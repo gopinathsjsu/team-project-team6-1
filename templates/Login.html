@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnytimeMovie Sign In</title>
+    <link rel="stylesheet" href="Login.css">
+    <style>
+        body {
+            background-image: url('img.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body>
+    <div class="signin-container">
+        <div class="signin-form">
+            <h1>Sign In</h1>
+            <form action="/adduserdetailstodbdb" method="POST" class="form" name="form" method="GET">
+                <label for="email">Username</label>
+                <input type="email" id="email" name="email" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <button type="submit">Sign In</button>
+            </form>
+            <p class="forgot-password">Forgot password?</p>
+            <div class="signup-info">
+                <h2>Not a member?</h2>
+                <p>Join ATM Stubs and start enjoying savings, rewards, and more at the movies.</p>
+                <p>Already joined ATM Stubs at a theatre? <a href="#">Register your account</a> to create a login.</p>
+            </div>
+        </div>        
+    </div>
+</body>
+</html>
