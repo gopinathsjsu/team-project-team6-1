@@ -15,6 +15,7 @@ except:
 def home():
    return render_template('registration.html')
 
+# api to register a user and add their info to database
 @app.route('/register', methods=['POST'])
 def register():
     result = json.dumps(request.form)
