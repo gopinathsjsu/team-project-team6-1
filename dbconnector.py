@@ -44,7 +44,7 @@ def checkLoginCredentials(username, password):
 
                 #fetch data from server
                 cur.execute(query, (username, password))
-                 
+
                 '''
                 for row in CursorByName(cur):
                     data.append(row)
