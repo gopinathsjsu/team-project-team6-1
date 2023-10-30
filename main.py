@@ -17,21 +17,21 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 def login():
    return render_template('Login.html')
 
-# @app.route("/signin",methods=["POST"])
-# def signin():
-#     result = json.dumps(request.form)
-#     requestdata = json.loads(result) 
-#     # requestdata = request.get_json()
+@app.route("/signin",methods=["POST"])
+def signin():
+    result = json.dumps(request.form)
+    requestdata = json.loads(result) 
+    # requestdata = request.get_json()
 
-#     username = requestdata["username"]
-#     password = requestdata["password"]
+    username = requestdata["username"]
+    password = requestdata["password"]
 
-#     #use database connector object to connect to database and retrieve data
-#     responsedata = dbc.checkLoginCredentials(username, password)
-#     print(responsedata)
-#     if "error" in responsedata[0]:
-#         return responsedata, 400
-#     return responsedata, 200
+    #use database connector object to connect to database and retrieve data
+    responsedata = dbc.checkLoginCredentials(username, password)
+    print(responsedata)
+    if "error" in responsedata[0]:
+        return responsedata, 400
+    return responsedata, 200
 
 
 
