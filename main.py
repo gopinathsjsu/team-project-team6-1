@@ -19,9 +19,7 @@ def login():
 
 @app.route("/signin",methods=["POST"])
 def signin():
-    result = json.dumps(request.form)
-    requestdata = json.loads(result) 
-    # requestdata = request.get_json()
+    requestdata = request.get_json()
 
     username = requestdata["username"]
     password = requestdata["password"]
@@ -32,7 +30,6 @@ def signin():
     if "error" in responsedata[0]:
         return responsedata, 400
     return responsedata, 200
-
 
 
 @app.route('/')
@@ -50,8 +47,8 @@ def register():
     # "password": "Divija@1998",
     # "port": "5433"
     # cursor = db.cursor()
-    result = json.dumps(request.form)
-    result = json.loads(result) 
+    json_data = jsonify(request.form)
+    result = json_data.get_json()
     fullname = result['name']
     username = result['username']
     password = result['password']
