@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/Register.css')}}">
+    <title>Register</title>
+</head>
+<body>
+    
+    <div class="container">
+    <div class="box1">
+    <form action="/register" method="POST" class="form" name="form">
+        <h1>Welcome to MovieAnytime</h1><br><br>
+        
+        <input type="text" id="name" name="name" required placeholder="Name"><br><br><br>
+        
+         <input type="text" id="phone_no" name="phone_no" pattern="[0-9]{10}" maxlength="10" placeholder="Phone Number"><br><br><br>
+         
+         <input type="email" id="username" name="username" placeholder="Email"><br><br><br>
+        
+     
+         <input type="password" id="password" name="password" placeholder="Password"><br><br><br>
+         
+        <textarea id="address" name="address" placeholder="Address"></textarea><br><br><br>
+        
+        <button type="submit" id="addDetails">Register</button><br><br>
+        
+        
+    </form>
+    
+    </div>
+    <div class="vertical-line"></div>
+    <div class="box2">
+        <img src="/static/images/cinema.png" alt="Your Image Description">
+        <p>Make your MovieTime experience even more amazing by Joining Premium Membership today. You'll get access to exclusive deals and special offers</p>
+        <a href="/joinmembership">Join Premium Membership!</a>
+    </div>
+</div>
+</body>
+</html>
