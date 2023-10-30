@@ -43,7 +43,8 @@ def checkLoginCredentials(username, password):
                 #query = f'SELECT * FROM usertable'
 
                 #fetch data from server
-                cur.execute(query, (username, password)) 
+                cur.execute(query, (username, password))
+                 
                 '''
                 for row in CursorByName(cur):
                     data.append(row)
