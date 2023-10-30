@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="static/css/styles.css">
+    <title data-rh="true">ShowTime at MovieAnytime Multiplexes</title>
+</head>
+
+<body>
+
+    <section class="top-bar">
+        <div class="left-content">
+            <h2 class="title">MovieAnytime</h2>
+            <form action="/bookmovie/{{moviename}}" method="post">
+                <ul class="navigation">
+                    <li>
+                        <select name="theaters" id="theaters">
+                            {% for showing in showings %}
+                            <option value="{{multiplex[0]}}">{{multiplex[1]}}</option>
+                            {% endfor %}
+                        </select>
+                    </li>
+                    <li>
+                        <input type="date" id="showdate" name="showdate">
+                    </li>
+                </ul>
+                <button class="btn" type="submit">Apply</button>
+            </form>
+
+        </div>
+        <div class="right-content">
+            <img src="./static/images/filter.png" alt="" class="filter">
+            <img src="./static/images/cart.png" alt="" class="cart">
+            <div class="profile-img-box">
+                <img src="./static/images/profile.png" alt="">
+            </div>
+            <img src="./static/images/menu.png" alt="" class="menu">
+        </div>
+    </section>
+
+    <section class="main-container-booking">
+        <div class="movies-container">
+            <div class="movie-header">
+                <h1>{{moviename}}</h1>
+            </div>
+            <div class="current-theaters">
+                <div class="current-movie">
+                    <h3 class="movie-title">{{showing[multiplex]}}</h3>
+                    <p class="screen-name">{{showing[theatername]}}</p>
+                    <div class="booking">
+                        <a href="#" class="btn">{{}}<br> {{showing[price]}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>
