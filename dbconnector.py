@@ -1,4 +1,5 @@
 
+from flask import jsonify
 from connection import connection
 import psycopg2
 import psycopg2.extras
@@ -63,3 +64,35 @@ def checkLoginCredentials(username, password):
             conn.close()
             print('database connection closed')
             return data
+        
+# for registeration of user
+def registeruser(fullname, phoneno, address, username, password, role):
+    data = {}  # Use a dictionary to store the response data
+    try:
+        # Establish connection and create a cursor
+        with psycopg2.connect(**params) as conn:
+            # Create a cursor
+            cur = conn.cursor()
+
+            # Write query
+            query = '''INSERT INTO usertable (fullname, phonenumber, address, username, userpassword, userrole) VALUES (%s, %s, %s, %s, %s, %s);'''
+
+            # Execute the query
+            cur.execute(query, (fullname, phoneno, address, username, password, role))
+            conn.commit()
+
+            # Set success response data
+            data['success'] = True
+            data['message'] = 'User registration successful'
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("Error in registeruser()")
+        print(error)
+
+        # Set error response data
+        data['success'] = False
+        data['error'] = 'Error in user registration'
+        data['error_details'] = str(error)
+
+    # Always return a JSON response
+    return jsonify(data)

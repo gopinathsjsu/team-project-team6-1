@@ -12,6 +12,8 @@ def connection():
     db['database'] = data['postgres']['dbname']
     db['user'] = data['postgres']['user']
     db['password'] = data['postgres']['password']
+    db['port']=data['postgres']['port']
+    
     #print("DB details:")
     #print(db)
     return db

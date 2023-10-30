@@ -1,9 +1,9 @@
 {
     "postgres":{
         "host":"localhost",
-        "port": 5432,
-        "dbname":"",
-        "user":"",
-        "password":""
+        "port": 5433,
+        "dbname":"projectdb",
+        "user":"postgres",
+        "password":"Divija@1998"
     }
 }
