@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/signin.css')}}">
+    <script src="{{ url_for('static', filename='js/signin.js')}}"></script>
     <title>AnytimeMovie Sign In</title>
-    <link rel="stylesheet" href="Login.css">
     <style>
         body {
-            background-image: url('img.jpg');
+            background-image: url('static/images/img.jpg');
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
@@ -18,9 +19,9 @@
     <div class="signin-container">
         <div class="signin-form">
             <h1>Sign In</h1>
-            <form action="/adduserdetailstodbdb" method="POST" class="form" name="form" method="GET">
-                <label for="email">Username</label>
-                <input type="email" id="email" name="email" required>
+            <form  class="form" name="form" id="signInForm">
+                <label for="username">User Name</label>
+                <input type="email" id="username" name="username" required>
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
                 <button type="submit">Sign In</button>
