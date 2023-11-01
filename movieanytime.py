@@ -3,6 +3,7 @@ import json
 import requests
 
 
+
 app = Flask(__name__)
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -16,6 +17,16 @@ def register():
         #else
         #error screen
    return render_template('registration.html')
+
+@app.route('/', methods=['GET'])
+def current_movies():
+   if request.method == "GET":
+        
+        r = requests.get('http://127.0.0.1:5000/currentmovies')
+        print(r.text)
+        current_movies_json=json.loads(r.text)
+   return render_template("testhome.html",movies = current_movies_json)
+   
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1',port=5001)

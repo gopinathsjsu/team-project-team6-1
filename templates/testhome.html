@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/testhome.css">
+   
+    
+    <title>MovieAnytime</title>
+</head>
+
+<body >
+    <section class="top-bar">
+        <div class="left-content">
+            <h2 class="title">MovieAnytime</h2>
+            <ul class="navigation">
+                <li><a class="active" href="#">Home</a></li>
+                <li><a href="#">Element 2</a></li>
+                <li><a href="#">Element 3</a></li>
+                <li><a href="#">Element 4</a></li>
+            </ul>
+        </div>
+        <div class="right-content">
+            <!-- <img src="./static/images/filter.png" alt="" class="filter" class="img2"> -->
+            <!-- <img src="./static/images/cart.png" alt="" class="cart" class="img2"> -->
+             <div class="profile-img-box"> 
+                <img src="./static/images/profile.png" alt="" class="img2"><br>
+           
+            
+            <!-- <img src="./static/images/menu.png" alt="" class="menu" class="img2"> -->
+            </div>
+            <a href="#"> <p>Sign In</p></a>
+       
+    </section>
+    
+    <!-- <section class ="slidershow middle">
+            <div class="slides">
+                <input type="radio" name="r" id="r1" checked>
+                <input type="radio" name="r" id="r2">
+                <input type="radio" name="r" id="r3">
+                <input type="radio" name="r" id="r4">
+                <div class="slide s1">
+                    <img src="/static/images/upcoming_movies[0]['posterImage']" class="img1">
+                </div>
+                <div class="slide">
+                    <img src="/static/images/upcoming_movies[1]['posterImage']" class="img1">
+                </div>
+                <div class="slide">
+                    <img src="/static/images/upcoming_movies[2]['posterImage']" class="img1">
+                </div>
+                <div class="slide">
+                    <img src="/static/images/upcoming_movies[3]['posterImage']" class="img1">
+                </div>
+            </div>
+            <div class="navigation1">
+                <label for="r1" class="bar"></label>
+                <label for="r2" class="bar"></label>
+                <label for="r3" class="bar"></label>
+                <label for="r4" class="bar"></label>
+            </div>
+            
+    </section> -->
+    
+    <section class ="slidershow middle">
+        
+        <div class="slides">
+            <input type="radio" name="r" id="r1" checked>
+            <input type="radio" name="r" id="r2">
+            <input type="radio" name="r" id="r3">
+            <input type="radio" name="r" id="r4">
+            
+            {% for movie in upcoming_movies %}
+            
+            <div class="slide s{{ loop.index }}">
+                <img src="/static/images/{{ movie['posterImage'] }}" class="img1">
+                <a href="#" class="button">Advance Tickets!</a>
+                
+            </div>
+            
+            {% endfor %}
+        </div>
+        <div class="navigation1">
+            <label for="r1" class="bar"></label>
+            <label for="r2" class="bar"></label>
+            <label for="r3" class="bar"></label>
+            <label for="r4" class="bar"></label>
+            
+        </div>
+        
+        
+    </section>
+    <!-- <section class="slidershow middle">
+        <div class="slides">
+            {% for upcoming in upcomingmovie %}
+                <input type="radio" name="r" id="r{{ loop.index }}" {% if loop.first %}checked{% endif %}>
+                <div class="slide s{{ loop.index }}">
+                    <img src="static/images/{{upcoming['posterImage']}}" class="img1">
+                </div>
+            {% endfor %}
+        </div>
+        <div class="navigation1">
+            {% for movie in movies %}
+                <label for="r{{ loop.index }}" class="bar"></label>
+            {% endfor %}
+        </div>
+    </section> -->
+    
+    
+    
+    <section class="main-container">
+        <div class="h1text" >
+            <!-- <h1 >In Theaters Now</h1> -->
+            <a href="#moviesdiv1">Now Playing</a>
+            <a href="#moviesdiv2" >View all Upcoming Movies</a>
+        </div>
+        <div class="movies-container" id="moviesdiv1">
+       
+            <div class="current-movies">
+                {% for movie in movies %}
+                <div class="current-movie">
+                    <div class="cm-img-box">
+                        <img src="static/images/{{movie['posterImage']}}" alt="" class="img2">
+                    </div>
+                    <h3 class="movie-title">{{movie['title']}}</h3>
+                    <h1 class="movie-duration">{{movie['duration']}}</h1>
+                    <h1 class="release-date">{{movie['releaseDate']}}</h1>
+                    <div class="booking">
+                        <a href="{{ url_for('bookmovie',moviename= movie[0]) }}" class="btn">Buy Tickets</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="movies-container" id="moviesdiv2">
+       
+            <div class="current-movies">
+                {% for movie in upcoming_movies %}
+                <div class="current-movie">
+                    <div class="cm-img-box">
+                        <img src="static/images/{{movie['posterImage']}}" alt="" class="img2">
+                    </div>
+                    <h3 class="movie-title">{{movie['title']}}</h3>
+                    <h1 class="movie-duration">{{movie['duration']}}</h1>
+                    <h1 class="release-date">{{movie['releaseDate']}}</h1>
+                    <div class="booking">
+                        <a href="{{ url_for('bookmovie',moviename= movie[0]) }}" class="btn">Buy Advance Tickets </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    
+
+   
+</body>
+</html> 
