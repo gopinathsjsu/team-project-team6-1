@@ -120,13 +120,13 @@
                 {% for movie in movies %}
                 <div class="current-movie">
                     <div class="cm-img-box">
-                        <img src="static/images/{{movie['posterImage']}}" alt="" class="img2">
+                        <img src="static/images/{{movie['poster']}}" alt="" class="img2">
                     </div>
-                    <h3 class="movie-title">{{movie['title']}}</h3>
-                    <h1 class="movie-duration">{{movie['duration']}}</h1>
-                    <h1 class="release-date">{{movie['releaseDate']}}</h1>
+                    <h3 class="movie-title">{{movie['moviename']}}</h3>
+                    <h1 class="movie-duration">{{movie['runtimeminutes']}}</h1>
+                    <!-- <h1 class="release-date">{{movie['releaseDate']}}</h1> -->
                     <div class="booking">
-                        <a href="{{ url_for('bookmovie',moviename= movie[0]) }}" class="btn">Buy Tickets</a>
+                        <a href="" class="btn">Buy Tickets</a>
                     </div>
                 </div>
                 {% endfor %}
@@ -138,13 +138,13 @@
                 {% for movie in upcoming_movies %}
                 <div class="current-movie">
                     <div class="cm-img-box">
-                        <img src="static/images/{{movie['posterImage']}}" alt="" class="img2">
+                        <img src="static/images/{{movie['poster']}}" alt="" class="img2">
                     </div>
-                    <h3 class="movie-title">{{movie['title']}}</h3>
-                    <h1 class="movie-duration">{{movie['duration']}}</h1>
-                    <h1 class="release-date">{{movie['releaseDate']}}</h1>
+                    <h3 class="movie-title">{{movie['moviename']}}</h3>
+                    <h1 class="movie-duration">{{movie['runtimeminutes']}}</h1>
+                    <!-- <h1 class="release-date">{{movie['releaseDate']}}</h1> -->
                     <div class="booking">
-                        <a href="{{ url_for('bookmovie',moviename= movie[0]) }}" class="btn">Buy Advance Tickets </a>
+                        <a href="" class="btn">Buy Advance Tickets </a>
                     </div>
                 </div>
                 {% endfor %}
