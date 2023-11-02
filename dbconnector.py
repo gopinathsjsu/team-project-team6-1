@@ -104,6 +104,7 @@ def getCurrentMovies():
             #print('database connection closed')
             return data
 
+# to register a user 
 def registeruser(fullname, phoneno, address, username, password, role):
     data = {}  # Use a dictionary to store the response data
     try:
@@ -133,6 +134,7 @@ def registeruser(fullname, phoneno, address, username, password, role):
         data['error_details'] = str(error)
     return jsonify(data)
 
+# to register user as having Regular membership as soon as they register
 def registerUserMembership(username):
     #global conn
     print("I am in registerUserMmebership")
@@ -174,7 +176,7 @@ def registerUserMembership(username):
         if conn is not None:
             conn.close()
             print('database connection closed')
-        data = json.dumps(data, indent=4, sort_keys=True, default=str)
+        data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
         data = json.loads(data)
         return data
         
