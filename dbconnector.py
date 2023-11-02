@@ -2,6 +2,10 @@
 from connection import connection
 import psycopg2
 import psycopg2.extras
+import datetime
+from flask import jsonify
+import json
+
 
 conn = None
 # read connection parameters
@@ -99,3 +103,80 @@ def getCurrentMovies():
             conn.close()
             #print('database connection closed')
             return data
+
+# to register a user 
+def registeruser(fullname, phoneno, address, username, password, role):
+    data = {}  # Use a dictionary to store the response data
+    try:
+        # Establish connection and create a cursor
+        with psycopg2.connect(**params) as conn:
+            # Create a cursor
+            cur = conn.cursor()
+
+            # Write query
+            query = '''INSERT INTO usertable (userid,fullname, phonenumber, address, username, userpassword, userrole) VALUES (%s, %s, %s, %s, %s, %s, %s);'''
+            cur.execute('''select max(userid) from usertable;''')
+            max_id = cur.fetchone()[0]
+            print(max_id)
+            # Execute the query
+            cur.execute(query, (max_id+1,fullname, phoneno, address, username, password, role))
+            conn.commit()
+
+            # Set success response data
+            data['success'] = True
+            data['message'] = 'User registration successful'
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("Error in registeruser()")
+        print(error)
+        data['success'] = False
+        data['error'] = 'Error in user registration'
+        data['error_details'] = str(error)
+    return jsonify(data)
+
+# to register user as having Regular membership as soon as they register
+def registerUserMembership(username):
+    #global conn
+    print("I am in registerUserMmebership")
+    data = []
+    try:
+        #establish connection
+        with psycopg2.connect(**params) as conn:
+
+            # create a cursor 
+                cursor = conn.cursor()
+                print("hello world")
+                query = '''INSERT INTO usermembership (membershipid, rewardpoints, ispremium, membershiptilldate, userid, membershiptype) VALUES (%s, %s, %s, %s, %s, %s);'''
+                cursor.execute('''select max(membershipid) from usermembership;''')
+                max_id = cursor.fetchone()[0]
+                print(max_id)
+                query2 = "SELECT userid FROM usertable WHERE username = %s;"
+                cursor.execute(query2,(username,))
+                userid = cursor.fetchone()[0]
+                print("User id :",userid)
+                curDate = datetime.date.today()
+                newYear = curDate.year+4
+                insertDate = curDate.replace(year=newYear).strftime('%Y-%m-%d')
+                print(insertDate)
+                
+                cursor.execute(query, (max_id + 1, 0, 'false', insertDate, userid, "Regular"))
+                conn.commit()
+                cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
+                query3 = "select * from usermembership where membershipid=%s"
+                cursor.execute(query3,(max_id+1,))
+                data = cursor.fetchone()
+                print(data)
+                if len(data) ==0:
+                    data.append({"error":"No record found"})
+                    data.append({"error details": "No record found with username and password"})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in inserting usermembership"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            print('database connection closed')
+        data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
+        data = json.loads(data)
+        return data
+        
