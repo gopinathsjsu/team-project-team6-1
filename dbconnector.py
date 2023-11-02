@@ -118,8 +118,12 @@ def registeruser(fullname, phoneno, address, username, password, role):
             cur.execute('''select max(userid) from usertable;''')
             max_id = cur.fetchone()[0]
             print(max_id)
+            if (max_id != None):
             # Execute the query
-            cur.execute(query, (max_id+1,fullname, phoneno, address, username, password, role))
+                cur.execute(query, (max_id+1,fullname, phoneno, address, username, password, role))
+            else:
+                cur.execute(query, (1,fullname, phoneno, address, username, password, role))
+                
             conn.commit()
 
             # Set success response data
@@ -149,6 +153,8 @@ def registerUserMembership(username):
                 query = '''INSERT INTO usermembership (membershipid, rewardpoints, ispremium, membershiptilldate, userid, membershiptype) VALUES (%s, %s, %s, %s, %s, %s);'''
                 cursor.execute('''select max(membershipid) from usermembership;''')
                 max_id = cursor.fetchone()[0]
+                if (max_id == None):
+                    max_id = 0
                 print(max_id)
                 query2 = "SELECT userid FROM usertable WHERE username = %s;"
                 cursor.execute(query2,(username,))
