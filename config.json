@@ -4,6 +4,6 @@
         "port": 5432,
         "dbname":"",
         "user":"",
-        "password":"postgres"
+        "password":""
     }
 }
