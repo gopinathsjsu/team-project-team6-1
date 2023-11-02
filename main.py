@@ -62,9 +62,7 @@ def currentmovies():
 # api to register a user and add their info to database
 @app.route('/signup', methods=['POST'])
 def register():
-   
-    json_data = jsonify(request)
-    result = json_data.get_json()
+    result = request.get_json()
     fullname = result['name']
     username = result['username']
     password = result['password']
