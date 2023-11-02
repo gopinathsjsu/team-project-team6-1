@@ -56,6 +56,14 @@ def currentmovies():
         return responsedata, 400
     return responsedata, 200
     
+@app.route("/upcomingmovies",methods=["GET"])
+def upcomingmovies():
+    responsedata = dbc.getUpcomingMovies()
+
+    if "error" in responsedata[0]:
+        return responsedata, 400
+    return responsedata, 200
+    
 
 
 
