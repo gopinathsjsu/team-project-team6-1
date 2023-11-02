@@ -1,5 +1,5 @@
 from datetime import date
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import dbconnector as dbc
 import psycopg2
 
@@ -63,7 +63,7 @@ def currentmovies():
 @app.route('/signup', methods=['POST'])
 def register():
    
-    json_data = jsonify(request.form)
+    json_data = jsonify(request)
     result = json_data.get_json()
     fullname = result['name']
     username = result['username']
