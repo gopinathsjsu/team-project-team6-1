@@ -1,7 +1,6 @@
 from datetime import date
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, request
 import dbconnector as dbc
-import json
 import psycopg2
 
 
@@ -51,13 +50,13 @@ def currentmovies():
     if token != "xyz-secret-key":
         return "Unauthorised user", 401
     '''
-
     responsedata = dbc.getCurrentMovies()
-    #print(responsedata)
+
     if "error" in responsedata[0]:
         return responsedata, 400
     return responsedata, 200
     
+
 
 
 # api to register a user and add their info to database
@@ -80,5 +79,6 @@ def register():
     print(type(data))
     return data
 
+
 if __name__ == '__main__':
-    app.run()
+    app.run(host='127.0.0.1',port=5000)
