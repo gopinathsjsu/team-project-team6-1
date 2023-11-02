@@ -23,9 +23,11 @@ def current_movies():
    if request.method == "GET":
         
         r = requests.get('http://127.0.0.1:5000/currentmovies')
+        print(r)
         print(r.text)
         current_movies_json=json.loads(r.text)
-   return render_template("testhome.html",movies = current_movies_json)
+        featuring_movies=current_movies_json[:4]
+   return render_template("testhome.html",movies=current_movies_json,Featuring_movies=featuring_movies)
    
 
 if __name__ == '__main__':
