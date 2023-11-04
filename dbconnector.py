@@ -27,6 +27,7 @@ class CursorByName():
 
 '''
 
+#checks username and password for login; returns username and membership details
 def checkLoginCredentials(username, password):
     
     data = []
@@ -38,18 +39,13 @@ def checkLoginCredentials(username, password):
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
 
                 #write query
-                # query = f'''SELECT username, membership.* FROM usertable
-                #         INNER JOIN (
-                #             SELECT * from usermembership
-                #         )membership
-                #         on usertable.userid = membership.userid
-                #         WHERE username = %s AND userpassword = %s'''
+                query = f'''SELECT username, membership.* FROM usertable
+                        INNER JOIN (
+                            SELECT * from usermembership
+                        )membership
+                        on usertable.userid = membership.userid
+                        WHERE username = %s AND userpassword = %s'''
                         
-                query = f'''SELECT *
-                    FROM usertable
-                    WHERE username = %s AND userpassword = %s;'''
-                #query = f'SELECT * FROM usertable'
-
                 #fetch data from server
                 cur.execute(query, (username, password))
 
@@ -75,6 +71,7 @@ def checkLoginCredentials(username, password):
             print('database connection closed')
             return data
         
+#returns list of currently showing movies
 def getCurrentMovies():
     data = []
     try:
@@ -83,27 +80,23 @@ def getCurrentMovies():
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
 
                 query = f'''SELECT movieid, moviename, runtimeminutes, poster
-	                    FROM public.movie WHERE releasedate < CURRENT_DATE AND endshowingdate > CURRENT_DATE'''
+	                    FROM movie WHERE releasedate < CURRENT_DATE AND endshowingdate > CURRENT_DATE'''
                 
                 cur.execute(query)
 
                 data = cur.fetchall()
-                #print(data)
-                #print('successfully read in data')
                 if len(data) ==0:
                     data.append({"error":"No record found"})
                     data.append({"error details": "No movies showing currently!"})
     except (Exception, psycopg2.DatabaseError) as error:
-        #print("Error in checkLoginCredentials()")
-        #print(error)
         data.append({"error":"Error in getCurrentMovies()"})
         data.append({"error details": str(error)})
     finally:
         if conn is not None:
             conn.close()
-            #print('database connection closed')
             return data
 
+#returns list of upcoming movies
 def getUpcomingMovies():
     data = []
     try:
@@ -112,27 +105,89 @@ def getUpcomingMovies():
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
 
                 query = f'''SELECT movieid, moviename, runtimeminutes, poster
-	                    FROM public.movie WHERE releasedate > CURRENT_DATE'''
+	                    FROM movie WHERE releasedate > CURRENT_DATE'''
                 
                 cur.execute(query)
 
                 data = cur.fetchall()
-                #print(data)
-                #print('successfully read in data')
                 if len(data) ==0:
                     data.append({"error":"No record found"})
                     data.append({"error details": "No upcoming movies!"})
     except (Exception, psycopg2.DatabaseError) as error:
-        #print("Error in checkLoginCredentials()")
-        #print(error)
-        data.append({"error":"Error in getCurrentMovies()"})
+        data.append({"error":"Error in getUpcomingMovies()"})
         data.append({"error details": str(error)})
     finally:
         if conn is not None:
             conn.close()
-            #print('database connection closed')
             return data
 
+#returns list of all multiplexes
+def getMultiplexList():
+    data = []
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+
+                query = f'''SELECT multiplexid, multiplexname FROM multiplex'''
+                
+                cur.execute(query)
+
+                data = cur.fetchall()
+                if len(data) ==0:
+                    data.append({"error":"No record found"})
+                    data.append({"error details": "No multiplexes found!"})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in getMultiplexList()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data
+
+#retuns all the multiplexes, theater and date information for the given movie
+def getShowingInfo(movieid, multiplexid, date):
+    data = []
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                query = f'''SELECT * FROM showingdetails
+                            INNER JOIN (
+                                SELECT * FROM showingmaster
+                                INNER JOIN(
+                                    SELECT theaterid, theater.multiplexid, theaternumber, name1  from theater
+                                        INNER JOIN (
+                                            SELECT multiplexname as name1, multiplex.multiplexid from multiplex where multiplex.multiplexid = {multiplexid}
+                                        )mul1
+                                        on theater.multiplexid = mul1.multiplexid
+                                    )t1
+                                ON showingmaster.theaterid = t1.theaterid
+                                INNER JOIN(
+                                    SELECT * from movie where movieid = {movieid}
+                                    )m1
+                                ON showingmaster.movieid = m1.movieid
+                                
+                            )sm
+                            on sm.showingid = showingdetails.showingid
+                            where showingdetails.showdate >= '{date}'
+                            ;'''
+                print(query)
+                cur.execute(query)
+
+                data = cur.fetchall()
+                if len(data) ==0:
+                    data.append({"error":"No record found"})
+                    data.append({"error details": "No theaters for the selected movie and date!"})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in getShowingInfo()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
+            data = json.loads(data)
+            return data
 
 # to register a user 
 def registeruser(fullname, phoneno, address, username, password, role):
