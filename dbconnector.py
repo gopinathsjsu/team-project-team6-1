@@ -104,6 +104,36 @@ def getCurrentMovies():
             #print('database connection closed')
             return data
 
+def getUpcomingMovies():
+    data = []
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+
+                query = f'''SELECT movieid, moviename, runtimeminutes, poster
+	                    FROM public.movie WHERE releasedate > CURRENT_DATE'''
+                
+                cur.execute(query)
+
+                data = cur.fetchall()
+                #print(data)
+                #print('successfully read in data')
+                if len(data) ==0:
+                    data.append({"error":"No record found"})
+                    data.append({"error details": "No upcoming movies!"})
+    except (Exception, psycopg2.DatabaseError) as error:
+        #print("Error in checkLoginCredentials()")
+        #print(error)
+        data.append({"error":"Error in getCurrentMovies()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            #print('database connection closed')
+            return data
+
+
 # to register a user 
 def registeruser(fullname, phoneno, address, username, password, role):
     data = {}  # Use a dictionary to store the response data
