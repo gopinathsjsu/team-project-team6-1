@@ -89,7 +89,15 @@ def upgradeToPremium():
     return response
 
 
-
+# api to retrieve user details to display on profile - full name, address, membership type, membership valid till data, and rewards points
+@app.route('/profileInfo', methods=['GET'])
+def profileInfo():
+    loginInfo = request.get_json()
+    username = loginInfo['username']
+    response = dbc.getProfileInfo(username)
+    print('profile info - response : ', response)
+    print(type(response))
+    return response
 
 
 if __name__ == '__main__':
