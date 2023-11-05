@@ -217,3 +217,31 @@ def upgradeMembership(username):
             conn.close()
             print('database connection closed')
         return jsonify(data)
+    
+
+# function to get user's profile info
+def getProfileInfo(username):
+    data = []
+    try:
+        #establish connection
+        with psycopg2.connect(**params) as conn:
+
+            # create a cursor 
+                cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
+                query = "select fullname, address, membershiptype, membershiptilldate, rewardpoints from usertable inner join usermembership on usertable.userid = usermembership.userid where username=%s;"
+                cursor.execute(query,(username,))
+                data = cursor.fetchone()
+                print(data)
+                if len(data) ==0:
+                    data.append({"error":"No record found"})
+                    data.append({"error details": "No record found for this username"})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in retrieving profile info"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            print('database connection closed')
+        data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
+        data = json.loads(data)
+        return jsonify(data)
