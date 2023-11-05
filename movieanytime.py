@@ -28,6 +28,5 @@ def current_movies():
         print(upcoming_movies.text)
         upcoming_movies_json=json.loads(upcoming_movies.text)
    return render_template("testhome.html",movies = current_movies_json)
-
 if __name__ == '__main__':
     app.run(host='127.0.0.1',port=5001)

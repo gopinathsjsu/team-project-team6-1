@@ -16,21 +16,71 @@
             <h2 class="title">MovieAnytime</h2>
             <ul class="navigation">
                 <li><a class="active" href="#">Home</a></li>
-                <li><a href="#">Element 2</a></li>
-                <li><a href="#">Element 3</a></li>
-                <li><a href="#">Element 4</a></li>
+                <div class="tab1"><li><a href="">Multiplexes</a></li>
+                    <!-- <div class="panel1">
+                        <ul>
+                            <li><a href="second.html" class="button">element 4</a><li>
+                            <li>Element 2</li>
+                            <li>Element 3</li>
+                        </ul>
+                    </div> -->
+                </div>
+                <div class="tab1"><li><a href="#">Upgrade Membership</a></li>
+                    <!-- <div class="panel1">
+                        <ul>
+                            <li>Element 3</li>
+                            <li>Element 4</li>
+                        </ul>
+                    </div>
+                 -->
+                </div>
+                <div class="tab1"><li><a href="#">Showtimes</a></li>
+                    <!-- <img src="./static/images/sonya.png" alt="" class="img3"> -->
+                    <!-- <div class="panel1">
+                        <ul>
+                            <li>Element 3</li>
+                            <li>Element 4</li>
+                        </ul>
+                    </div>
+                 -->
+                </div>
+                <!-- <div class="tab1"><li><img src="./static/images/sonya.png" alt="" class="img3"></li> -->
+                    <!-- <div class="panel1">
+                        <ul>
+                            <li>Element 3</li>
+                            <li>Element 4</li>
+                        </ul>
+                    </div>
+                 -->
+                <!-- </div> -->
+                <!-- <img src="./static/images/sonya.png" alt="" class="img3"><br> -->
+                <!-- <a href="#"> <p>Showtime</p></a><br> -->
+                <!-- <div class="tab1"><li><a href="#">Element 4</a></li> -->
+                    <!-- <div class="panel1">
+                        <ul>
+                            <li>Element 5</li>
+                            <li>Element 6</li>
+                        </ul>
+                    </div> -->
+                </div>
             </ul>
         </div>
         <div class="right-content">
             <!-- <img src="./static/images/filter.png" alt="" class="filter" class="img2"> -->
             <!-- <img src="./static/images/cart.png" alt="" class="cart" class="img2"> -->
              <div class="profile-img-box"> 
-                <img src="./static/images/profile.png" alt="" class="img2"><br>
+                
            
             
             <!-- <img src="./static/images/menu.png" alt="" class="menu" class="img2"> -->
             </div>
-            <a href="#"> <p>Sign In</p></a>
+           
+           
+            
+            <img src="./static/images/profile.png" alt="" class="img3"><br>
+            <a href="/openloginpage"> <p>Sign In</p></a>
+            
+        </div>
        
     </section>
     
@@ -73,7 +123,7 @@
             {% for movie in upcoming_movies %}
             
             <div class="slide s{{ loop.index }}">
-                <img src="/static/images/{{ movie['posterImage'] }}" class="img1">
+                <img src="/static/images/{{ movie['poster'] }}" class="img1">
                 <a href="#" class="button">Advance Tickets!</a>
                 
             </div>
@@ -89,6 +139,30 @@
         </div>
         
         
+    </section>
+    
+    <section class="main-container1" >
+        <div class="h1text">
+            <h2 >Grab Tickets for the Latest Movies only at MovieAnytime</h2>
+        </div>
+        <div class="movies-container1">
+       
+            <div class="current-movies1">
+                {% for movie in Featuring_movies %}
+                <div class="current-movie1">
+                    <div class="cm-img-box1">
+                        <img src="static/images/{{movie['poster']}}" alt="" class="img2">
+                    </div>
+                    <h3 class="movie-title1">{{movie['moviename']}}</h3>
+                    <h4 class="movie-duration">{{movie['runtimeminutes']}}min</h4>
+                    <!-- <h3 class="release-date">{{movie['releaseDate']}}</h3> -->
+                    <div class="booking">
+                        <a href="" class="btn">Buy Tickets</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
     </section>
     <!-- <section class="slidershow middle">
         <div class="slides">
@@ -109,13 +183,13 @@
     
     
     <section class="main-container">
-        <div class="h1text" >
+        <div class="h1text" id="hreftags">
             <!-- <h1 >In Theaters Now</h1> -->
-            <a href="#moviesdiv1">Now Playing</a>
-            <a href="#moviesdiv2" >View all Upcoming Movies</a>
+            <a href="#moviesdiv1" >View All Movies</a>
+            <a href="#moviesdiv2" >Coming Soon</a>
         </div>
         <div class="movies-container" id="moviesdiv1">
-       
+            <h1 >Movies Lined Up</h1><br>
             <div class="current-movies">
                 {% for movie in movies %}
                 <div class="current-movie">
@@ -123,7 +197,7 @@
                         <img src="static/images/{{movie['poster']}}" alt="" class="img2">
                     </div>
                     <h3 class="movie-title">{{movie['moviename']}}</h3>
-                    <h1 class="movie-duration">{{movie['runtimeminutes']}}</h1>
+                    <h4 class="movie-duration">{{movie['runtimeminutes']}} min</h4>
                     <!-- <h1 class="release-date">{{movie['releaseDate']}}</h1> -->
                     <div class="booking">
                         <a href="" class="btn">Buy Tickets</a>
@@ -133,15 +207,17 @@
             </div>
         </div>
         <div class="movies-container" id="moviesdiv2">
+            <h1 >Soon-to-Hit-Theaters</h1><br>
        
             <div class="current-movies">
-                {% for movie in upcoming_movies %}
+
+                {% for movie in upcoming_movie_all  %}
                 <div class="current-movie">
                     <div class="cm-img-box">
                         <img src="static/images/{{movie['poster']}}" alt="" class="img2">
                     </div>
                     <h3 class="movie-title">{{movie['moviename']}}</h3>
-                    <h1 class="movie-duration">{{movie['runtimeminutes']}}</h1>
+                    <h4 class="movie-duration">{{movie['runtimeminutes']}} min</h4>
                     <!-- <h1 class="release-date">{{movie['releaseDate']}}</h1> -->
                     <div class="booking">
                         <a href="" class="btn">Buy Advance Tickets </a>
