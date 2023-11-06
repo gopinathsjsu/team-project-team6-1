@@ -6,12 +6,7 @@ import psycopg2
 
 app = Flask(__name__)
 
-'''
-@app.route('/')
-def home():
-    return render_template('registration.html')
-'''
-
+# api to check username and password for login
 @app.route("/signin",methods=["POST"])
 def signin():
     '''
@@ -37,6 +32,7 @@ def signin():
         return responsedata, 400
     return responsedata, 200
 
+#api to get currently showing movies
 @app.route("/currentmovies",methods=["GET"])
 def currentmovies():
     '''
@@ -56,16 +52,36 @@ def currentmovies():
         return responsedata, 400
     return responsedata, 200
     
+#api to get upcoming movies
 @app.route("/upcomingmovies",methods=["GET"])
 def upcomingmovies():
     responsedata = dbc.getUpcomingMovies()
-
     if "error" in responsedata[0]:
         return responsedata, 400
     return responsedata, 200
     
+#api to get all multiplexes  
+@app.route("/multiplexlist",methods=["GET"])
+def multiplexlist():
+    responsedata = dbc.getMultiplexList()
 
+    if "error" in responsedata[0]:
+        return responsedata, 400
+    return responsedata, 200
 
+#api to get all the multiplexes, theater and date information for a particular movie
+@app.route("/getmovietheaters",methods=["GET", "POST"])
+def getmovietheaters():
+    requestdata = request.get_json()
+
+    movieid = requestdata["movieid"]
+    multiplexid = requestdata["multiplexid"]
+    date = requestdata["chosenDate"]
+    responsedata = dbc.getShowingInfo(movieid, multiplexid, date)
+
+    if "error" in responsedata[0]:
+        return responsedata, 400
+    return responsedata, 200
 
 # api to register a user and add their info to database
 @app.route('/signup', methods=['POST'])

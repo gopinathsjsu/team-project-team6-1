@@ -24,9 +24,13 @@ def current_movies():
         current_movies = requests.get('http://127.0.0.1:5000/currentmovies')
         print(current_movies.text)
         current_movies_json=json.loads(current_movies.text)
+        featuring_movies=current_movies_json[:4]
+        
         upcoming_movies = requests.get('http://127.0.0.1:5000/upcomingmovies')
         print(upcoming_movies.text)
         upcoming_movies_json=json.loads(upcoming_movies.text)
-   return render_template("testhome.html",movies = current_movies_json)
+        
+   return render_template("testhome.html",movies = current_movies_json,Featuring_movies=featuring_movies)
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1',port=5001)
