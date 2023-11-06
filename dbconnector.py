@@ -189,6 +189,36 @@ def getShowingInfo(movieid, multiplexid, date):
             data = json.loads(data)
             return data
 
+def getUpcomingMovies():
+    data = []
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+
+                query = f'''SELECT movieid, moviename, runtimeminutes, poster
+	                    FROM public.movie WHERE releasedate > CURRENT_DATE'''
+                
+                cur.execute(query)
+
+                data = cur.fetchall()
+                #print(data)
+                #print('successfully read in data')
+                if len(data) ==0:
+                    data.append({"error":"No record found"})
+                    data.append({"error details": "No upcoming movies!"})
+    except (Exception, psycopg2.DatabaseError) as error:
+        #print("Error in checkLoginCredentials()")
+        #print(error)
+        data.append({"error":"Error in getCurrentMovies()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            #print('database connection closed')
+            return data
+
+
 # to register a user 
 def registeruser(fullname, phoneno, address, username, password, role):
     data = {}  # Use a dictionary to store the response data
@@ -259,7 +289,7 @@ def registerUserMembership(username):
                 print(data)
                 if len(data) ==0:
                     data.append({"error":"No record found"})
-                    data.append({"error details": "No record found with username and password"})
+                    data.append({"error details": "No record found with membershipid"})
     except (Exception, psycopg2.DatabaseError) as error:
         data.append({"error":"Error in inserting usermembership"})
         data.append({"error details": str(error)})
@@ -271,3 +301,62 @@ def registerUserMembership(username):
         data = json.loads(data)
         return data
         
+# function to upgrade user's membership to Premium
+def upgradeMembership(username):
+    data = []
+    try:
+        #establish connection
+        with psycopg2.connect(**params) as conn:
+
+            # create a cursor 
+                cursor = conn.cursor()
+                preQuery = "SELECT userid FROM usertable WHERE username = %s;"
+                cursor.execute(preQuery,(username,))
+                userid = cursor.fetchone()[0]
+                query = "UPDATE usermembership SET membershiptype = %s, ispremium = %s WHERE userid = %s;"
+                cursor.execute(query,('Premium','true',userid,))
+                conn.commit()
+                cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
+                confirmSuccessQuery = "select * from usermembership where userid=%s"
+                cursor.execute(confirmSuccessQuery,(userid,))
+                data = cursor.fetchone()
+                print(data)
+                if len(data) ==0:
+                    data.append({"error":"No record found"})
+                    data.append({"error details": "No record found with userid"})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in upgrading user membership to premium"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            print('database connection closed')
+        return jsonify(data)
+    
+
+# function to get user's profile info
+def getProfileInfo(username):
+    data = []
+    try:
+        #establish connection
+        with psycopg2.connect(**params) as conn:
+
+            # create a cursor 
+                cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
+                query = "select fullname, address, membershiptype, membershiptilldate, rewardpoints from usertable inner join usermembership on usertable.userid = usermembership.userid where username=%s;"
+                cursor.execute(query,(username,))
+                data = cursor.fetchone()
+                print(data)
+                if len(data) ==0:
+                    data.append({"error":"No record found"})
+                    data.append({"error details": "No record found for this username"})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in retrieving profile info"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            print('database connection closed')
+        data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
+        data = json.loads(data)
+        return jsonify(data)

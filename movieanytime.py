@@ -32,6 +32,5 @@ def current_movies():
         
    return render_template("testhome.html",movies = current_movies_json,Featuring_movies=featuring_movies)
 
-
 if __name__ == '__main__':
     app.run(host='127.0.0.1',port=5001)
