@@ -152,26 +152,28 @@ def getShowingInfo(movieid, multiplexid, date):
         with psycopg2.connect(**params) as conn:
 
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
-                query = f'''SELECT * FROM showingdetails
+                query = f'''SELECT * FROM showingmaster
+                            INNER JOIN(
+                                SELECT theaterid, theater.multiplexid, theaternumber, multiplexname  from theater
+                                    INNER JOIN (
+                                        SELECT multiplexname, multiplex.multiplexid from multiplex where multiplex.multiplexid = {multiplexid}
+                                    )mul1
+                                    on theater.multiplexid = mul1.multiplexid
+                                )t1
+                            ON showingmaster.theaterid = t1.theaterid
+                            INNER JOIN(
+                                SELECT movieid, moviename, poster from movie where movieid = {movieid}
+                                GROUP BY movieid
+                                )m1
+                            ON showingmaster.movieid = m1.movieid
                             INNER JOIN (
-                                SELECT * FROM showingmaster
-                                INNER JOIN(
-                                    SELECT theaterid, theater.multiplexid, theaternumber, name1  from theater
-                                        INNER JOIN (
-                                            SELECT multiplexname as name1, multiplex.multiplexid from multiplex where multiplex.multiplexid = {multiplexid}
-                                        )mul1
-                                        on theater.multiplexid = mul1.multiplexid
-                                    )t1
-                                ON showingmaster.theaterid = t1.theaterid
-                                INNER JOIN(
-                                    SELECT * from movie where movieid = {movieid}
-                                    )m1
-                                ON showingmaster.movieid = m1.movieid
-                                
-                            )sm
-                            on sm.showingid = showingdetails.showingid
-                            where showingdetails.showdate >= '{date}'
-                            ;'''
+                                SELECT showingdetails.showingid, STRING_AGG(showtime::text, ', ' ORDER BY showtime) AS mshowtimes,
+                                STRING_AGG(showingdetails.showingid::text, ', ' ORDER BY showingdetails.showingid) AS showingids,
+                                STRING_AGG(discount::text, ', ' ORDER BY discount) AS discounts
+                                FROM showingdetails WHERE showdate = '{date}' AND seatsavailable >0 
+                                GROUP BY showingdetails.showingid
+                                )sd
+                            ON showingmaster.showingid = sd.showingid;'''
                 print(query)
                 cur.execute(query)
 
