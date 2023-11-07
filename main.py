@@ -56,7 +56,6 @@ def currentmovies():
 @app.route("/upcomingmovies",methods=["GET"])
 def upcomingmovies():
     responsedata = dbc.getUpcomingMovies()
-
     if "error" in responsedata[0]:
         return responsedata, 400
     return responsedata, 200
@@ -101,6 +100,28 @@ def register():
     print("Data : ",data)
     print(type(data))
     return data
+
+
+# api to upgrade user's membership from Regular to Premium
+@app.route('/upgradeToPremium', methods=['POST'])
+def upgradeToPremium():
+    loginInfo = request.get_json()
+    username = loginInfo['username']
+    response = dbc.upgradeMembership(username)
+    print('upgrade - response : ', response)
+    print(type(response))
+    return response
+
+
+# api to retrieve user details to display on profile - full name, address, membership type, membership valid till data, and rewards points
+@app.route('/profileInfo', methods=['GET'])
+def profileInfo():
+    loginInfo = request.get_json()
+    username = loginInfo['username']
+    response = dbc.getProfileInfo(username)
+    print('profile info - response : ', response)
+    print(type(response))
+    return response
 
 
 if __name__ == '__main__':
