@@ -278,7 +278,7 @@ def registerUserMembership(username):
                 userid = cursor.fetchone()[0]
                 print("User id :",userid)
                 curDate = datetime.date.today()
-                newYear = curDate.year+4
+                newYear = curDate.year+1
                 insertDate = curDate.replace(year=newYear).strftime('%Y-%m-%d')
                 print(insertDate)
                 
