@@ -2,14 +2,15 @@ from flask import Flask, jsonify, request, render_template
 import json
 import requests
 
-
 app = Flask(__name__)
+
 # @app.route("/openloginpage")
 # def openloginpage():
 #    return render_template('Login.html')
 # @app.route("/")
 # def openregisterpage():
 #    return render_template("merge.html")
+
 @app.route("/openupgradepage")
 def openregisterpage():
    return render_template('upgrademembership.html')
@@ -69,6 +70,7 @@ def upcoming_movies1():
         current_movies_featuring=current_movies_json[:4]
         upcoming_movies_json=json.loads(r_upcoming.text)
    return render_template("testhome.html",Featuring_movies=current_movies_featuring,upcoming_movie_all=upcoming_movies_json)
+
 @app.route('/viewprofiledetails', methods=['POST', 'GET'])
 def user_details():
       
@@ -99,7 +101,31 @@ def upgrade_membership():
 
          return "membership updated"
       
-   
+@app.route('/bookmovie', methods=['POST'])
+def book_movies():
+   if request.method =="POST":
+      movieid = request.form.get('movieid')
+      multiplexid = request.form.get('multiplexid')
+      chosenDate = request.form.get('chosenDate')   
+      
+      print(movieid)       
+      print(multiplexid)
+      print(chosenDate)
+      
+      # movieid=6
+      # multiplexid=14
+      # chosenDate = '2023-11-03'
+      
+      data1 = {
+         "movieid": movieid,
+         "multiplexid":multiplexid,
+         "chosenDate": chosenDate      
+      }
+      headers = {'Content-Type': 'application/json'}
+      r = requests.post('http://127.0.0.1:5000/getmovietheaters', json=data1, headers=headers)
+      print(r.text)
+      theaters = json.loads(r.text)
+   return render_template("bookmovie.html",theaters=theaters) 
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1',port=5001)
