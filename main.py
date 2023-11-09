@@ -114,7 +114,7 @@ def upgradeToPremium():
 
 
 # api to retrieve user details to display on profile - full name, address, membership type, membership valid till data, and rewards points
-@app.route('/profileInfo', methods=['GET'])
+@app.route('/profileInfo', methods=['POST'])
 def profileInfo():
     loginInfo = request.get_json()
     username = loginInfo['username']

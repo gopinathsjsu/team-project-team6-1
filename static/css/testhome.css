@@ -153,7 +153,7 @@ body {
     color: #adadad;
     display: grid;
     /*grid-template-columns: 1fr 3fr;*/
-    gap: 2rem;
+    /* gap: 0.5rem; */
     margin-left: 3%;
     margin-right: 3%;
     /* background-color: #92601f; */
@@ -247,15 +247,15 @@ label {
 /* current movies */
 
 .movies-container {
-    padding-bottom: 3rem;
-    display: none;
+    padding-bottom: 1rem;
+    
    
 }
-.movies-container:target{
+/* .movies-container:target{
     display: block;
    
    
-}
+} */
 .current-movies {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
