@@ -1,3 +1,5 @@
+#API Documentation
+
 <details>
 
 <summary> Seat Allocation API </summary>
@@ -5,16 +7,18 @@
 URL format: POST
 http://127.0.0.1:5000/getseatmatrix
 
-Request format: 
+Request format:
+
+```yaml
 {
     "theaterid":1,
     "showdetailid":2
 }
+```
 
-Response format: 
+Response format: Response truncated to two records only 
 
-Response truncated to two records only 
-
+```yaml
 [
     {
         "istaken": false,
@@ -33,6 +37,7 @@ Response truncated to two records only
         "showingdetailid": 2
     }
 ]
+```
 
 </details>
 
@@ -45,13 +50,18 @@ URL format:
 http://127.0.0.1:5000/getmovietheaters
 
 Request format: POST
+
+```yaml
 {
     "movieid": 1,
     "multiplexid": 1,
     "chosenDate" : "2023-12-13"
 }
+```
 
 Response format: 
+
+```yaml
 [
     {
         "discounts": "$0.00, $0.75",
@@ -68,6 +78,7 @@ Response format:
         "theaternumber": 1
     }
 ]
+```
 
 </details>
 
@@ -80,10 +91,9 @@ http://127.0.0.1:5000/multiplexlist
 
 Request format:
 
-Response format: 
+Response format: Response truncated to two records only 
 
-Response truncated to two records only 
-
+```yaml
 [
     {
         "multiplexid": 1,
@@ -94,6 +104,7 @@ Response truncated to two records only
         "multiplexname": "DEF multiplex"
     }
 ]
+```
 
 </details>
 
@@ -108,6 +119,7 @@ Request format:
 
 Response format: 
 
+```yaml
 [
     {
         "movieid": 5,
@@ -116,6 +128,7 @@ Response format:
         "runtimeminutes": 202
     }
 ]
+```
 
 </details>
 
@@ -128,10 +141,9 @@ http://127.0.0.1:5000/currentmovies
 
 Request format:
 
-Response format: 
+Response format: Response truncated to two records only 
 
-Response truncated to two records only 
-
+```yaml
 [
     {
         "movieid": 1,
@@ -146,6 +158,7 @@ Response truncated to two records only
         "runtimeminutes": 187
     }
 ]
+```
 
 </details>
 
@@ -159,13 +172,16 @@ http://127.0.0.1:5000/signin
 
 Request format:
 
+```yaml
 {
     "username": "freddy1@gmail.com",
     "password": "fred1"
 }
+```
 
 Response format: 
 
+```yaml
 [
     {
         "ispremium": true,
@@ -177,5 +193,6 @@ Response format:
         "username": "freddy1@gmail.com"
     }
 ]
+```
 
 </details>
