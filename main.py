@@ -83,6 +83,19 @@ def getmovietheaters():
         return responsedata, 400
     return responsedata, 200
 
+#api to get seat allocation chart for a show
+@app.route("/getseatmatrix", methods = ["POST"])
+def  getseatmatrix():
+    requestdata = request.get_json()
+
+    theaterid = requestdata["theaterid"]
+    showdetailid = requestdata["showdetailid"]
+    responsedata = dbc.getseatAllocation(theaterid, showdetailid)
+
+    if "error" in responsedata[0]:
+        return responsedata, 400
+    return responsedata, 200
+
 # api to register a user and add their info to database
 @app.route('/signup', methods=['POST'])
 def register():

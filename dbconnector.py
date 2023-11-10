@@ -191,35 +191,33 @@ def getShowingInfo(movieid, multiplexid, date):
             data = json.loads(data)
             return data
 
-def getUpcomingMovies():
+def getseatAllocation(theaterid, showdetailid):
     data = []
     try:
         with psycopg2.connect(**params) as conn:
 
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
-
-                query = f'''SELECT movieid, moviename, runtimeminutes, poster
-	                    FROM public.movie WHERE releasedate > CURRENT_DATE'''
-                
+                query = f'''SELECT * FROM seatdetails
+                            INNER JOIN (
+                                SELECT seatid,rownum,seatno FROM seat WHERE theaterid = {theaterid}
+                            )st
+                            ON seatdetails.seatid = st.seatid
+                            WHERE showingdetailid ={showdetailid};'''
                 cur.execute(query)
 
                 data = cur.fetchall()
-                #print(data)
-                #print('successfully read in data')
                 if len(data) ==0:
                     data.append({"error":"No record found"})
-                    data.append({"error details": "No upcoming movies!"})
+                    data.append({"error details": "No seatdeatils records for the selected movie, theater and date!"})
     except (Exception, psycopg2.DatabaseError) as error:
-        #print("Error in checkLoginCredentials()")
-        #print(error)
-        data.append({"error":"Error in getCurrentMovies()"})
+        data.append({"error":"Error in getseatAllocation()"})
         data.append({"error details": str(error)})
     finally:
         if conn is not None:
             conn.close()
-            #print('database connection closed')
+            data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
+            data = json.loads(data)
             return data
-
 
 # to register a user 
 def registeruser(fullname, phoneno, address, username, password, role):
