@@ -52,6 +52,22 @@ Request format: POST
 }
 
 Response format: 
+[
+    {
+        "discounts": "$0.00, $0.75",
+        "movieid": 1,
+        "moviename": "Killers Of The Flower Moon",
+        "mshowtimes": "14:00:00, 19:00:00",
+        "multiplexid": 1,
+        "multiplexname": "ABC multiplex",
+        "poster": "KillersOfTheFlowerMoon.jpeg",
+        "price": "$2.50",
+        "showingid": 1,
+        "showingids": "1, 1",
+        "theaterid": 1,
+        "theaternumber": 1
+    }
+]
 
 </details>
 
