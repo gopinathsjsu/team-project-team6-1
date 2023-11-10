@@ -78,7 +78,7 @@
            
             
             <img src="./static/images/profile.png" alt="" class="img3"><br>
-            <a href="/openloginpage"> <p>Sign In</p></a>
+            <a href="/viewprofiledetails"> <p>view profile</p></a>
             
         </div>
        
@@ -185,11 +185,11 @@
     <section class="main-container">
         <div class="h1text" id="hreftags">
             <!-- <h1 >In Theaters Now</h1> -->
-            <a href="#moviesdiv1" >View All Movies</a>
-            <a href="#moviesdiv2" >Coming Soon</a>
+            <a href="/current_movies" >View All Movies</a>
+            <!-- <a href="/upcoming_movies" >Coming Soon</a> -->
         </div>
         <div class="movies-container" id="moviesdiv1">
-            <h1 >Movies Lined Up</h1><br>
+            <!-- <h1 >Movies Lined Up</h1><br> -->
             <div class="current-movies">
                 {% for movie in movies %}
                 <div class="current-movie">
@@ -197,7 +197,7 @@
                         <img src="static/images/{{movie['poster']}}" alt="" class="img2">
                     </div>
                     <h3 class="movie-title">{{movie['moviename']}}</h3>
-                    <h4 class="movie-duration">{{movie['runtimeminutes']}} min</h4>
+                    <h4 class="movie-duration">{{movie['runtimeminutes']}}min</h4>
                     <!-- <h1 class="release-date">{{movie['releaseDate']}}</h1> -->
                     <div class="booking">
                         <a href="" class="btn">Buy Tickets</a>
@@ -206,18 +206,23 @@
                 {% endfor %}
             </div>
         </div>
+        <div class="h1text" id="hreftags">
+            <!-- <h1 >In Theaters Now</h1> -->
+            <!-- <a href="/current_movies" >View All Movies</a> -->
+            <a href="/upcoming_movies" >Coming Soon</a>
+        </div>
         <div class="movies-container" id="moviesdiv2">
-            <h1 >Soon-to-Hit-Theaters</h1><br>
+            <!-- <h1 >Soon-to-Hit-Theaters</h1><br> -->
        
             <div class="current-movies">
 
-                {% for movie in upcoming_movie_all  %}
+                {% for movie in upcoming_movie_all %}
                 <div class="current-movie">
                     <div class="cm-img-box">
                         <img src="static/images/{{movie['poster']}}" alt="" class="img2">
                     </div>
                     <h3 class="movie-title">{{movie['moviename']}}</h3>
-                    <h4 class="movie-duration">{{movie['runtimeminutes']}} min</h4>
+                    <h4 class="movie-duration">{{movie['runtimeminutes']}}min</h4>
                     <!-- <h1 class="release-date">{{movie['releaseDate']}}</h1> -->
                     <div class="booking">
                         <a href="" class="btn">Buy Advance Tickets </a>
