@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Member Details</title>
+    <link rel="stylesheet" href="static/css/viewprofile.css">
+
+</head>
+<body>
+    <h3>Profile</h3>
+     
+    <div class="container">
+    <section class="main-container1" >
+       
+            
+            <h4>Full Name</h4><h5>{{ fullname}}</h5>
+            <h4>Address</h4><h5>{{ address }}</h5>
+            <!-- <h4>Membership Type</h4>{{ membershiptype }} -->
+            <h4>Membership valid Till</h4><h5>{{ membershiptilldate }}</h5>
+            <h4>Reward Points</h4><h5>{{ rewardpoints }} </h5>           
+       
+    </section>  
+    <div class="divider"></div>
+    <section class="main-container2" >
+    {% if membershiptype == "Regular" %}
+    
+    <div class="membership-container">
+        
+        <img src="/static/images/AnnualMemberhip.png" class="img1">
+        <h4>Membership Type</h4><h5>{{ membershiptype }}</h5>
+        <p>Your Membership Includes:<br>
+        FREE refill on your large popcorn<br>
+        Birthday gift<br>
+        Member-exclusive offers, screenings, and more!</p>
+        <!-- /openupgradepage -->
+        <!-- <form action="/openupgradepage" class="form" name="form">
+        <button type="button">Upgrade to Premium</button>
+        </form> -->
+        <a href="/openupgradepage" class="button"> <p>upgrade membership</p></a>
+    </div><br>
+    
+    {% endif %} 
+    {% if membershiptype == "Premium" %}
+    
+    <div class="membership-container">
+        
+        <img src="/static/images/AnnualMemberhip.png" class="img1">
+        <h4>Membership Type</h4><h5>{{ membershiptype }}</h5>
+        <p>Your Membership Includes:<br>
+            Enjoy a year of waived online service fees<br>
+        FREE refill on your large popcorn<br>
+        Birthday gift<br>
+        Member-exclusive offers, screenings, and more!</p>
+        
+    </div><br>
+    
+    {% endif %} 
+
+    </section>
+    </div>
+</body>
+</html>
+

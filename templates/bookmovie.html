@@ -12,20 +12,19 @@
     <section class="top-bar">
         <div class="left-content">
             <h2 class="title">MovieAnytime</h2>
-            <form action="/bookmovie/{{moviename}}" method="post">
+            <form action="/bookmovie" method="POST">
                 <ul class="navigation">
                     <li>
-                        <select name="theaters" id="theaters">
-                            <option value="multiplex">multiplex</option>
-                        </select>
+                        <input type="movieid" id="movieid" name="movieid">
+                    <li>
+                        <input type="multiplexid" id="multiplexid" name="multiplexid">
                     </li>
                     <li>
-                        <input type="date" id="showdate" name="showdate">
+                        <input type="date" id="chosenDate" name="chosenDate">
                     </li>
                 </ul>
                 <button class="btn" type="submit">Apply</button>
             </form>
-
         </div>
         <div class="right-content">
             <img src="./static/images/filter.png" alt="" class="filter">
@@ -46,51 +45,18 @@
             <div class="movie-header">
                 <h4>moviename</h4>
             </div>
-            <div class="current-theaters">
-                <div class="current-movie">
-                    <h3 class="movie-title">showing multiplex</h3>
-                    <p class="screen-name">showing theatername</p>
-                    <div class="booking">
-                        <a href="#" class="btn"> show Time</a>
-                        <a href="#" class="btn"> show Time</a>
-                        <a href="#" class="btn"> show Time</a>
-                    </div>
+        <div class="current-theaters">
+            {% for theater in theaters %}
+            <div class="current-movie">
+                <h3 class="movie-title">{{ theater['multiplexname'] }}</h3>
+                <p class="screen-name">Showing at {{ theater['theaternumber'] }}</p>
+                <div class="booking">
+                    {% for showtime in theater['mshowtimes'].split(', ') %}
+                        <button class="btn" type="submit">{{ showtime }}</button>
+                    {% endfor %}
                 </div>
             </div>
-        </div>
-    </section>
-    <section class="main-container-booking">
-        <div class="movies-container">
-            <div class="movie-header">
-            </div>
-            <div class="current-theaters">
-                <div class="current-movie">
-                    <h3 class="movie-title">showing multiplex</h3>
-                    <p class="screen-name">showing theatername</p>
-                    <div class="booking">
-                        <a href="#" class="btn"> show Time</a>
-                        <a href="#" class="btn"> show Time</a>
-                        <a href="#" class="btn"> show Time</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="main-container-booking">
-        <div class="movies-container">
-            <div class="movie-header">
-            </div>
-            <div class="current-theaters">
-                <div class="current-movie">
-                    <h3 class="movie-title">showing multiplex</h3>
-                    <p class="screen-name">showing theatername</p>
-                    <div class="booking">
-                        <a href="#" class="btn"> show Time</a>
-                        <a href="#" class="btn"> show Time</a>
-                        <a href="#" class="btn"> show Time</a>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </section>
 
