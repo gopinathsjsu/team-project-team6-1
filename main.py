@@ -138,7 +138,7 @@ def profileInfo():
 
 
 # api to retrieve user's past movie bookings to display on profile
-@app.route('/pastMovieBookings', methods=['GET'])
+@app.route('/pastMovieBookings', methods=['GET','POST'])
 def pastMovieBookings():
     loginInfo = request.get_json()
     username = loginInfo['username']
@@ -149,7 +149,7 @@ def pastMovieBookings():
 
 
 # api to retrieve user's upcoming movie bookings to display on profile
-@app.route('/upcomingMovieBookings', methods=['GET'])
+@app.route('/upcomingMovieBookings', methods=['GET','POST'])
 def upcomingMovieBookings():
     loginInfo = request.get_json()
     username = loginInfo['username']
