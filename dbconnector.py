@@ -375,7 +375,7 @@ def getPastMovieBookings(username):
                 cursor.execute(preQuery,(username,))
                 userid = cursor.fetchone()[0]
                 cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
-                query = "select bookingid, num_seats_booked, seatstaken,totalcost,servicefee,showdate,showtime,price,moviename,runtimeminutes from (select * from (select * from booking inner join showingdetails on booking.showingdetailid = showingdetails.showingdetailid where userid = 9 and showingdetails.showdate < CURRENT_DATE) inner join showingmaster using (showingid)) inner join movie using (movieid);"
+                query = "select bookingid, num_seats_booked,totalcost,servicefee,showdate,showtime,price,moviename,runtimeminutes from (select * from (select * from booking inner join showingdetails on booking.showingdetailid = showingdetails.showingdetailid where userid = 9 and showingdetails.showdate < CURRENT_DATE) inner join showingmaster using (showingid)) inner join movie using (movieid);"
                 cursor.execute(query,(userid,))
                 data = cursor.fetchall()
                 print(data)
@@ -407,7 +407,7 @@ def getUpcomingMovieBookings(username):
                 cursor.execute(preQuery,(username,))
                 userid = cursor.fetchone()[0]
                 cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
-                query = "select bookingid, num_seats_booked, seatstaken,totalcost,servicefee,showdate,showtime,price,moviename,runtimeminutes from (select * from (select * from booking inner join showingdetails on booking.showingdetailid = showingdetails.showingdetailid where userid = 9 and showingdetails.showdate > CURRENT_DATE) inner join showingmaster using (showingid)) inner join movie using (movieid);"
+                query = "select bookingid, num_seats_booked,totalcost,servicefee,showdate,showtime,price,moviename,runtimeminutes from (select * from (select * from booking inner join showingdetails on booking.showingdetailid = showingdetails.showingdetailid where userid = 9 and showingdetails.showdate > CURRENT_DATE) inner join showingmaster using (showingid)) inner join movie using (movieid);"
                 cursor.execute(query,(userid,))
                 data = cursor.fetchall()
                 print(data)
@@ -424,3 +424,6 @@ def getUpcomingMovieBookings(username):
         data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
         data = json.loads(data)
         return jsonify(data)
+    
+
+
