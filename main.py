@@ -148,5 +148,15 @@ def pastMovieBookings():
     return response
 
 
+# api to retrieve user's upcoming movie bookings to display on profile
+@app.route('/upcomingMovieBookings', methods=['GET'])
+def upcomingMovieBookings():
+    loginInfo = request.get_json()
+    username = loginInfo['username']
+    response = dbc.getUpcomingMovieBookings(username)
+    print('upcoming movie bookings - response : ', response)
+    print(type(response))
+    return response
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1',port=5000)
