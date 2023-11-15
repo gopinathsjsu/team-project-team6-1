@@ -158,5 +158,17 @@ def upcomingMovieBookings():
     print(type(response))
     return response
 
+# api to retrieve user's 30 day movie history
+@app.route('/moviesPast30Days', methods=['GET'])
+def moviesPast30Days():
+    loginInfo = request.get_json()
+    username = loginInfo['username']
+    response = dbc.getMoviesPast30Days(username)
+    print('30 day movie history - response : ', response)
+    print(type(response))
+    return response
+
+
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1',port=5000)
