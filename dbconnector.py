@@ -156,13 +156,13 @@ def getShowingInfo(movieid, multiplexid, date):
                             INNER JOIN(
                                 SELECT theaterid, theater.multiplexid, theaternumber, multiplexname  from theater
                                     INNER JOIN (
-                                        SELECT multiplexname, multiplex.multiplexid from multiplex where multiplex.multiplexid = {multiplexid}
+                                        SELECT multiplexname, multiplex.multiplexid from multiplex where multiplex.multiplexid = %s
                                     )mul1
                                     on theater.multiplexid = mul1.multiplexid
                                 )t1
                             ON showingmaster.theaterid = t1.theaterid
                             INNER JOIN(
-                                SELECT movieid, moviename, poster from movie where movieid = {movieid}
+                                SELECT movieid, moviename, poster from movie where movieid = %s
                                 GROUP BY movieid
                                 )m1
                             ON showingmaster.movieid = m1.movieid
@@ -170,12 +170,11 @@ def getShowingInfo(movieid, multiplexid, date):
                                 SELECT showingdetails.showingid, STRING_AGG(showtime::text, ', ' ORDER BY showtime) AS mshowtimes,
                                 STRING_AGG(showingdetails.showingid::text, ', ' ORDER BY showingdetails.showingid) AS showingids,
                                 STRING_AGG(discount::text, ', ' ORDER BY discount) AS discounts
-                                FROM showingdetails WHERE showdate = '{date}' AND seatsavailable >0 
+                                FROM showingdetails WHERE showdate = %s AND seatsavailable >0 
                                 GROUP BY showingdetails.showingid
                                 )sd
                             ON showingmaster.showingid = sd.showingid;'''
-                print(query)
-                cur.execute(query)
+                cur.execute(query, (multiplexid, movieid, date))
 
                 data = cur.fetchall()
                 if len(data) ==0:
@@ -191,6 +190,7 @@ def getShowingInfo(movieid, multiplexid, date):
             data = json.loads(data)
             return data
 
+#returns all the seats from seatdetail table for a showing detail
 def getseatAllocation(theaterid, showdetailid):
     data = []
     try:
@@ -199,11 +199,11 @@ def getseatAllocation(theaterid, showdetailid):
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
                 query = f'''SELECT * FROM seatdetails
                             INNER JOIN (
-                                SELECT seatid,rownum,seatno FROM seat WHERE theaterid = {theaterid}
+                                SELECT seatid,rownum,seatno FROM seat WHERE theaterid = %s
                             )st
                             ON seatdetails.seatid = st.seatid
-                            WHERE showingdetailid ={showdetailid};'''
-                cur.execute(query)
+                            WHERE showingdetailid =%s;'''
+                cur.execute(query, (theaterid, showdetailid))
 
                 data = cur.fetchall()
                 if len(data) ==0:
@@ -211,6 +211,81 @@ def getseatAllocation(theaterid, showdetailid):
                     data.append({"error details": "No seatdeatils records for the selected movie, theater and date!"})
     except (Exception, psycopg2.DatabaseError) as error:
         data.append({"error":"Error in getseatAllocation()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data
+
+#creates temperory booking number
+def createBooking(seatid, showingdetailid,userid):
+    data = []
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                query = f'''INSERT INTO booking(num_seats_booked, seatid, showingdetailid, userid) VALUES (%s, %s, %s,%s) RETURNING bookingid;'''
+                cur.execute(query, (len(seatid), seatid, showingdetailid, userid))
+
+                data = cur.fetchall()
+                if len(data) ==0:
+                    data.append({"error":"Record not created"})
+                    data.append({"error details": "Booking record not created"})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in createBooking()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data
+
+#get card details
+def getCardDetails(userid):
+    data = []
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                query = f'''SELECT cardid FROM CardDetails WHERE userid = %s;'''
+                cur.execute(query, (userid,))
+
+                data = cur.fetchall()
+                if len(data) ==0:
+                    data.append({"error":"Record not found"})
+                    data.append({"error details": "Card record not found for the user"})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in getCardDetails()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data
+
+#get booking details
+def getTransactionDetails(bookingid):
+    data = []
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                query = f'''SELECT booking.showingdetailid, ARRAY_LENGTH(seatid,1), sd.* FROM booking
+                            INNER JOIN(
+                            SELECT showingdetails.showingid, showingdetails.showingdetailid, showdate, showtime, discount, sm.* FROM showingdetails
+                                INNER JOIN(
+                                SELECT price, showingmaster.showingid FROM showingmaster
+                                )sm
+                                ON sm.showingid = showingdetails.showingid
+                            )sd
+                            ON sd.showingdetailid = booking.showingdetailid
+                            WHERE bookingid =%s;'''
+                cur.execute(query, (bookingid,))
+
+                data = cur.fetchall()
+                if len(data) ==0:
+                    data.append({"error":"Record not found"})
+                    data.append({"error details": "Booking record not found"})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in getBookingDetails()"})
         data.append({"error details": str(error)})
     finally:
         if conn is not None:

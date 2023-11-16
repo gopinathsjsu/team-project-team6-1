@@ -1,10 +1,10 @@
 from datetime import date
 from flask import Flask, request, jsonify
 import dbconnector as dbc
-import psycopg2
-
+import rsa
 
 app = Flask(__name__)
+
 
 # api to check username and password for login
 @app.route("/signin",methods=["POST"])
@@ -85,7 +85,7 @@ def getmovietheaters():
 
 #api to get seat allocation chart for a show
 @app.route("/getseatmatrix", methods = ["POST"])
-def  getseatmatrix():
+def getseatmatrix():
     requestdata = request.get_json()
 
     theaterid = requestdata["theaterid"]
@@ -95,6 +95,59 @@ def  getseatmatrix():
     if "error" in responsedata[0]:
         return responsedata, 400
     return responsedata, 200
+
+#api to create a booking record
+@app.route("/createbooking", methods=["POST"])
+def createbooking():
+    requestdata = request.get_json()
+
+    seatid = requestdata["seatid"]
+    showingdetailid = requestdata["showingdetailid"]
+    userid = requestdata["userid"]
+    responsedata = dbc.createBooking(seatid, showingdetailid, userid)
+
+    if "error" in responsedata[0]:
+        return responsedata, 400
+    return responsedata, 200
+
+#api to fetch last 4 digits of card
+@app.route("/getCardDetails", methods=["POST"])
+def getCardDetails():
+    requestdata = request.get_json()
+
+    userid = requestdata["userid"]
+    responsedata = dbc.getCardDetails(userid)
+
+    if "error" in responsedata[0]:
+        return responsedata, 400
+    return responsedata, 200
+
+#api to save card details
+@app.route("/savecardetails", methods=["POST"])
+def savecardetails():
+    requestdata = request.get_json()
+
+    bookingid = requestdata["bookingid"]
+    responsedata = dbc.saveCardDetails(bookingid)
+
+    if "error" in responsedata[0]:
+        return responsedata, 400
+    return responsedata, 200
+
+
+
+#api to fetch booking details
+@app.route("/getTransactionDetails", methods=["POST"])
+def getTransactionDetails():
+    requestdata = request.get_json()
+
+    bookingid = requestdata["bookingid"]
+    responsedata = dbc.getTransactionDetails(bookingid)
+
+    if "error" in responsedata[0]:
+        return responsedata, 400
+    return responsedata, 200
+
 
 # api to register a user and add their info to database
 @app.route('/signup', methods=['POST'])

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/payment.css')}}">
+    <script src="{{ url_for('static', filename='js/payment.js')}}"></script>
+    <title>Payment</title>
+</head>
+
+<body onload="enablePaymentbtn()">
+    <section class="top-bar">
+        <p class="title">Confirm Purchase</p>
+    </section>
+    <section class="display-poster">
+        <p class="moviename">
+            {{moviedetails.moviename}}
+        </p>
+        <div>
+            <table cellspacing = "10", cellpadding = "10">
+                <tr>
+                    <td>{{moviedetails.multiplex}}</td>
+                    <td>Screen {{moviedetails.theater}}</td>
+                    <td>{{moviedetails.showdate}}</td>
+                    <td>{{moviedetails.showtime}}</td>
+                    <td>{{moviedetails.noofseats}} Seat(s)</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+    <div class="main-container">
+        
+        
+        <div class="tabledialog" style="text-align: center;">
+            Upgrade to premium membership to save service fee!<br><br>
+            <img src="../static/images/AnnualMemberhip.png" alt="Premium batch" class="imgpremium">
+            <div class="membtn"><button>Join now</button></div>
+        </div>
+
+        <div>
+            <div style="float: right !important;">
+                <table cellspacing ="10" cellpadding = "10" class="tabledialog">
+                    <tr>
+                        <td style="text-align: left;">Ticket price</td>
+                        <td style="text-align: right;">${{payment.price}}</td>
+                    </tr>
+                    {% for i in range(5) %}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td style="text-align: left;">Tax</td>
+                        <td style="text-align: right;">${{payment.tax}}</td>
+                    </tr>
+                    {% if userdetails is none or userdetails.membership != 'true' %}   
+                    <tr>
+                        <td style="text-align: left;">Service Fee</td>
+                        <td style="text-align: right;">${{payment.fee}}</td>
+                    </tr>
+                    {% endif %}
+                    
+                    {% for i in range(3) %}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="2"><hr></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">Total</td>
+                        <td style="text-align: right;">${{payment.total}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="tabledialog">
+            <h1>Enter Credit Card details</h1><br>
+                <table cellspacing ="10" cellpadding = "10" style="color: black;">
+                    {% if userdetails is not none and 'card_num' in userdetails %}   
+                    <tr>
+                        <td colspan ="2"><label for="card_number">Pay with card ending in {{userdetails.card_num}} </label></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><button onclick="addnewcard();return false;">Add new Card</button></td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td><label for="card_number">Card Number:</label></td>
+                        <td><input onChange="enablePaymentbtn();" type="text" id="card_number" name="card_number" placeholder="1234567812345678" pattern="\d{16}" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="expiry_date">Expiry Date:</label></td>
+                        <td><input onChange="cardFormSubmit();" type="text" id="expiry_date" name="expiry_date" placeholder="MM/YY" pattern="[0-1]{0-1}[0-9]{1}/[0-9]{4}" maxlength="5" required></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <p id = "error" hidden>Incorrect </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="cvv">CVV:</label></td>
+                        <td><input onChange="enablePaymentbtn();" type="password" id="cvv" name="cvv" pattern="\d{3}" required></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><button id="carddetailsbtn" onclick="cardFormSubmit();return false;">Save Payment</button></td>
+                    </tr>
+                    {% endif %}
+
+                </table>
+        </div>
+
+        <div>
+            <div  class="tabledialog" style="float: right !important;">
+                <label for="email">Email</label>
+                <p style="font-size: small; font-style: italic;"> Your booking confirmation and ticket will be sent to this email.</p>
+                {% if userdetails is not none %}   
+                    <input onChange="enablePaymentbtn();" type="email" id="email" name="email" value="{{ userdetails.email }}" required>
+                {% else %}
+                    <input onChange="enablePaymentbtn();" type="email" id="email" name="email" required>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <footer>
+        Total <strong>${{payment.total}}</strong> &emsp;
+        <i style="font-size: x-small;">Please add all the necessary information</i>&emsp;
+        <button type="button" class="paybutton" id = "purchasebtn" onclick="paymentconfirmation();" >Make Payment</button>&emsp;
+    </footer>
+</body>
+</html>

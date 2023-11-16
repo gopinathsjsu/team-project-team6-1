@@ -1,11 +1,99 @@
 #API Documentation
 
+
+<details>
+
+<summary> Fetch card details API </summary>
+
+URL format: POST
+/getBookingDetails
+
+Request format:
+
+```yaml
+{
+    "bookingid":1
+}
+```
+
+Response format: Response truncated to two records only 
+
+```yaml
+[
+    {
+        "array_length": 1,
+        "discount": "$0.00",
+        "price": "$2.50",
+        "showdate": "2023-12-13",
+        "showingdetailid": 1,
+        "showingid": 1,
+        "showtime": "19:00:00"
+    }
+]
+```
+
+</details>
+
+<details>
+
+<summary> Fetch card details API </summary>
+
+URL format: POST
+/getCardDetails
+
+Request format:
+
+```yaml
+{
+    "userid": 1
+}
+```
+
+Response format: Response truncated to two records only 
+
+```yaml
+
+```
+
+</details>
+
+
+<details>
+
+<summary> Create Booking API </summary>
+
+URL format: POST
+/createbooking
+
+Request format:
+
+```yaml
+{
+    "seatid": [2],
+    "showingdetailid":1,
+    "userid":1
+}
+```
+
+Response format: Response truncated to two records only 
+
+```yaml
+[
+    {
+        "bookingid": 5
+    }
+]
+```
+
+</details>
+
+
 <details>
 
 <summary> Seat Allocation API </summary>
 
 URL format: POST
-http://127.0.0.1:5000/getseatmatrix
+/getseatmatrix
 
 Request format:
 
@@ -47,7 +135,7 @@ Response format: Response truncated to two records only
 <summary> Get Movie Theaters API </summary>
 
 URL format:
-http://127.0.0.1:5000/getmovietheaters
+/getmovietheaters
 
 Request format: POST
 
@@ -87,7 +175,7 @@ Response format:
 <summary> Get Multiplex list API </summary>
 
 URL format: GET
-http://127.0.0.1:5000/multiplexlist
+/multiplexlist
 
 Request format:
 
@@ -113,7 +201,7 @@ Response format: Response truncated to two records only
 <summary> Get Upcoming Movies API </summary>
 
 URL format: GET
-http://127.0.0.1:5000/upcomingmovies
+/upcomingmovies
 
 Request format:
 
@@ -137,7 +225,7 @@ Response format:
 <summary> Get Current movies API </summary>
 
 URL format: GET
-http://127.0.0.1:5000/currentmovies
+/currentmovies
 
 Request format:
 
@@ -168,7 +256,7 @@ Response format: Response truncated to two records only
 <summary> Login API </summary>
 
 URL format: POST
-http://127.0.0.1:5000/signin
+/signin
 
 Request format:
 
