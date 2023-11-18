@@ -1,9 +1,9 @@
 {
     "postgres":{
-        "host":"localhost",
-        "port": 5432,
-        "dbname":"movieanytime",
-        "user":"postgres",
-        "password":"postgres"
+        "host":"",
+        "port": ,
+        "dbname":"",
+        "user":"",
+        "password":""
     }
 }

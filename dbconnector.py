@@ -239,6 +239,48 @@ def createBooking(seatid, showingdetailid,userid):
             conn.close()
             return data
 
+def completeBooking(bookingid, payment, rewardpointsused, seats):
+    data = []
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                print("{" + (",".join(map(str, seats))) + "}")
+                query = f'''SELECT seatdetailid FROM seatdetails WHERE seatdetailid = ANY (%s::int[]) and istaken = TRUE;'''
+                cur.execute(query, ("{" + (",".join(map(str, seats))) + "}",))
+                data = cur.fetchall()
+                if len(data) > 0:
+                    data.append({"error":"Seat cannot be be assigned"})
+                    data.append({"error details": "Seats already taken"})
+                    return data
+
+                query = f'''UPDATE seatdetails set istaken = true WHERE seatdetailid = ANY (%s::int[]) and istaken = false RETURNING seatdetailid;'''
+                cur.execute(query, ("{" + (",".join(map(str, seats))) + "}",))
+                data = cur.fetchall()
+                if len(data) < len(seats):
+                    data.append({"error":"Seat cannot be be assigned"})
+                    data.append({"error details": "Seats already taken"})
+                    return data
+
+
+                query = f'''UPDATE booking set status = %s, totalcost = %s, discount = %s, servicefee = %s, 
+                            rewardpointsused = %s, rewardpointsearned = %s
+	                        WHERE bookingid = %s RETURNING bookingid;'''
+                cur.execute(query, ('true',payment['total']-rewardpointsused, payment['discount'], payment['fee'], rewardpointsused, payment['total']-rewardpointsused, bookingid))
+
+                data = cur.fetchall()
+                if len(data) ==0:
+                    data.append({"error":"Record not created"})
+                    data.append({"error details": "Booking record not created"})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in createBooking()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data
+
+
 #get card details
 def getCardDetails(userid):
     data = []
@@ -268,7 +310,7 @@ def getTransactionDetails(bookingid):
         with psycopg2.connect(**params) as conn:
 
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
-                query = f'''SELECT booking.showingdetailid, ARRAY_LENGTH(seatid,1), sd.* FROM booking
+                query = f'''SELECT booking.showingdetailid, ARRAY_LENGTH(seatid,1), seatid, sd.* FROM booking
                             INNER JOIN(
                             SELECT showingdetails.showingid, showingdetails.showingdetailid, showdate, showtime, discount, sm.* FROM showingdetails
                                 INNER JOIN(
@@ -285,13 +327,33 @@ def getTransactionDetails(bookingid):
                     data.append({"error":"Record not found"})
                     data.append({"error details": "Booking record not found"})
     except (Exception, psycopg2.DatabaseError) as error:
-        data.append({"error":"Error in getBookingDetails()"})
+        data.append({"error":"Error in getTransactionDetails()"})
         data.append({"error details": str(error)})
     finally:
         if conn is not None:
             conn.close()
             data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
             data = json.loads(data)
+            return data
+
+#save card details to db
+def saveCardDetails(card_number, cvv,exp, userid):
+    data = []
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                query = f'''UPDATE carddetails SET cardid = %s, cvv = %s, expiry = %s WHERE userid=%s;
+                            INSERT INTO carddetails (cardid, cvv, expiry, userid)
+                                SELECT %s, %s, %s, %s
+                                WHERE NOT EXISTS (SELECT 1 FROM carddetails WHERE userid=%s);'''
+                cur.execute(query, (card_number,cvv,exp,userid,card_number,cvv,exp,userid,userid))
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in saveCardDetails()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
             return data
 
 # to register a user 

@@ -1,4 +1,4 @@
-from flask import Flask, redirect, session, request, render_template, url_for
+from flask import Flask, jsonify, redirect, session, request, render_template, url_for
 import json
 import requests
 
@@ -47,7 +47,7 @@ def payment(bookingid):
 
       response = json.loads(r.text)
       if r.status_code == 200:
-         userdetails["card_num"]=(response[0]['cardid']-1234567812345678)%10000
+         userdetails["card_num"]=(response[0]['cardid'])%10000
       userdetails['email'] = session['username']
       userdetails['membership']= session['ispremium']
       userdetails['rewards']= session['rewardpoints']
@@ -57,39 +57,48 @@ def payment(bookingid):
        moviedetails['multiplex'] = session['multiplex']
        moviedetails['theater'] = session['theater']
    else:
-       #error
+       #error remove this part afterwards
        moviedetails['moviename'] = 'Paw Patrol'
        moviedetails['multiplex'] = 'AMC SARATOGA'
        moviedetails['theater'] = 3
 
    jsonrequest={"bookingid": bookingid}
+   moviedetails['bookingid'] = bookingid
    r = requests.post('http://127.0.0.1:5000/getTransactionDetails', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
 
    response = json.loads(r.text)
    if r.status_code == 200:
        moviedetails['showdate'] =response[0]['showdate']
        moviedetails['showtime'] =response[0]['showtime']
+       moviedetails['showingdetailid'] =response[0]['showingdetailid']
        moviedetails['noofseats'] =response[0]['array_length']
+       moviedetails['seats'] =response[0]['seatid']
        payment['price'] = round(float(response[0]['price'].strip('$.')) * moviedetails['noofseats'] , 2)
        payment['discount'] = float(response[0]['discount'].strip('$.')) 
        payment['tax'] = round(float(payment['price']) * 0.05, 2)
        payment['fee'] = 2.50
        payment['total'] = round(payment['fee'] + payment['tax'] + payment['price'] - payment['discount'], 2)
-   #get all from session variables or database when you get info from previous page
-   #moviedetails = {'moviename': 'Paw Patrol', 'multiplex': 'AMC SARATOGA', 'theater': 3, 'showdate': '12/03/2023', 'showtime':'19:00', 'noofseats': '2'}
-   #payment = {'price': 25.20, 'tax': 12.00, 'fee':2.50, 'total': 50}
-   #userdetails = {'email': 'a@b.com', 'userid': 12, 'membership':'true', 'rewards': 50, 'card_num': 1234123412341234, 'exp':'12/27', 'cvv':'057'}
    return render_template('payment.html', moviedetails =moviedetails, payment=payment, userdetails=userdetails)
 
 @app.route('/bookingconfirmation', methods=['POST', 'GET'])
 def bookingconfirmation():
-   data = request.get_json()
-   card_number = data.get('card_number')
-   cvv = data.get('cvv')
-   
-   userdetails = data.get('userdetails')
-    
-   return render_template('confirmationpage.html')
+   if request.method == "POST":
+      jsonrequest = json.dumps(request.get_json())
+      r = requests.post('http://127.0.0.1:5000/saveBooking', data=jsonrequest, headers= {'Content-Type': 'application/json'})
+      if(r.status_code == 200):
+         #session.pop('moviename')
+         #session.pop('multiplex')
+         #session.pop('theater')
+         return jsonify({'response': r.text}), 200
+      else:
+          return jsonify({'response': r.text}), 400
+          
+   return render_template('confirmation.html')
+
+@app.route('/bookingerror', methods=['POST', 'GET'])
+def bookingerror():
+   return render_template('error.html')
+
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():

@@ -1,4 +1,5 @@
 from datetime import date
+import json
 from flask import Flask, request, jsonify
 import dbconnector as dbc
 import rsa
@@ -123,13 +124,24 @@ def getCardDetails():
     return responsedata, 200
 
 #api to save card details
-@app.route("/savecardetails", methods=["POST"])
-def savecardetails():
+@app.route("/saveBooking", methods=["POST"])
+def saveBooking():
     requestdata = request.get_json()
+    print(requestdata)
+    card_number = requestdata["card_number"]
+    cvv = requestdata["cvv"]
+    exp = requestdata["exp"]
+    rewardpointsused = requestdata["rewardpointsused"]
+    email =requestdata["email"]
+    moviedetails = eval(requestdata["moviedetails"].replace("'", "\""))
+    payment =  eval(requestdata["payment"].replace("'", "\""))
+    userdetails = eval(requestdata["userdetails"].replace("'", "\""))
+    #if(userdetails is not None and "card_num" not in userdetails):
 
-    bookingid = requestdata["bookingid"]
-    responsedata = dbc.saveCardDetails(bookingid)
-
+    if card_number != "":
+        responsedata = dbc.saveCardDetails(card_number, cvv,exp, userdetails["userid"])
+        print(responsedata)
+    responsedata = dbc.completeBooking(moviedetails["bookingid"], payment, rewardpointsused, moviedetails["seats"])
     if "error" in responsedata[0]:
         return responsedata, 400
     return responsedata, 200

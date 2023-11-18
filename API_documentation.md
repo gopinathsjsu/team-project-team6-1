@@ -1,9 +1,42 @@
 #API Documentation
 
+<details>
+
+<summary> Save all info for booking API </summary>
+
+URL format: POST
+/saveBooking
+
+Request format:
+
+```yaml
+{
+    "card_number": "",
+    "cvv": "",
+    "exp": "",
+    "email": "freddy1@gmail.com",
+    "rewardpointsused": 0,
+    "userdetails": "{'userid': 1, 'card_num': 7788, 'email': 'freddy1@gmail.com', 'membership': True, 'rewards': 10}",
+    "moviedetails": "{'moviename': 'Paw Patrol', 'multiplex': 'AMC SARATOGA', 'theater': 3, 'bookingid': '1', 'showdate': '2023-12-13', 'showtime': '19:00:00', 'showingdetailid': 1, 'noofseats': 3, 'seats': [3]}",
+    "payment": "{'price': 37.5, 'discount': 0.0, 'tax': 1.88, 'fee': 2.5, 'total': 41.88}"
+}
+```
+
+Response format: Response truncated to two records only 
+
+```yaml
+[
+    {
+        "bookingid": 1
+    }
+]
+```
+
+</details>
 
 <details>
 
-<summary> Fetch card details API </summary>
+<summary> Fetch BOOKING details API </summary>
 
 URL format: POST
 /getBookingDetails
