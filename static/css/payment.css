@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Joan&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Joan', serif;
+    font-size: 22px;
+    color: #ffffff;
+}
+
+.title {
+    margin-right: 3rem;
+    font-size: xx-large;
+    font-weight: bold;
+}
+
+.top-bar {
+    text-align: center !important;
+    padding: 5px;
+    align-items: center;
+    background-color: #954c0c;
+}
+
+body {
+    background-color: black;
+    padding-left: 10%;
+    padding-right: 10%;
+    justify-content: space-evenly;
+}
+
+.filter{
+    margin-right: 1rem;
+    display: none;
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+section div table tr td {
+    padding: 10px;
+    border: 2px outset rgb(255, 255, 255);
+    border-radius: 10px;
+}
+div div table tr td{
+    padding: 10 px;
+}
+.display-poster
+{
+    width: 100%;
+    background-color: rgba(65, 65, 65, 0.816);
+    padding-left: 15px;
+}
+.moviename{
+    font-size: 50px;
+    font-weight: 500;
+}
+.main-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    width: 100%;
+    background-color: #656565;
+    padding: 50px;
+}
+.tabledialog{
+    background-color: #17171a;
+    width: 500px;
+    padding: 10px;
+}
+.membtn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+footer {
+    position: relative;
+    width: 100%;
+    margin-top:50px;
+    background-color: black;
+    text-align: right;
+  }
+button {
+    bottom: 2rem;
+    left: 2rem;
+    padding: 10px;
+    background-color: red;
+}
+input{
+    color: #000000;
+}
+
+.imgpremium{
+    position: relative;
+    width: 50%;
+    height: 70%;
+}
