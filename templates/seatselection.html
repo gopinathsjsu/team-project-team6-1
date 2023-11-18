@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/seatselection.css')}}">
+    <script src="{{ url_for('static', filename='js/seatselection.js')}}"></script>
+</head>
+<body>
+    <div id="layout"></div>
+
+    <div id="seats">
+        <div class="seat"></div> <div class="txt">Available</div>
+        <div class="seat taken"></div> <div class="txt">Taken</div>
+        <div class="seat selected"></div> <div class="txt">Your Chosen Seats</div>
+    </div>
+    <button id="save" onclick="reserve.save()">Continue</button>
+</body>
+</html>

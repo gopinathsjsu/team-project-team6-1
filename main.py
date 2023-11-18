@@ -203,7 +203,7 @@ def profileInfo():
 
 
 # api to retrieve user's past movie bookings to display on profile
-@app.route('/pastMovieBookings', methods=['GET'])
+@app.route('/pastMovieBookings', methods=['GET','POST'])
 def pastMovieBookings():
     loginInfo = request.get_json()
     username = loginInfo['username']
@@ -211,6 +211,28 @@ def pastMovieBookings():
     print('past movie bookings - response : ', response)
     print(type(response))
     return response
+
+
+# api to retrieve user's upcoming movie bookings to display on profile
+@app.route('/upcomingMovieBookings', methods=['GET','POST'])
+def upcomingMovieBookings():
+    loginInfo = request.get_json()
+    username = loginInfo['username']
+    response = dbc.getUpcomingMovieBookings(username)
+    print('upcoming movie bookings - response : ', response)
+    print(type(response))
+    return response
+
+# api to retrieve user's 30 day movie history
+@app.route('/moviesPast30Days', methods=['GET'])
+def moviesPast30Days():
+    loginInfo = request.get_json()
+    username = loginInfo['username']
+    response = dbc.getMoviesPast30Days(username)
+    print('30 day movie history - response : ', response)
+    print(type(response))
+    return response
+
 
 
 if __name__ == '__main__':

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="static/css/commonprofile.css">
+</head>
+<body>
+    <div class="topnav">
+        <a href="#content-view-profile" class="tab">View Profile</a>
+        <!-- <a href="#content-upgrade-membership" class="tab">Upgrade Membership</a> -->
+        <a href="#content-upcoming-movies" class="tab">Upcoming Movies</a>
+        <a href="#content-past-movies" class="tab">Past Movies</a>
+    </div>
+
+    <div id="content-view-profile" class="tab-content">
+        <p>This is the View Profile content.</p>
+        <h3>Profile</h3>
+     
+        <div class="container">
+        <section class="main-container1" >
+           
+                
+                <h4>Full Name</h4><h5>{{ fullname}}</h5>
+                <h4>Address</h4><h5>{{ address }}</h5>
+                <!-- <h4>Membership Type</h4>{{ membershiptype }} -->
+                <h4>Membership valid Till</h4><h5>{{ membershiptilldate }}</h5>
+                <h4>Reward Points</h4><h5>{{ rewardpoints }} </h5>           
+           
+        </section>  
+        <div class="divider"></div>
+        <section class="main-container2" >
+        {% if membershiptype == "Regular" %}
+        
+        <div class="membership-container">
+            
+            <img src="/static/images/AnnualMemberhip.png" class="img1">
+            <h4>Membership Type</h4><h5>{{ membershiptype }}</h5>
+            <p>Your Membership Includes:<br>
+            FREE refill on your large popcorn<br>
+            Birthday gift<br>
+            Member-exclusive offers, screenings, and more!</p>
+            <!-- /openupgradepage -->
+            <!-- <form action="/openupgradepage" class="form" name="form">
+            <button type="button">Upgrade to Premium</button>
+            </form> -->
+            <a href="/openupgradepage" class="button"> <p>upgrade membership</p></a>
+        </div><br>
+        
+        {% endif %} 
+        {% if membershiptype == "Premium" %}
+        
+        <div class="membership-container">
+            
+            <img src="/static/images/AnnualMemberhip.png" class="img1">
+            <h4>Membership Type</h4><h5>{{ membershiptype }}</h5>
+            <p>Your Membership Includes:<br>
+                Enjoy a year of waived online service fees<br>
+            FREE refill on your large popcorn<br>
+            Birthday gift<br>
+            Member-exclusive offers, screenings, and more!</p>
+            
+        </div><br>
+        
+        {% endif %} 
+    
+        </section>
+        </div>
+
+
+
+    </div>
+
+    <div id="content-upgrade-membership" class="tab-content">
+        <p>This is the Upgrade Membership content.</p>
+    </div>
+
+    <div id="content-upcoming-movies" class="tab-content">
+        <p>This is the Upcoming Movies content.</p>
+        
+        {% for tickets in futuremovieticket %}
+                <div class="current-movie1">
+                  
+                    <h3>Booking_id:-{{tickets['bookingid']}}</h3>
+                    <h4 >No_of_seats_booked:-{{tickets['num_seats_booked']}}</h4>
+                    <h4 >Movie:-{{tickets['moviename']}}</h4>
+                    <h4>ShowDate:-{{tickets['showdate']}}</h4>
+                    <h4 >ShowTime:-{{tickets['showtime']}}</h4>
+                    <h4>TotalCost:-{{tickets['totalcost']}}</h4>
+        {% endfor %}
+       
+    </div></div>
+
+    <div id="content-past-movies" class="tab-content">
+        <p>This is the Past Movies content.</p>
+        {% for ticket in pastmovieticket %}
+                <div class="current-movie2">
+                  
+                    <h3 class="movie-title1">Booking_id:-{{ticket['bookingid']}}</h3>
+                    <h4 class="movie-duration">No_of_seats_booked:-{{ticket['num_seats_booked']}}</h4>
+                    <h4 class="movie-duration">Movie:-{{ticket['moviename']}}</h4>
+                    <h4 class="movie-duration">ShowDate:-{{ticket['showdate']}}</h4>
+                    <h4 class="movie-duration">ShowTime:-{{ticket['showtime']}}</h4>
+                    <h4 class="movie-duration">TotalCost:-{{ticket['totalcost']}}</h4>
+        {% endfor %}</div>
+    </div>
+
+    <script>
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = tab.getAttribute('href').substring(1);
+                const contents = document.querySelectorAll('.tab-content');
+                contents.forEach(content => {
+                    content.style.display = 'none';
+                });
+                document.getElementById(target).style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>

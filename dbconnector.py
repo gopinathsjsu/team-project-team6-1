@@ -512,7 +512,7 @@ def getPastMovieBookings(username):
                 cursor.execute(preQuery,(username,))
                 userid = cursor.fetchone()[0]
                 cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
-                query = "select bookingid, num_seats_booked, seatstaken,totalcost,servicefee,showdate,showtime,price,moviename,runtimeminutes from (select * from (select * from booking inner join showingdetails on booking.showingdetailid = showingdetails.showingdetailid where userid = 9 and showingdetails.showdate < CURRENT_DATE) inner join showingmaster using (showingid)) inner join movie using (movieid);"
+                query = "select bookingid, num_seats_booked,totalcost,servicefee,showdate,showtime,price,moviename,runtimeminutes from (select * from (select * from booking inner join showingdetails on booking.showingdetailid = showingdetails.showingdetailid where userid = %s and showingdetails.showdate < CURRENT_DATE) inner join showingmaster using (showingid)) inner join movie using (movieid);"
                 cursor.execute(query,(userid,))
                 data = cursor.fetchall()
                 print(data)
@@ -529,3 +529,68 @@ def getPastMovieBookings(username):
         data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
         data = json.loads(data)
         return jsonify(data)
+    
+
+# function to get user's upcoming movie bookings to display on profile section
+def getUpcomingMovieBookings(username):
+    data = []
+    try:
+        #establish connection
+        with psycopg2.connect(**params) as conn:
+
+            # create a cursor 
+                cursor = conn.cursor()
+                preQuery = "SELECT userid FROM usertable WHERE username = %s;"
+                cursor.execute(preQuery,(username,))
+                userid = cursor.fetchone()[0]
+                cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
+                query = "select bookingid, num_seats_booked,totalcost,servicefee,showdate,showtime,price,moviename,runtimeminutes from (select * from (select * from booking inner join showingdetails on booking.showingdetailid = showingdetails.showingdetailid where userid = %s and showingdetails.showdate > CURRENT_DATE) inner join showingmaster using (showingid)) inner join movie using (movieid);"
+                cursor.execute(query,(userid,))
+                data = cursor.fetchall()
+                print(data)
+                if len(data) ==0:
+                    data.append({"error":"No record found"})
+                    data.append({"error details": "No upcoming movie info found for this username"})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in retrieving user's upcoming movie bookings"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            print('database connection closed')
+        data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
+        data = json.loads(data)
+        return jsonify(data)
+    
+
+# function to get user's movies watched in the past 30 days
+def getMoviesPast30Days(username):
+    data = []
+    try:
+        #establish connection
+        with psycopg2.connect(**params) as conn:
+
+            # create a cursor 
+                cursor = conn.cursor()
+                preQuery = "SELECT userid FROM usertable WHERE username = %s;"
+                cursor.execute(preQuery,(username,))
+                userid = cursor.fetchone()[0]
+                cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
+                query = "select moviename from (select * from (select * from booking inner join showingdetails on booking.showingdetailid = showingdetails.showingdetailid where userid = %s and showingdetails.showdate < CURRENT_DATE) inner join showingmaster using (showingid)) inner join movie using (movieid) where showdate >= CURRENT_DATE - 30;"
+                cursor.execute(query,(userid,))
+                data = cursor.fetchall()
+                print(data)
+                if len(data) ==0:
+                    data.append({"error":"No record found"})
+                    data.append({"error details": "No 30 days movie history found for this username"})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in retrieving user's 30 days movie history"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            print('database connection closed')
+        return jsonify(data)
+    
+
+
