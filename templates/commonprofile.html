@@ -7,14 +7,14 @@
     <div class="topnav">
         <a href="#content-view-profile" class="tab">View Profile</a>
         <!-- <a href="#content-upgrade-membership" class="tab">Upgrade Membership</a> -->
-        <a href="#content-upcoming-movies" class="tab">Upcoming Movies</a>
-        <a href="#content-past-movies" class="tab">Past Movies</a>
-        <a href="#content-past-30-movies" class="tab">Movies watched in 30 days</a>
+        <a href="#content-upcoming-movies" class="tab">Upcoming Bookings</a>
+        <a href="#content-past-movies" class="tab">Booking History</a>
+        <a href="#content-past-30-movies" class="tab">Movies Watched in past 30 days</a>
     </div>
-
+<br>
     <div id="content-view-profile" class="tab-content">
-        <p>This is the View Profile content.</p>
-        <h3>Profile</h3>
+        <!-- <p>This is the View Profile content.</p>
+        <h3>Profile</h3> -->
      
         <div class="container">
         <section class="main-container1" >
@@ -43,7 +43,7 @@
             <!-- <form action="/openupgradepage" class="form" name="form">
             <button type="button">Upgrade to Premium</button>
             </form> -->
-            <a href="/openupgradepage" class="button"> <p>upgrade membership</p></a>
+            <a href="/openupgradepage" class="button"> <p>Upgrade Membership</p></a>
         </div><br>
         
         {% endif %} 
@@ -69,13 +69,13 @@
 
 
     </div>
-
+<!-- 
     <div id="content-upgrade-membership" class="tab-content">
         <p>This is the Upgrade Membership content.</p>
-    </div>
+    </div> -->
 
     <div id="content-upcoming-movies" class="tab-content">
-        <p>This is the Upcoming Movies content.</p>
+        <p>Bookings</p>
         <!-- {% if futuremovieticket %}
            {% for tickets in futuremovieticket %}
                 <div class="current-movie1">
@@ -94,39 +94,48 @@
         {% if futuremovieticket and futuremovieticket[0].error %}
         <p>{{ futuremovieticket[0].error }}</p>
     {% elif futuremovieticket %}
+    
         {% for tickets in futuremovieticket %}
-        <h3>Booking_id:-{{tickets['bookingid']}}</h3>
+        <div class="tickets">
+        <img src="static/images/{{tickets['poster']}}" class="imgticket">
+            <!-- <img src="/static/images/sonya.png" class="img3"> -->
+        <h3>Booking Id:-{{tickets['bookingid']}}</h3>
         <h4 >No_of_seats_booked:-{{tickets['num_seats_booked']}}</h4>
         <h4 >Movie:-{{tickets['moviename']}}</h4>
         <h4>ShowDate:-{{tickets['showdate']}}</h4>
         <h4 >ShowTime:-{{tickets['showtime']}}</h4>
         <h4>TotalCost:-{{tickets['totalcost']}}</h4>
+        <button type="button">Cancel Ticket!</button>
+    </div><br>
         {% endfor %}
+    
     {% else %}
         <p>No upcoming movie tickets.</p>
     {% endif %}
     </div>
 
     <div id="content-past-movies" class="tab-content">
-        <p>This is the Past Movies content.</p>
+        <p>History</p>
        
         {% if pastmovieticket and pastmovieticket[0].error %}
         <p>{{ pastmovieticket[0].error }}</p>
     {% elif pastmovieticket %}
-        {% for tickets in pastmovieticket %}
-        <h3>Booking_id:-{{tickets['bookingid']}}</h3>
+    {% for tickets in pastmovieticket %}
+    <div class="tickets">
+        
+        <h3>Booking Id:-{{tickets['bookingid']}}</h3>
         <h4 >No_of_seats_booked:-{{tickets['num_seats_booked']}}</h4>
         <h4 >Movie:-{{tickets['moviename']}}</h4>
         <h4>ShowDate:-{{tickets['showdate']}}</h4>
         <h4 >ShowTime:-{{tickets['showtime']}}</h4>
-        <h4>TotalCost:-{{tickets['totalcost']}}</h4>
+        <h4>TotalCost:-{{tickets['totalcost']}}</h4></div><br>
         {% endfor %}
     {% else %}
         <p>No past movie tickets.</p>
     {% endif %}
     </div>
     <div id="content-past-30-movies" class="tab-content">
-        <p>This is the Past 30 Movies content.</p>
+        <!-- <p>Movies </p> -->
         <!-- {% for ticket in movies%}
                 <div class="current-movie2">
                   
@@ -139,9 +148,10 @@
         <p>{{ movies[0].error }}</p>
     {% elif movies %}
         {% for tickets in movies %}
-        
-        <h4 >Movie:-{{tickets['moviename']}}</h4>
-        
+       <div class="movies">
+          <h4>{{tickets['moviename']}}</h4>
+          <img src="static/images/{{tickets['poster']}}" class="img2">
+       </div>
         {% endfor %}
     {% else %}
         <p>No movies watched in past 30 days.</p>
