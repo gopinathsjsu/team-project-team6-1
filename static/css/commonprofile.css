@@ -1,8 +1,9 @@
 
 /* Style the top navigation */
 .topnav {
-    background-color: #333;
+    background-color: rgba(27, 27, 27, 0.644);
     overflow: hidden;
+    border-bottom: 0.5px solid wheat;
 }
 
 .topnav a {
@@ -22,6 +23,7 @@
 /* Style the tab content */
 .tab-content {
     display: none;
+   
 }
 
 /* Set "View Profile" as the default tab */
@@ -63,12 +65,15 @@ body{
 }
 p{
     font-size: larger;
+    margin-left:  15%;
+
     
     
 }
 button{
     border-radius: 15px;
     padding: 5px;
+    margin-left:  30%;
 }
 /* viewprofile.css */
 .container {
@@ -115,10 +120,35 @@ text{
     color: white;
 }
 h3{
-   margin-left:  47%;
+   margin-left:  30%;
 }
 a{
     color: palevioletred;
 }
-
-
+.tickets{
+    border: 1px solid white;
+    padding: 15px;
+    padding-left: 30px;
+    width:500px;
+    
+}
+.imgticket{
+   
+    padding: 15px;
+    padding-left: 40px;
+    width:400px;
+}
+button:hover{
+    background-color: #333;
+    color: white;
+}
+.movies{
+    margin-left: 10%;
+}
+.img2{
+    height: 200px;
+}
+.img3{
+    height: 50px;
+    width: 50px;
+}
