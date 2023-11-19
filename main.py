@@ -224,7 +224,7 @@ def upcomingMovieBookings():
     return response
 
 # api to retrieve user's 30 day movie history
-@app.route('/moviesPast30Days', methods=['GET'])
+@app.route('/moviesPast30Days', methods=['GET','POST'])
 def moviesPast30Days():
     loginInfo = request.get_json()
     username = loginInfo['username']
