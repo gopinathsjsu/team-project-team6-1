@@ -176,21 +176,27 @@ def user_details():
 #                                 membershiptilldate=user_details['membershiptilldate'],membershiptype=user_details['membershiptype'],
 #                                 rewardpoints=user_details['rewardpoints'])
       jsonrequest={"username": "divijayuvraj30@gmail.com"}
+      
       r1 = requests.post('http://127.0.0.1:5000/upcomingMovieBookings', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
-      print("r1.text",r1.text)
+      print("upcoming",r1.text)
       futuremoviejson=json.loads(r1.text)
       r = requests.post('http://127.0.0.1:5000/pastMovieBookings', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
-      print("r.text",r.text)
+      print("past",r.text)
       pastmoviejson=json.loads(r.text)
+   
       r = requests.post('http://127.0.0.1:5000/profileInfo', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
-      print("r.text",r.text)
+      print("profile",r.text)
       user_details=json.loads(r.text)
+      r = requests.post('http://127.0.0.1:5000/moviesPast30Days', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+      print("profile",r.text)
+      pastmovies=json.loads(r.text)
       # print("userdetails",json.dumps(user_details))
       # print("addressofusr",user_details['address'])
-      
+      # futuremovieticket=futuremoviejson
+      # pastmovieticket=pastmoviejson,
       return render_template("commonprofile.html",futuremovieticket=futuremoviejson,pastmovieticket=pastmoviejson,address=user_details['address'],fullname=user_details['fullname'],
                                 membershiptilldate=user_details['membershiptilldate'],membershiptype=user_details['membershiptype'],
-                                rewardpoints=user_details['rewardpoints'])
+                                rewardpoints=user_details['rewardpoints'],movies=pastmovies)
       
 @app.route('/upgrademembership', methods=['POST'])
 def upgrade_membership():
