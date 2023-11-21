@@ -199,7 +199,12 @@ def getseatAllocation(theaterid, showdetailid):
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
                 query = f'''SELECT * FROM seatdetails
                             INNER JOIN (
-                                SELECT seatid,rownum,seatno FROM seat WHERE theaterid = %s
+                                SELECT * FROM seat
+                                INNER JOIN (
+                                    SELECT noofrows, noofcolumns, theater.theaterid FROM theater
+                                )th
+                                ON seat.theaterid = th.theaterid
+                                WHERE seat.theaterid = %s
                             )st
                             ON seatdetails.seatid = st.seatid
                             WHERE showingdetailid =%s;'''
@@ -239,6 +244,7 @@ def createBooking(seatid, showingdetailid,userid):
             conn.close()
             return data
 
+#add all the booking info after payment is successful
 def completeBooking(bookingid, payment, rewardpointsused, seats):
     data = []
     try:
@@ -279,7 +285,6 @@ def completeBooking(bookingid, payment, rewardpointsused, seats):
         if conn is not None:
             conn.close()
             return data
-
 
 #get card details
 def getCardDetails(userid):
@@ -355,6 +360,110 @@ def saveCardDetails(card_number, cvv,exp, userid):
         if conn is not None:
             conn.close()
             return data
+
+#create new movie record in db
+def createMovie(name, runtimeminutes, releasedate, endshowingdate, poster):
+    data = []
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                query = f'''INSERT INTO movie(moviename, runtimeminutes, releasedate, endshowingdate, poster) VALUES (%s, %s, %s,%s, %s) RETURNING movieid;'''
+                cur.execute(query, (name, runtimeminutes, releasedate, endshowingdate, poster))
+
+                data = cur.fetchall()
+                if len(data) ==0:
+                    data.append({"error":"Record not created"})
+                    data.append({"error details": "Movie record not created"})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in createMovie()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data
+
+#create new location record in db
+def createLocation(city, postalcode, noofmultiplex):
+    data = []
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                query = f'''INSERT INTO location( city, postalcode, noofmultiplex) VALUES (%s, %s, %s) RETURNING locationid;'''
+                cur.execute(query, (city, postalcode, noofmultiplex))
+
+                data = cur.fetchall()
+                if len(data) ==0:
+                    data.append({"error":"Record not created"})
+                    data.append({"error details": "Location record not created"})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in createLocation()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data
+
+#create new multiplex record in db
+def createMultiplex(name, locationid, address, nooftheaters):
+    data = []
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                query = f'''INSERT INTO multiplex( multiplexname, locationid, address, nooftheaters) VALUES (%s, %s, %s, %s) RETURNING multiplexid;'''
+                cur.execute(query, (name, locationid, address, nooftheaters))
+
+                data = cur.fetchall()
+                if len(data) ==0:
+                    data.append({"error":"Record not created"})
+                    data.append({"error details": "Multiplex record not created"})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in createMultiplex()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data
+
+
+#create new theater record and respective seat records in seat table in db
+def createTheater(multiplexid, noofseats, theaternumber, noofrows, noofcolumns):
+    data = []
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                query = f'''INSERT INTO theater(multiplexid, noofseats, theaternumber, noofrows, noofcolumns) VALUES (%s, %s, %s, %s, %s) RETURNING theaterid;'''
+                cur.execute(query, (multiplexid, noofseats, theaternumber, noofrows, noofcolumns))
+
+                data = cur.fetchall()
+                if len(data) ==0:
+                    data.append({"error":"Record not created"})
+                    data.append({"error details": "Theater record not created"})
+                else:
+                    query = f'''INSERT INTO seat(rownum, seatno, theaterid) VALUES (%s, %s, %s) RETURNING seatid;'''
+                    print(query)
+                    values = []
+                    for i in range(noofrows):
+                        for j in range(noofcolumns):
+                            values.append(tuple((i, j, data[0]["theaterid"])))
+                    cur.executemany(query,values)
+                    '''
+                    seatdata = cur.fetchall()
+                    if len(seatdata) < noofseats:
+                        data[0]["error"]="Record not created"
+                        data[0]["error details"] = "Seat record not created"
+                    '''
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in createTheater()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data
+
 
 # to register a user 
 def registeruser(fullname, phoneno, address, username, password, role):

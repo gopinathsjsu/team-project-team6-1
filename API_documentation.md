@@ -2,6 +2,141 @@
 
 <details>
 
+<summary> Add new theater to db </summary>
+
+URL format: POST
+/addTheater
+
+Request format:
+
+```yaml
+[
+    {
+        "multiplexid": 7,
+        "noofseats": 20,
+        "theaternumber": 5,
+        "noofrows": 4,
+        "noofcolumns": 5
+    },
+    {
+        "multiplexid": 7,
+        "noofseats": 20,
+        "theaternumber": 3,
+        "noofrows": 5,
+        "noofcolumns": 5
+    }
+]
+```
+
+Response format: Response truncated to two records only 
+
+```yaml
+[
+    [
+        {
+            "theaterid": 17
+        }
+    ],
+    [
+        {
+            "theaterid": 18
+        }
+    ]
+]
+```
+
+<details>
+
+<details>
+
+<summary> Add new multiplex to db </summary>
+
+URL format: POST
+/addMultiplex
+
+Request format:
+
+```yaml
+{
+    "multiplexname": "AMC Saratoga",
+    "locationid": 3,
+    "address": "Utah",
+    "nooftheaters": 5
+}
+```
+
+Response format: Response truncated to two records only 
+
+```yaml
+[
+    {
+        "multiplexid": 7
+    }
+]
+```
+
+<details>
+
+<summary> Add new location to db </summary>
+
+URL format: POST
+/addLocation
+
+Request format:
+
+```yaml
+{
+    "city":"San Jose",
+    "postalcode": 95126,
+    "noofmultiplex": 3
+}
+```
+
+Response format: Response truncated to two records only 
+
+```yaml
+[
+    {
+        "locationid": 3
+    }
+]
+```
+
+</details>
+
+<details>
+
+<summary> Add new movie to db </summary>
+
+URL format: POST
+/addMovie
+
+Request format:
+
+```yaml
+{
+    "moviename": "Utah",
+    "runtimeminutes": "66",
+    "releasedate": "2024-10-13",
+    "endshowingdate": "2024-12-13",
+    "poster": "utah.jpg"
+}
+```
+
+Response format: Response truncated to two records only 
+
+```yaml
+[
+    {
+        "movieid": 6
+    }
+]
+```
+
+</details>
+
+<details>
+
 <summary> Save all info for booking API </summary>
 
 URL format: POST
@@ -143,19 +278,25 @@ Response format: Response truncated to two records only
 [
     {
         "istaken": false,
+        "noofcolumns": 5,
+        "noofrows": 2,
         "rownum": 1,
         "seatdetailid": 11,
         "seatid": 1,
         "seatno": 1,
-        "showingdetailid": 2
+        "showingdetailid": 2,
+        "theaterid": 1
     },
     {
         "istaken": false,
+        "noofcolumns": 5,
+        "noofrows": 2,
         "rownum": 1,
         "seatdetailid": 12,
         "seatid": 2,
         "seatno": 5,
-        "showingdetailid": 2
+        "showingdetailid": 2,
+        "theaterid": 1
     }
 ]
 ```

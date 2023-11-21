@@ -146,6 +146,51 @@ def saveBooking():
         return responsedata, 400
     return responsedata, 200
 
+#api to Add movie in schedule
+@app.route("/addMovie", methods=["POST"])
+def addMovie():
+    requestdata = request.get_json()
+
+    name = requestdata["moviename"]
+    runtimeminutes = requestdata["runtimeminutes"]
+    releasedate = requestdata["releasedate"]
+    endshowingdate = requestdata["endshowingdate"]
+    poster = requestdata["poster"]
+    responsedata = dbc.createMovie(name, runtimeminutes, releasedate, endshowingdate, poster)
+
+    if "error" in responsedata[0]:
+        return responsedata, 400
+    return responsedata, 200
+
+#api to Add location
+@app.route("/addLocation", methods=["POST"])
+def addLocation():
+    requestdata = request.get_json()
+
+    city = requestdata["city"]
+    postalcode = requestdata["postalcode"]
+    noofmultiplex = requestdata["noofmultiplex"]
+    responsedata = dbc.createLocation(city, postalcode, noofmultiplex)
+
+    if "error" in responsedata[0]:
+        return responsedata, 400
+    return responsedata, 200
+
+
+#api to Add multiplex in schedule
+@app.route("/addMultiplex", methods=["POST"])
+def addMultiplex():
+    requestdata = request.get_json()
+
+    name = requestdata["multiplexname"]
+    locationid = requestdata["locationid"]
+    address = requestdata["address"]
+    nooftheaters = requestdata["nooftheaters"]
+    responsedata = dbc.createMultiplex(name, locationid, address, nooftheaters)
+
+    if "error" in responsedata[0]:
+        return responsedata, 400
+    return responsedata, 200
 
 
 #api to fetch booking details
@@ -159,6 +204,30 @@ def getTransactionDetails():
     if "error" in responsedata[0]:
         return responsedata, 400
     return responsedata, 200
+
+#api to Add theaters in schedule and add respective seats in seat table
+@app.route("/addTheater", methods=["POST"])
+def addTheater():
+    requestdata = request.get_json()
+
+    responsedata=[]
+    flag = True
+
+    for data in requestdata:
+        multiplexid = data["multiplexid"]
+        noofseats = data["noofseats"]
+        theaternumber = data["theaternumber"]
+        noofrows = data["noofrows"]
+        noofcolumns = data["noofcolumns"]
+        res = dbc.createTheater(multiplexid, noofseats, theaternumber, noofrows, noofcolumns)
+        responsedata.append(res)
+        if "error" in res[0]:
+            flag = False
+
+    if not flag:
+        return responsedata, 400
+    return responsedata, 200
+
 
 
 # api to register a user and add their info to database
