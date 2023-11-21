@@ -594,3 +594,32 @@ def getMoviesPast30Days(username):
     
 
 
+# function to cancel user's movie booking
+def cancelBooking(bookingId):
+    data = []
+    try:
+        #establish connection
+        with psycopg2.connect(**params) as conn:
+
+            # create a cursor 
+                cursor = conn.cursor()
+                query = "delete FROM booking WHERE bookingid = %s;"
+                cursor.execute(query,(bookingId,))
+                cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
+                queryValidate = "select * from booking where bookingid = %s;"
+                cursor.execute(queryValidate,(bookingId,))
+                data = cursor.fetchall()
+                print(data)
+                if len(data) !=0:
+                    data.append({"error":"Record found"})
+                    data.append({"error details": "Booking could not be deleted."})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in deleting movie booking"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            print('database connection closed')
+        data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
+        data = json.loads(data)
+        return jsonify(data)
