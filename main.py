@@ -158,5 +158,16 @@ def upcomingMovieBookings():
     print(type(response))
     return response
 
+
+# api to delete user's movie booking
+@app.route('/cancelBooking', methods=['DELETE'])
+def cancelBooking():
+    bookingInfo = request.get_json()
+    bookingId = bookingInfo['bookingid']
+    response = dbc.cancelBooking(bookingId)
+    print('cancel movie bookings - response : ', response)
+    print(type(response))
+    return response
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1',port=5000)
