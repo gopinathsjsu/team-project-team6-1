@@ -512,7 +512,8 @@ def getPastMovieBookings(username):
                 cursor.execute(preQuery,(username,))
                 userid = cursor.fetchone()[0]
                 cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
-                query = "select bookingid, num_seats_booked,totalcost,servicefee,showdate,showtime,price,moviename,runtimeminutes from (select * from (select * from booking inner join showingdetails on booking.showingdetailid = showingdetails.showingdetailid where userid = %s and showingdetails.showdate < CURRENT_DATE) inner join showingmaster using (showingid)) inner join movie using (movieid);"
+                # query = "select bookingid, num_seats_booked,totalcost,servicefee,showdate,showtime,price,moviename,runtimeminutes from (select * from (select * from booking inner join showingdetails on booking.showingdetailid = showingdetails.showingdetailid where userid = %s and showingdetails.showdate < CURRENT_DATE) inner join showingmaster using (showingid)) inner join movie using (movieid);"
+                query="SELECT bookingid, num_seats_booked, totalcost, servicefee, showdate, showtime, price, moviename, poster,runtimeminutes FROM (SELECT * FROM (SELECT * FROM booking INNER JOIN showingdetails ON booking.showingdetailid = showingdetails.showingdetailid WHERE userid = %s AND showingdetails.showdate < CURRENT_DATE) AS subquery1 INNER JOIN showingmaster USING (showingid)) AS subquery2 INNER JOIN movie USING (movieid);"
                 cursor.execute(query,(userid,))
                 data = cursor.fetchall()
                 print(data)
@@ -544,7 +545,8 @@ def getUpcomingMovieBookings(username):
                 cursor.execute(preQuery,(username,))
                 userid = cursor.fetchone()[0]
                 cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
-                query = "select bookingid, num_seats_booked,totalcost,servicefee,showdate,showtime,price,moviename,runtimeminutes from (select * from (select * from booking inner join showingdetails on booking.showingdetailid = showingdetails.showingdetailid where userid = %s and showingdetails.showdate > CURRENT_DATE) inner join showingmaster using (showingid)) inner join movie using (movieid);"
+                # query = "select bookingid, num_seats_booked,totalcost,servicefee,showdate,showtime,price,moviename,runtimeminutes from (select * from (select * from booking inner join showingdetails on booking.showingdetailid = showingdetails.showingdetailid where userid = %s and showingdetails.showdate > CURRENT_DATE) inner join showingmaster using (showingid)) inner join movie using (movieid);"
+                query="SELECT bookingid, num_seats_booked, totalcost, servicefee, showdate, showtime, price, moviename, poster,runtimeminutes FROM (SELECT * FROM (SELECT * FROM booking INNER JOIN showingdetails ON booking.showingdetailid = showingdetails.showingdetailid  WHERE userid = %s AND showingdetails.showdate > CURRENT_DATE) AS subquery1 INNER JOIN showingmaster USING (showingid)) AS subquery2 INNER JOIN movie USING (movieid);"
                 cursor.execute(query,(userid,))
                 data = cursor.fetchall()
                 print(data)
@@ -576,7 +578,8 @@ def getMoviesPast30Days(username):
                 cursor.execute(preQuery,(username,))
                 userid = cursor.fetchone()[0]
                 cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
-                query = "select moviename from (select * from (select * from booking inner join showingdetails on booking.showingdetailid = showingdetails.showingdetailid where userid = %s and showingdetails.showdate < CURRENT_DATE) inner join showingmaster using (showingid)) inner join movie using (movieid) where showdate >= CURRENT_DATE - 30;"
+                # query = "select moviename from (select * from (select * from booking inner join showingdetails on booking.showingdetailid = showingdetails.showingdetailid where userid = %s and showingdetails.showdate < CURRENT_DATE) inner join showingmaster using (showingid)) inner join movie using (movieid) where showdate >= CURRENT_DATE - 30;"
+                query="SELECT distinct moviename,poster FROM (SELECT * FROM (SELECT * FROM booking INNER JOIN showingdetails ON booking.showingdetailid = showingdetails.showingdetailid WHERE userid = %s AND showingdetails.showdate < CURRENT_DATE) AS subquery1 INNER JOIN showingmaster USING (showingid)) AS subquery2 INNER JOIN movie USING (movieid) WHERE showdate >= CURRENT_DATE - 30;"
                 cursor.execute(query,(userid,))
                 data = cursor.fetchall()
                 print(data)
