@@ -253,5 +253,14 @@ def retrieveMultiplexes():
     print(type(response))
     return response
 
+
+# api to retrieve movies which have played in the past 90 days
+@app.route('/retrieveMoviesPlayedPast90Days', methods=['GET'])
+def retrieveMoviesPlayedPast90Days():
+    response = dbc.getMoviesPlayedPast90Days()
+    print('retrieve movies which have played in the past 90 days - response : ', response)
+    print(type(response))
+    return response
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1',port=5000)
