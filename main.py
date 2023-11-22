@@ -243,5 +243,15 @@ def cancelBooking():
     print(type(response))
     return response
 
+# api to retrieve multiplexes by location
+@app.route('/retrieveMultiplexes', methods=['GET'])
+def retrieveMultiplexes():
+    locationInfo = request.get_json()
+    locationId = locationInfo['locationid']
+    response = dbc.getMultiplexesByLocation(locationId)
+    print('retrieve multiplexes by location - response : ', response)
+    print(type(response))
+    return response
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1',port=5000)
