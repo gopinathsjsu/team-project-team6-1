@@ -623,3 +623,32 @@ def cancelBooking(bookingId):
         data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
         data = json.loads(data)
         return jsonify(data)
+    
+
+
+# function to get all multiplexes from a particular location
+def getMultiplexesByLocation(locationId):
+    data = []
+    try:
+        #establish connection
+        with psycopg2.connect(**params) as conn:
+
+            # create a cursor 
+                cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
+                query = "select multiplexname FROM multiplex WHERE locationid = %s;"
+                cursor.execute(query,(locationId,))
+                data = cursor.fetchall()
+                print(data)
+                if len(data) ==0:
+                    data.append({"error":"Record found"})
+                    data.append({"error details": "multiplex names could not be retrieved."})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in retrieving multiplex names by location"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            print('database connection closed')
+        data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
+        data = json.loads(data)
+        return jsonify(data)
