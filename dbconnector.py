@@ -665,7 +665,7 @@ def getMoviesPlayedPast90Days():
 
             # create a cursor 
                 cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
-                query = "select distinct moviename from (select * from movie inner join (select * from showingmaster inner join showingdetails on showingmaster.showingid = showingdetails.showingid) using (movieid)) where showdate >= CURRENT_DATE-90;"
+                query = "select distinct moviename, movieid from (select * from movie inner join (select * from showingmaster inner join showingdetails on showingmaster.showingid = showingdetails.showingid) using (movieid)) where showdate >= CURRENT_DATE-90;"
                 cursor.execute(query)
                 data = cursor.fetchall()
                 print(data)
@@ -674,6 +674,35 @@ def getMoviesPlayedPast90Days():
                     data.append({"error details": "No movies found which played in the past 90 days"})
     except (Exception, psycopg2.DatabaseError) as error:
         data.append({"error":"Error in retrieving movies which have played in the past 90 days."})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            print('database connection closed')
+        data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
+        data = json.loads(data)
+        return jsonify(data)
+    
+
+
+# function to get all cities in db
+def getAllCities():
+    data = []
+    try:
+        #establish connection
+        with psycopg2.connect(**params) as conn:
+
+            # create a cursor 
+                cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
+                query = "select distinct city from location;"
+                cursor.execute(query)
+                data = cursor.fetchall()
+                print(data)
+                if len(data) ==0:
+                    data.append({"error":"No record found"})
+                    data.append({"error details": "No cities found in db"})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in retrieving all cities in db"})
         data.append({"error details": str(error)})
     finally:
         if conn is not None:
