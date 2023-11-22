@@ -262,5 +262,14 @@ def retrieveMoviesPlayedPast90Days():
     print(type(response))
     return response
 
+
+# api to retrieve all cities in db
+@app.route('/retrieveAllCities', methods=['GET'])
+def retrieveAllCities():
+    response = dbc.getAllCities()
+    print('retrieve all cities in db - response : ', response)
+    print(type(response))
+    return response
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1',port=5000)
