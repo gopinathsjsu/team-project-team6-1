@@ -665,7 +665,7 @@ def getMoviesPlayedPast90Days():
 
             # create a cursor 
                 cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
-                query = "select distinct moviename, movieid from (select * from movie inner join (select * from showingmaster inner join showingdetails on showingmaster.showingid = showingdetails.showingid) using (movieid)) where showdate >= CURRENT_DATE-90;"
+                query = "SELECT DISTINCT moviename, movieid FROM (SELECT * FROM movie INNER JOIN (SELECT *FROM showingmaster INNER JOIN showingdetails ON showingmaster.showingid = showingdetails.showingid) AS subquery USING (movieid)) AS main_query WHERE showdate >= CURRENT_DATE - 90;"
                 cursor.execute(query)
                 data = cursor.fetchall()
                 print(data)
