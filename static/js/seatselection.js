@@ -1,6 +1,7 @@
 var reserve = {
     init: () => {
         let layout = document.getElementById("layout");
+        let selectedSeatsMessage = document.getElementById("selected-seats-message");
 
         let requestData = {
             theaterid: 26,
@@ -17,49 +18,56 @@ var reserve = {
         .then((response) => response.json())
         .then((data) => {
             reserve.generateSeats(layout, data);
+
             layout.querySelectorAll(".seat.available").forEach((seat) => {
-                seat.onclick = () => reserve.toggle(seat);
+                seat.onclick = () => {
+                    reserve.toggle(seat);
+                    reserve.updateSelectedSeatsMessage(selectedSeatsMessage);
+                };
             });
         })
         .catch((error) => console.error("Error:", error));
     },
 
-   
     generateSeats: (layout, data) => {
+        layout.innerHTML = "";
 
-    layout.innerHTML = "";
+        for (let i = 1; i <= data.length; i++) {
+            let seatData = data[i - 1];
+            let seat = document.createElement("div");
+            seat.innerHTML = i;
+            seat.className = "seat";
 
-    for (let i = 1; i <= data.length; i++) {
-        let seatData = data[i - 1];
-        let seat = document.createElement("div");
-        seat.innerHTML = i;
-        seat.className = "seat";
-        
-        if (seatData.istaken) {
-            seat.classList.add("taken");
-        } else {
-            seat.classList.add("available");
-        }
+            if (seatData.istaken) {
+                seat.classList.add("taken");
+            } else {
+                seat.classList.add("available");
+            }
 
-        layout.appendChild(seat);
+            layout.appendChild(seat);
         }
     },
 
     toggle: (seat) => seat.classList.toggle("selected"),
 
-    save: () => {
-
+    updateSelectedSeatsMessage: (messageElement) => {
         let selected = document.querySelectorAll("#layout .selected");
 
-        if (selected.length == 0) {
-            alert("No seats selected.");
-        } 
-        else {
-            let seats = [];
-            for (let s of selected) {
-                seats.push(s.innerHTML);
-            }
+        if (selected.length === 0) {
+            messageElement.innerHTML = "No seats selected.";
+        } else {
+            let seats = Array.from(selected).map((s) => s.innerHTML).join(", ");
+            messageElement.innerHTML = `Selected Seats: ${seats}`;
+        }
+    },
 
+    save: () => {
+        let selected = document.querySelectorAll("#layout .selected");
+
+        if (selected.length === 0) {
+            alert("No seats selected.");
+        } else {
+            let seats = Array.from(selected).map((s) => s.innerHTML);
             console.log("Selected Seats:", seats);
         }
     },
