@@ -237,6 +237,16 @@ def book_movies():
       print(r.text)
       theaters = json.loads(r.text)
    return render_template("bookmovie.html",theaters=theaters) 
+@app.route('/openanalytics1', methods=['POST','GET'])
+def get_cities():
+      
+      #   as of now its hardcoded need to figure our session user or current user
+         
+         r = requests.get('http://127.0.0.1:5000/retrieveAllCities')
+         print("r.text",r.text)
+         city=json.loads(r.text)
+
+         return render_template('analytics1.html',cities=city)
 
 
 if __name__ == '__main__':
