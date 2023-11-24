@@ -7,13 +7,18 @@
     <script src="{{ url_for('static', filename='js/seatselection.js')}}"></script>
 </head>
 <body>
-    <div id="layout"></div>
-
+    <div id="screen">
+        <h2>Screen</h2>
+    </div>
+    <br>
+    <div id="layout"></div>   
+    <div id="selected-seats-message"></div>
+    <br>
     <div id="seats">
         <div class="seat"></div> <div class="txt">Available</div>
         <div class="seat taken"></div> <div class="txt">Taken</div>
         <div class="seat selected"></div> <div class="txt">Your Chosen Seats</div>
-    </div>
+    </div>    
     <button id="save" onclick="reserve.save()">Continue</button>
 </body>
 </html>
