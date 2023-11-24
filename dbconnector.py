@@ -714,3 +714,54 @@ def getAllCities():
         data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
         data = json.loads(data)
         return jsonify(data)
+    
+
+
+# function to calculate theater occupancy by specific location over the past 30, 60, and 90 days
+def theaterOccupancyByLocation(locationid):
+    data = []
+    try:
+        #establish connection
+        with psycopg2.connect(**params) as conn:
+
+            # create a cursor 
+                cursor = conn.cursor()
+                queryTotalSeatsAtLoc = "select sum(noofseats) from (select * from (location inner join multiplex using (locationid)) inner join theater using (multiplexid)) group by locationid having locationid = %s;"
+                cursor.execute(queryTotalSeatsAtLoc,(locationid,))
+                totalNumSeatsAtLoc = cursor.fetchone()[0]
+
+                queryTotalOccupiedSeats30days = "select sum(sumSeatsTaken) from (select sum(seatstaken) as sumSeatsTaken from (select * from (select * from (select * from (select * from location inner join multiplex using (locationid)) inner join theater using (multiplexid)) inner join showingmaster using (theaterid)) inner join showingdetails using (showingid)) group by locationid,showdate having locationid=%s and showdate >= CURRENT_DATE-30);"
+                cursor.execute(queryTotalOccupiedSeats30days,(locationid,))
+                totalSeatsTakenAtLoc30days = cursor.fetchone()[0]
+                
+                queryTotalOccupiedSeats60days = "select sum(sumSeatsTaken) from (select sum(seatstaken) as sumSeatsTaken from (select * from (select * from (select * from (select * from location inner join multiplex using (locationid)) inner join theater using (multiplexid)) inner join showingmaster using (theaterid)) inner join showingdetails using (showingid)) group by locationid,showdate having locationid=%s and showdate >= CURRENT_DATE-60);"
+                cursor.execute(queryTotalOccupiedSeats60days,(locationid,))
+                totalSeatsTakenAtLoc60days = cursor.fetchone()[0]
+
+                queryTotalOccupiedSeats90days = "select sum(sumSeatsTaken) from (select sum(seatstaken) as sumSeatsTaken from (select * from (select * from (select * from (select * from location inner join multiplex using (locationid)) inner join theater using (multiplexid)) inner join showingmaster using (theaterid)) inner join showingdetails using (showingid)) group by locationid,showdate having locationid=%s and showdate >= CURRENT_DATE-90);"
+                cursor.execute(queryTotalOccupiedSeats90days,(locationid,))
+                totalSeatsTakenAtLoc90days = cursor.fetchone()[0]
+                
+                percentOccupied30days = (totalSeatsTakenAtLoc30days/totalNumSeatsAtLoc)*100
+                percentOccupied30days = round(percentOccupied30days,2)
+                percentOccupied60days = (totalSeatsTakenAtLoc60days/totalNumSeatsAtLoc)*100
+                percentOccupied60days = round(percentOccupied60days,2)
+                percentOccupied90days = (totalSeatsTakenAtLoc90days/totalNumSeatsAtLoc)*100
+                percentOccupied90days = round(percentOccupied90days,2)
+
+                returnDict = {'No of days':['over30days','over60days','over90days'], 'Occupancy Percentage': [percentOccupied30days, percentOccupied60days, percentOccupied90days]}
+                data.append(returnDict)
+                print(data)
+                if len(data) ==0:
+                    data.append({"error":"No record found"})
+                    data.append({"error details": "No occupancy found in db"})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in retrieving theater occupancy info"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            print('database connection closed')
+        data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
+        data = json.loads(data)
+        return jsonify(data)
