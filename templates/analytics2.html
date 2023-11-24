@@ -7,10 +7,10 @@
 </head>
 <body>
     <form>
-        <label for="citySelect">Select a City:</label>
-        <select name="city" id="citySelect">
-            {% for city in cities %}
-                <option value="{{ city.locationid }}">{{ city.city }}</option>
+        <label for="movieSelect">Select a Movie:</label>
+        <select name="Movie" id="movieSelect">
+            {% for movie in movies %}
+                <option value="{{ movie.movieid }}">{{ movie.moviename }}</option>
             {% endfor %}
         </select>
         <input type="submit" value="Submit">
