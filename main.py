@@ -271,5 +271,16 @@ def retrieveAllCities():
     print(type(response))
     return response
 
+
+# api to retrieve theater occupancy info by location over past 30, 60, and 90 days
+@app.route('/theaterOccupancyInfoByLocation', methods=['GET'])
+def theaterOccupancyInfoByLocation():
+    locationInfo = request.get_json()
+    locationid = locationInfo['locationid']
+    response = dbc.theaterOccupancyByLocation(locationid)
+    print('retrieve theater occupancy info by location over past 30, 60, 90 days : ', response)
+    print(type(response))
+    return response
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1',port=5000)
