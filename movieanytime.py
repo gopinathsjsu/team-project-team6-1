@@ -247,6 +247,16 @@ def get_cities():
          city=json.loads(r.text)
 
          return render_template('analytics1.html',cities=city)
+@app.route('/openanalytics1', methods=['POST','GET'])
+def get_movie():
+      
+      #   as of now its hardcoded need to figure our session user or current user
+         
+         r = requests.get('http://127.0.0.1:5000/retrieveMoviesPlayedPast90Days')
+         print("r.text",r.text)
+         movie=json.loads(r.text)
+
+         return render_template('analytics2.html',movies=movie)
 
 
 if __name__ == '__main__':
