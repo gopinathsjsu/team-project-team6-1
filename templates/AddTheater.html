@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{{ url_for('static', filename='js/updatemovie.js')}}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/updatemovie.css')}}">
+    <title>MovieAnytime</title>
+</head>
+<body>
+    <header>
+        <h1>MovieAnytime</h1>
+    </header>
+    <div class="container">
+        <div>
+            <label for="multiplex">Select Multiplex:</label>
+            <select id="multiplex" class="multiplex-dropdown">
+                <option value="multiplex1">Multiplex 1</option>
+                <option value="multiplex2">Multiplex 2</option>
+                <option value="multiplex3">Multiplex 3</option>
+            </select>
+            <button class="add-theater-btn" onclick="addTheater()" id="add-theater-btn">Add Theater</button>
+        </div>
+    </div>
+    <div class="container" id="theaterContainer">
+        <div class="theater-box">
+            <h2>Theater 1</h2>
+            <p>Showtimes: 1:00 PM, 4:00 PM, 7:00 PM</p>
+            <p>Movies Playing: Movie A, Movie B, Movie C</p>
+            <p>Seating Capacity: 100</p>
+            <button class="update-btn" id="update-btn" onclick="navigateToUpdatePage()">Update</button>
+        </div>
+    </div>
+</body>
+</html>
