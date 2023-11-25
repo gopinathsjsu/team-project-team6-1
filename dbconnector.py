@@ -725,28 +725,37 @@ def theaterOccupancyByLocation(locationid):
         with psycopg2.connect(**params) as conn:
 
             # create a cursor 
-                cursor = conn.cursor()
-                queryTotalSeatsAtLoc = "select sum(noofseats) from (select * from (location inner join multiplex using (locationid)) inner join theater using (multiplexid)) group by locationid having locationid = %s;"
-                cursor.execute(queryTotalSeatsAtLoc,(locationid,))
-                totalNumSeatsAtLoc = cursor.fetchone()[0]
+                cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
+                query30days = "select sum(seatstaken) as totalTaken, sum(noofseats) as totalAvailable from (select locationid,showdate,seatstaken,noofseats from showingdetails inner join (select * from (select * from (location inner join multiplex using (locationid)) inner join theater using (multiplexid)) inner join showingmaster using (theaterid)) using (showingid) group by locationid,showdate,seatstaken,noofseats having locationid=%s and showdate >= CURRENT_DATE-30);"
+                cursor.execute(query30days,(locationid,))
+                row = cursor.fetchone()
+                totalNumSeatsAtLoc30days = row['totalavailable']
+                print(totalNumSeatsAtLoc30days)
+                totalNumSeatsTakenAtLoc30days = row['totaltaken']
+                print(totalNumSeatsTakenAtLoc30days)
 
-                queryTotalOccupiedSeats30days = "select sum(sumSeatsTaken) from (select sum(seatstaken) as sumSeatsTaken from (select * from (select * from (select * from (select * from location inner join multiplex using (locationid)) inner join theater using (multiplexid)) inner join showingmaster using (theaterid)) inner join showingdetails using (showingid)) group by locationid,showdate having locationid=%s and showdate >= CURRENT_DATE-30);"
-                cursor.execute(queryTotalOccupiedSeats30days,(locationid,))
-                totalSeatsTakenAtLoc30days = cursor.fetchone()[0]
-                
-                queryTotalOccupiedSeats60days = "select sum(sumSeatsTaken) from (select sum(seatstaken) as sumSeatsTaken from (select * from (select * from (select * from (select * from location inner join multiplex using (locationid)) inner join theater using (multiplexid)) inner join showingmaster using (theaterid)) inner join showingdetails using (showingid)) group by locationid,showdate having locationid=%s and showdate >= CURRENT_DATE-60);"
-                cursor.execute(queryTotalOccupiedSeats60days,(locationid,))
-                totalSeatsTakenAtLoc60days = cursor.fetchone()[0]
+                query60days = "select sum(seatstaken) as totalTaken, sum(noofseats) as totalAvailable from (select locationid,showdate,seatstaken,noofseats from showingdetails inner join (select * from (select * from (location inner join multiplex using (locationid)) inner join theater using (multiplexid)) inner join showingmaster using (theaterid)) using (showingid) group by locationid,showdate,seatstaken,noofseats having locationid=%s and showdate >= CURRENT_DATE-60);"
+                cursor.execute(query60days,(locationid,))
+                row = cursor.fetchone()
+                totalNumSeatsAtLoc60days = row['totalavailable']
+                print(totalNumSeatsAtLoc60days)
+                totalNumSeatsTakenAtLoc60days = row['totaltaken']
+                print(totalNumSeatsTakenAtLoc60days)
 
-                queryTotalOccupiedSeats90days = "select sum(sumSeatsTaken) from (select sum(seatstaken) as sumSeatsTaken from (select * from (select * from (select * from (select * from location inner join multiplex using (locationid)) inner join theater using (multiplexid)) inner join showingmaster using (theaterid)) inner join showingdetails using (showingid)) group by locationid,showdate having locationid=%s and showdate >= CURRENT_DATE-90);"
-                cursor.execute(queryTotalOccupiedSeats90days,(locationid,))
-                totalSeatsTakenAtLoc90days = cursor.fetchone()[0]
+                query90days = "select sum(seatstaken) as totalTaken, sum(noofseats) as totalAvailable from (select locationid,showdate,seatstaken,noofseats from showingdetails inner join (select * from (select * from (location inner join multiplex using (locationid)) inner join theater using (multiplexid)) inner join showingmaster using (theaterid)) using (showingid) group by locationid,showdate,seatstaken,noofseats having locationid=%s and showdate >= CURRENT_DATE-90);"
+                cursor.execute(query90days,(locationid,))
+                row = cursor.fetchone()
+                totalNumSeatsAtLoc90days = row['totalavailable']
+                print(totalNumSeatsAtLoc90days)
+                totalNumSeatsTakenAtLoc90days = row['totaltaken']
+                print(totalNumSeatsTakenAtLoc90days)
+
                 
-                percentOccupied30days = (totalSeatsTakenAtLoc30days/totalNumSeatsAtLoc)*100
+                percentOccupied30days = (totalNumSeatsTakenAtLoc30days/totalNumSeatsAtLoc30days)*100
                 percentOccupied30days = round(percentOccupied30days,2)
-                percentOccupied60days = (totalSeatsTakenAtLoc60days/totalNumSeatsAtLoc)*100
+                percentOccupied60days = (totalNumSeatsTakenAtLoc60days/totalNumSeatsAtLoc60days)*100
                 percentOccupied60days = round(percentOccupied60days,2)
-                percentOccupied90days = (totalSeatsTakenAtLoc90days/totalNumSeatsAtLoc)*100
+                percentOccupied90days = (totalNumSeatsTakenAtLoc90days/totalNumSeatsAtLoc90days)*100
                 percentOccupied90days = round(percentOccupied90days,2)
 
                 returnDict = {'No of days':['over30days','over60days','over90days'], 'Occupancy Percentage': [percentOccupied30days, percentOccupied60days, percentOccupied90days]}
