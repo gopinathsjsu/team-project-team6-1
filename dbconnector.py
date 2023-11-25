@@ -780,3 +780,76 @@ def theaterOccupancyByLocation(locationid):
         data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
         data = json.loads(data)
         return jsonify(data)
+
+
+# function to calculate theater occupancy by specific movie over the past 30, 60, and 90 days
+def theaterOccupancyByMovie(moviename):
+    data = []
+    try:
+        #establish connection
+        with psycopg2.connect(**params) as conn:
+
+            # create a cursor 
+                cursor = conn.cursor()
+                queryForMovieId = "select movieid from movie where moviename=%s"
+                cursor.execute(queryForMovieId,(moviename,))
+                movieid = cursor.fetchone()[0]
+                cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
+
+                queryForOccupancyInfo30days = "select sum(seatstaken) as taken, sum(noofseats) as total from (select showdate, seatstaken, theaterid, movieid,noofseats from theater inner join (select * from showingdetails inner join showingmaster using (showingid)) using (theaterid) group by theaterid,movieid,seatstaken,showdate,noofseats having movieid=%s and showdate >= CURRENT_DATE-30 and showdate <= CURRENT_DATE);"
+                cursor.execute(queryForOccupancyInfo30days,(movieid,))
+                row = cursor.fetchone()
+                print(row)
+                if row['taken'] == None or row['total'] == None:
+                    totalSeatsTakenAtMovie30days = 0
+                    totalSeatsAvailableAtMovie30days = 1
+                else:
+                    totalSeatsTakenAtMovie30days = row['taken']
+                    totalSeatsAvailableAtMovie30days = row['total']
+
+                queryForOccupancyInfo60days = "select sum(seatstaken) as taken, sum(noofseats) as total from (select showdate, seatstaken, theaterid, movieid,noofseats from theater inner join (select * from showingdetails inner join showingmaster using (showingid)) using (theaterid) group by theaterid,movieid,seatstaken,showdate,noofseats having movieid=%s and showdate >= CURRENT_DATE-60 and showdate <= CURRENT_DATE);"
+                cursor.execute(queryForOccupancyInfo60days,(movieid,))
+                row = cursor.fetchone()
+                print(row)
+                if row['taken'] == None or row['total'] == None:
+                    totalSeatsTakenAtMovie60days = 0
+                    totalSeatsAvailableAtMovie60days = 1
+                else:
+                    totalSeatsTakenAtMovie60days = row['taken']
+                    totalSeatsAvailableAtMovie60days = row['total']
+
+                queryForOccupancyInfo90days = "select sum(seatstaken) as taken, sum(noofseats) as total from (select showdate, seatstaken, theaterid, movieid,noofseats from theater inner join (select * from showingdetails inner join showingmaster using (showingid)) using (theaterid) group by theaterid,movieid,seatstaken,showdate,noofseats having movieid=%s and showdate >= CURRENT_DATE-90 and showdate <= CURRENT_DATE);"
+                cursor.execute(queryForOccupancyInfo90days,(movieid,))
+                row = cursor.fetchone()
+                print(row)
+                if row['taken'] == None or row['total'] == None:
+                    totalSeatsTakenAtMovie90days = 0
+                    totalSeatsAvailableAtMovie90days = 1
+                else:
+                    totalSeatsTakenAtMovie90days = row['taken']
+                    totalSeatsAvailableAtMovie90days = row['total']
+
+                percentOccupied30days = (totalSeatsTakenAtMovie30days/totalSeatsAvailableAtMovie30days)*100
+                percentOccupied30days = round(percentOccupied30days,2)
+                percentOccupied60days = (totalSeatsTakenAtMovie60days/totalSeatsAvailableAtMovie60days)*100
+                percentOccupied60days = round(percentOccupied60days,2)
+                percentOccupied90days = (totalSeatsTakenAtMovie90days/totalSeatsAvailableAtMovie90days)*100
+                percentOccupied90days = round(percentOccupied90days,2)
+
+                returnDict = {'No of days':['over30days','over60days','over90days'], 'Occupancy Percentage': [percentOccupied30days, percentOccupied60days, percentOccupied90days]}
+                
+                data.append(returnDict)
+                print(data)
+                if len(data) ==0:
+                    data.append({"error":"No record found"})
+                    data.append({"error details": "No occupancy found in db"})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in retrieving theater occupancy info"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            print('database connection closed')
+        data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
+        data = json.loads(data)
+        return jsonify(data)
