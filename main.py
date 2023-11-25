@@ -221,26 +221,22 @@ def getTransactionDetails():
 @app.route("/addTheater", methods=["POST"])
 def addTheater():
     requestdata = request.get_json()
-
-    responsedata=[]
-    flag = True
-
-    for data in requestdata:
-        multiplexid = data["multiplexid"]
-        noofseats = data["noofseats"]
-        theaternumber = data["theaternumber"]
-        noofrows = data["noofrows"]
-        noofcolumns = data["noofcolumns"]
-        if 'theaterid' in requestdata:
-            theaterid = requestdata["theaterid"]
-            responsedata = dbc.updateMultiplex(multiplexid, theaterid)
-        else:
-            res = dbc.createTheater(multiplexid, noofseats, theaternumber, noofrows, noofcolumns)
-        responsedata.append(res)
-        if "error" in res[0]:
-            flag = False
-
-    if not flag:
+    multiplexid = requestdata["multiplexid"]
+    noofseats = requestdata["noofseats"]
+    theaternumber = requestdata["theaternumber"]
+    noofrows = requestdata["noofrows"]
+    noofcolumns = requestdata["noofcolumns"]
+    movieid = requestdata["movieid"]# comma seperated string
+    price = requestdata["price"]# comma seperated string
+    showtimes = requestdata["showtimes"]# string of set
+    
+    if 'theaterid' in requestdata:
+        theaterid = requestdata["theaterid"]
+        responsedata = dbc.updateMultiplex(multiplexid, theaterid)
+    else:
+        responsedata = dbc.createTheater(multiplexid, noofseats, theaternumber, noofrows, noofcolumns, movieid, showtimes, price)
+        dbc. createshowingmaster(movieid, showtimes, price, responsedata[0]["theaterid"], noofseats)
+    if "error" in responsedata[0]:
         return responsedata, 400
     return responsedata, 200
 

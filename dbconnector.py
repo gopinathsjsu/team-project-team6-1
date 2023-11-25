@@ -459,7 +459,7 @@ def createMultiplex(name, locationid, address, nooftheaters):
 
 
 #create new theater record and respective seat records in seat table in db
-def createTheater(multiplexid, noofseats, theaternumber, noofrows, noofcolumns):
+def createTheater(multiplexid, noofseats, theaternumber, noofrows, noofcolumns, movieid, showtimes, price):
     data = []
     try:
         with psycopg2.connect(**params) as conn:
@@ -474,7 +474,6 @@ def createTheater(multiplexid, noofseats, theaternumber, noofrows, noofcolumns):
                     data.append({"error details": "Theater record not created"})
                 else:
                     query = f'''INSERT INTO seat(rownum, seatno, theaterid) VALUES (%s, %s, %s) RETURNING seatid;'''
-                    print(query)
                     values = []
                     for i in range(noofrows):
                         for j in range(noofcolumns):
@@ -493,6 +492,47 @@ def createTheater(multiplexid, noofseats, theaternumber, noofrows, noofcolumns):
         if conn is not None:
             conn.close()
             return data
+
+def createshowingmaster(movieid, showtimes, price, theaterid, no_seats):
+    data = []
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                movies = movieid.split(", ")
+                showtimesarr = showtimes.split(", ")
+                prices = price.split(", ")
+                prev = 0
+                s = 0
+
+                for i in range(0, len(movies)):
+                    if(movies[i] == prev):
+                        query= f'''UPDATE showingmaster SET showtimes = array_append(showtimes,%s) WHERE showingid = %s'''
+                        cur.execute(query,(showtimesarr[i],s))
+                    else:
+                        prev = movies[i]
+                        query = f'''INSERT INTO showingmaster(theaterid, movieid, price, showtimes)  VALUES (%s, %s, %s, Array [%s]) RETURNING showingid;'''
+                        cur.execute(query,(theaterid, movies[i], prices[i], showtimesarr[i]))
+                        data = cur.fetchall()
+                    if len(data) ==0:
+                        data.append({"error":"Record not created"})
+                        data.append({"error details": "Theater record not created"})
+                    else:
+                        s = data[0]["showingid"]
+                        query = f'''INSERT INTO showingdetails(showingid, showdate, showtime, discount, seatsavailable, seatstaken)
+	                                VALUES (%s, %s, %s, %s, %s, %s);'''
+                        values = []
+                        for j in range(10):
+                            values.append(tuple((s, datetime.date.today()+ datetime.timedelta(j), showtimesarr[i], "$0.00", no_seats, 0)))
+                        cur.executemany(query,values)
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in createshowingmaster()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data
+
 
 #update movie record in db
 def updateMovie(movieid, runtimeminutes, endshowingdate, poster):

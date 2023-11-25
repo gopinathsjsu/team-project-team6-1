@@ -85,41 +85,28 @@ URL format: POST
 Request format:
 
 ```yaml
-[
-    {
-        "theaterid": 17,
-        "multiplexid": 7,
-        "noofseats": 20,
-        "theaternumber": 5,
-        "noofrows": 4,
-        "noofcolumns": 5
-    },
-    {
-        "theaterid": 17,
-        "multiplexid": 7,
-        "noofseats": 20,
-        "theaternumber": 3,
-        "noofrows": 5,
-        "noofcolumns": 5
-    }
-]
+{
+    "multiplexid": 7,
+    "noofseats": 20,
+    "theaternumber": 6,
+    "noofrows": 4,
+    "noofcolumns": 5,
+    "movieid": "1, 1, 3, 3",
+    "price": "12.00, 12.00, 12.25, 12.25",
+    "showtimes": "10:00:00, 12:00:00, 15:00:00, 17:00:00"
+}
 ```
 
 Response format: Response truncated to two records only 
 
 ```yaml
+
 [
-    [
-        {
-            "theaterid": 17
-        }
-    ],
-    [
-        {
-            "theaterid": 18
-        }
-    ]
+    {
+        "theaterid": 17
+    }
 ]
+
 ```
 
 </details>
