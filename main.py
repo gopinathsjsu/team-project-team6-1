@@ -283,5 +283,16 @@ def theaterOccupancyInfoByLocation():
     print(type(response))
     return response
 
+# api to retrieve theater occupancy info by moviename over past 30, 60, and 90 days
+@app.route('/theaterOccupancyInfoByMovie', methods=['POST'])
+def theaterOccupancyInfoByMovie():
+    movieInfo = request.get_json()
+    moviename = movieInfo['moviename']
+    response = dbc.theaterOccupancyByMovie(moviename)
+    print('retrieve theater occupancy info by movie over past 30, 60, 90 days : ', response)
+    print(type(response))
+    return response
+
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1',port=5000)
