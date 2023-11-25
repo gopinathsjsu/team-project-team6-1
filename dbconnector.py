@@ -590,21 +590,22 @@ def getTheaterInfo(multiplexid):
         with psycopg2.connect(**params) as conn:
 
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
-                query = f'''SELECT * FROM showingmaster
+                query = f'''SELECT theater.theaterid,noofseats, multiplexid, theaternumber, sm.*  from theater
                             INNER JOIN(
-                                SELECT theaterid,noofseats, theater.multiplexid, theaternumber  from theater
-                                    INNER JOIN (
-                                        SELECT multiplex.multiplexid from multiplex where multiplex.multiplexid = %s
-                                    )mul1
-                                    on theater.multiplexid = mul1.multiplexid
-                                )t1
-                            ON showingmaster.theaterid = t1.theaterid
-                            INNER JOIN (
-                                SELECT STRING_AGG(distinct showtime::text, ', ' ORDER BY showtime::text) AS mshowtimes, showingid
-                                FROM showingdetails
-                                GROUP BY showingdetails.showingid
-                                )sd
-                            ON showingmaster.showingid = sd.showingid;'''
+                                SELECT showingmaster.theaterid, STRING_AGG(distinct showingmaster.movieid::text, ', ' ORDER BY showingmaster.movieid::text) AS mmovieid,
+                                STRING_AGG(distinct m1.moviename, ', ' ) AS mmovienames,STRING_AGG(distinct showtimes::text, ', ') AS mshowtimes
+                                FROM showingmaster
+                                INNER JOIN (
+                                    SELECT moviename, movie.movieid FROM movie
+                                )m1 
+                                on m1.movieid =showingmaster.movieid
+                                GROUP BY showingmaster.theaterid
+                            )sm
+
+                            ON sm.theaterid = theater.theaterid
+                            where multiplexid = 1;
+                            '''
+                
                 cur.execute(query, (multiplexid, ))
 
                 data = cur.fetchall()

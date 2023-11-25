@@ -20,22 +20,20 @@ Response format: Response truncated to two records only
 ```yaml
 [
     {
-        "movieid": 1,
-        "mshowtimes": "14:00:00, 19:00:00",
+        "mmovieid": "1, 2, 3",
+        "mmovienames": "Creator, Killers Of The Flower Moon, Paw Patrol",
+        "mshowtimes": "{10:00:00,12:00:00}, {15:00:00,17:00:00}, {}",
         "multiplexid": 1,
         "noofseats": 10,
-        "price": "$12.50",
-        "showingid": 1,
         "theaterid": 1,
         "theaternumber": 1
     },
     {
-        "movieid": 3,
-        "mshowtimes": "21:00:00",
+        "mmovieid": "1, 3",
+        "mmovienames": "Creator, Killers Of The Flower Moon",
+        "mshowtimes": null,
         "multiplexid": 1,
         "noofseats": 10,
-        "price": "$12.75",
-        "showingid": 5,
         "theaterid": 2,
         "theaternumber": 2
     }
