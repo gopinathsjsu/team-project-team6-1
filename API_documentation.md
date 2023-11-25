@@ -2,6 +2,83 @@
 
 <details>
 
+<summary> Fetch theater details from multiplex </summary>
+
+URL format: POST
+/getalltheaters
+
+Request format:
+
+```yaml
+{
+    "multiplexid": 1
+}
+```
+
+Response format: Response truncated to two records only 
+
+```yaml
+[
+    {
+        "movieid": 1,
+        "mshowtimes": "14:00:00, 19:00:00",
+        "multiplexid": 1,
+        "noofseats": 10,
+        "price": "$12.50",
+        "showingid": 1,
+        "theaterid": 1,
+        "theaternumber": 1
+    },
+    {
+        "movieid": 3,
+        "mshowtimes": "21:00:00",
+        "multiplexid": 1,
+        "noofseats": 10,
+        "price": "$12.75",
+        "showingid": 5,
+        "theaterid": 2,
+        "theaternumber": 2
+    }
+]
+```
+
+</details>
+
+
+<details>
+
+<summary> Add new movie to db </summary>
+
+URL format: POST
+/addMovie
+
+Request format:
+
+```yaml
+{
+    "movieid": 6,
+    "moviename": "Utah",
+    "runtimeminutes": "66",
+    "releasedate": "2024-10-13",
+    "endshowingdate": "2024-12-13",
+    "poster": "utah.jpg"
+}
+```
+
+Response format: Response truncated to two records only 
+
+```yaml
+[
+    {
+        "movieid": 6
+    }
+]
+```
+
+</details>
+
+<details>
+
 <summary> Add new theater to db </summary>
 
 URL format: POST
@@ -12,6 +89,7 @@ Request format:
 ```yaml
 [
     {
+        "theaterid": 17,
         "multiplexid": 7,
         "noofseats": 20,
         "theaternumber": 5,
@@ -19,6 +97,7 @@ Request format:
         "noofcolumns": 5
     },
     {
+        "theaterid": 17,
         "multiplexid": 7,
         "noofseats": 20,
         "theaternumber": 3,
@@ -45,7 +124,7 @@ Response format: Response truncated to two records only
 ]
 ```
 
-<details>
+</details>
 
 <details>
 
@@ -58,6 +137,7 @@ Request format:
 
 ```yaml
 {
+    "multiplexid": 7,
     "multiplexname": "AMC Saratoga",
     "locationid": 3,
     "address": "Utah",
@@ -75,7 +155,7 @@ Response format: Response truncated to two records only
 ]
 ```
 
-<details>
+</details>
 
 <summary> Add new location to db </summary>
 
@@ -86,6 +166,7 @@ Request format:
 
 ```yaml
 {
+    "locationid": 3,
     "city":"San Jose",
     "postalcode": 95126,
     "noofmultiplex": 3
@@ -115,6 +196,7 @@ Request format:
 
 ```yaml
 {
+    "movieid": 6,
     "moviename": "Utah",
     "runtimeminutes": "66",
     "releasedate": "2024-10-13",
@@ -161,9 +243,23 @@ Response format: Response truncated to two records only
 
 ```yaml
 [
+    [
     {
-        "bookingid": 1
+        "seatdetailid": 4
+    },
+    {
+        "bookingid": 1,
+        "num_seats_booked": 3,
+        "showingdetailid": 1
+    },
+    {
+        "seatsavailable": -4,
+        "seatstaken": 24
+    },
+    {
+        "showingdetailid": 1
     }
+]
 ]
 ```
 

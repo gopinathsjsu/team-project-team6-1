@@ -146,7 +146,7 @@ def saveBooking():
         return responsedata, 400
     return responsedata, 200
 
-#api to Add movie in schedule
+#api to add/update movie in schedule
 @app.route("/addMovie", methods=["POST"])
 def addMovie():
     requestdata = request.get_json()
@@ -156,13 +156,17 @@ def addMovie():
     releasedate = requestdata["releasedate"]
     endshowingdate = requestdata["endshowingdate"]
     poster = requestdata["poster"]
-    responsedata = dbc.createMovie(name, runtimeminutes, releasedate, endshowingdate, poster)
+    if 'movieid' in requestdata:
+        movieid = requestdata["movieid"]
+        responsedata = dbc.updateMovie(movieid, runtimeminutes, endshowingdate, poster)
+    else:
+        responsedata = dbc.createMovie(name, runtimeminutes, releasedate, endshowingdate, poster)
 
     if "error" in responsedata[0]:
         return responsedata, 400
     return responsedata, 200
 
-#api to Add location
+#api to Add and update location
 @app.route("/addLocation", methods=["POST"])
 def addLocation():
     requestdata = request.get_json()
@@ -170,14 +174,18 @@ def addLocation():
     city = requestdata["city"]
     postalcode = requestdata["postalcode"]
     noofmultiplex = requestdata["noofmultiplex"]
-    responsedata = dbc.createLocation(city, postalcode, noofmultiplex)
+    if 'locationid' in requestdata:
+        locationid = requestdata["locationid"]
+        responsedata = dbc.updateLocation(locationid, noofmultiplex)
+    else:
+        responsedata = dbc.createLocation(city, postalcode, noofmultiplex)
 
     if "error" in responsedata[0]:
         return responsedata, 400
     return responsedata, 200
 
 
-#api to Add multiplex in schedule
+#api to Add and update multiplex in schedule
 @app.route("/addMultiplex", methods=["POST"])
 def addMultiplex():
     requestdata = request.get_json()
@@ -186,7 +194,11 @@ def addMultiplex():
     locationid = requestdata["locationid"]
     address = requestdata["address"]
     nooftheaters = requestdata["nooftheaters"]
-    responsedata = dbc.createMultiplex(name, locationid, address, nooftheaters)
+    if 'multiplexid' in requestdata:
+        multiplexid = requestdata["multiplexid"]
+        responsedata = dbc.updateMultiplex(multiplexid, name, address, nooftheaters)
+    else:
+        responsedata = dbc.createMultiplex(name, locationid, address, nooftheaters)
 
     if "error" in responsedata[0]:
         return responsedata, 400
@@ -219,7 +231,11 @@ def addTheater():
         theaternumber = data["theaternumber"]
         noofrows = data["noofrows"]
         noofcolumns = data["noofcolumns"]
-        res = dbc.createTheater(multiplexid, noofseats, theaternumber, noofrows, noofcolumns)
+        if 'theaterid' in requestdata:
+            theaterid = requestdata["theaterid"]
+            responsedata = dbc.updateMultiplex(multiplexid, theaterid)
+        else:
+            res = dbc.createTheater(multiplexid, noofseats, theaternumber, noofrows, noofcolumns)
         responsedata.append(res)
         if "error" in res[0]:
             flag = False
@@ -228,6 +244,17 @@ def addTheater():
         return responsedata, 400
     return responsedata, 200
 
+#api to get all theater for a given multiplex
+@app.route("/getalltheaters",methods=["POST"])
+def getalltheaters():
+    requestdata = request.get_json()
+
+    multiplexid = requestdata["multiplexid"]
+    responsedata = dbc.getTheaterInfo(multiplexid)
+
+    if "error" in responsedata[0]:
+        return responsedata, 400
+    return responsedata, 200
 
 
 # api to register a user and add their info to database

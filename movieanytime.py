@@ -52,7 +52,10 @@ def payment(bookingid):
       userdetails['email'] = session['username']
       userdetails['membership']= session['ispremium']
       userdetails['rewards']= session['rewardpoints']
+   else:
+      userdetails['userid'] = 0
    
+
    if(session.get('moviename') and session.get('multiplex') and session.get('theater')):
        moviedetails['moviename'] = session['moviename']
        moviedetails['multiplex'] = session['multiplex']

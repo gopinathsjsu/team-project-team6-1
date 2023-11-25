@@ -4,7 +4,7 @@ function paymentconfirmation(userdetails, payment, moviedetails){
         var exp;
         var rewardpoints = 0;
         var checkBox = document.getElementById("rewardpoints");
-        if (checkBox.checked == true){
+        if (checkBox != null && checkBox.checked == true){
             rewardpoints = userdetails.rewardpoints;
         }
         if (document.getElementById('card_number') != null) {
