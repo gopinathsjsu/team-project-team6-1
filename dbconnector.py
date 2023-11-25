@@ -733,28 +733,34 @@ def theaterOccupancyByLocation(locationid):
                 cursor.execute(query30days,(locationid,))
                 row = cursor.fetchone()
                 print("row",row)
-                totalNumSeatsAtLoc30days = row['totalavailable']
-                print(totalNumSeatsAtLoc30days)
-                totalNumSeatsTakenAtLoc30days = row['totaltaken']
-                print(totalNumSeatsTakenAtLoc30days)
+                if row['totaltaken'] == None or row['totalavailable'] == None:
+                    totalNumSeatsTakenAtLoc30days = 0
+                    totalNumSeatsAtLoc30days = 1
+                else:
+                    totalNumSeatsAtLoc30days = row['totalavailable']
+                    totalNumSeatsTakenAtLoc30days = row['totaltaken']
 
                 # query60days = "select sum(seatstaken) as totalTaken, sum(noofseats) as totalAvailable from (select locationid,showdate,seatstaken,noofseats from showingdetails inner join (select * from (select * from (location inner join multiplex using (locationid)) inner join theater using (multiplexid)) inner join showingmaster using (theaterid)) using (showingid) group by locationid,showdate,seatstaken,noofseats having locationid=%s and showdate >= CURRENT_DATE-60);"
                 query60days="select sum(seatstaken) as totalTaken,sum(noofseats) as totalAvailable from (select locationid,showdate,seatstaken,noofseats from showingdetails inner join (select * from (select * from (location inner join multiplex using (locationid)) as subquery_4 inner join theater using (multiplexid)) as subquery_3 inner join showingmaster using (theaterid)) as subquery_2 using (showingid) group by locationid,showdate,seatstaken,noofseats having locationid=%s and showdate >= CURRENT_DATE-60 and showdate<=Current_date) as subquery_1;"
                 cursor.execute(query60days,(locationid,))
                 row = cursor.fetchone()
-                totalNumSeatsAtLoc60days = row['totalavailable']
-                print(totalNumSeatsAtLoc60days)
-                totalNumSeatsTakenAtLoc60days = row['totaltaken']
-                print(totalNumSeatsTakenAtLoc60days)
+                if row['totaltaken'] == None or row['totalavailable'] == None:
+                    totalNumSeatsTakenAtLoc60days = 0
+                    totalNumSeatsAtLoc60days = 1
+                else:
+                    totalNumSeatsAtLoc60days = row['totalavailable']
+                    totalNumSeatsTakenAtLoc60days = row['totaltaken']
 
                 # query90days = "select sum(seatstaken) as totalTaken, sum(noofseats) as totalAvailable from (select locationid,showdate,seatstaken,noofseats from showingdetails inner join (select * from (select * from (location inner join multiplex using (locationid)) inner join theater using (multiplexid)) inner join showingmaster using (theaterid)) using (showingid) group by locationid,showdate,seatstaken,noofseats having locationid=%s and showdate >= CURRENT_DATE-90);"
                 query90days="select sum(seatstaken) as totalTaken,sum(noofseats) as totalAvailable from (select locationid,showdate,seatstaken,noofseats from showingdetails inner join (select * from (select * from (location inner join multiplex using (locationid)) as subquery_4 inner join theater using (multiplexid)) as subquery_3 inner join showingmaster using (theaterid)) as subquery_2 using (showingid) group by locationid,showdate,seatstaken,noofseats having locationid=%s and showdate >= CURRENT_DATE-90 and showdate<=Current_date) as subquery_1;"
                 cursor.execute(query90days,(locationid,))
                 row = cursor.fetchone()
-                totalNumSeatsAtLoc90days = row['totalavailable']
-                print(totalNumSeatsAtLoc90days)
-                totalNumSeatsTakenAtLoc90days = row['totaltaken']
-                print(totalNumSeatsTakenAtLoc90days)
+                if row['totaltaken'] == None or row['totalavailable'] == None:
+                    totalNumSeatsTakenAtLoc90days = 0
+                    totalNumSeatsAtLoc90days = 1
+                else:
+                    totalNumSeatsAtLoc90days = row['totalavailable']
+                    totalNumSeatsTakenAtLoc90days = row['totaltaken']
 
                 
                 percentOccupied30days = (totalNumSeatsTakenAtLoc30days/totalNumSeatsAtLoc30days)*100
