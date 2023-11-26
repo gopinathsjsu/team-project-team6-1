@@ -118,23 +118,23 @@ def register():
         #error screen
    return render_template('registration.html')
 
-# @app.route('/', methods=['GET'])
-# def current_movies():
-#    if request.method == "GET":
-#         #use session variables
-#         if session.get('username') :
-#             print(session['username'])
+@app.route('/', methods=['GET'])
+def current_movies():
+   if request.method == "GET":
+        #use session variables
+        if session.get('username') :
+            print(session['username'])
         
-#         r = requests.get('http://127.0.0.1:5000/currentmovies')
-#         print(r)
-#         print(r.text)
-#         current_movies_json=json.loads(r.text)
-#         current_movies_featuring=current_movies_json[:4]
-#         r_upcoming = requests.get('http://127.0.0.1:5000/upcomingmovies')
-#         upcoming_movies_json=json.loads(r_upcoming.text)
-#         upcoming_movies_featuring=upcoming_movies_json[:4]
-#       #   it will also have upcoming 4movies
-#    return render_template("testhome.html",Featuring_movies=current_movies_featuring, upcoming_movies=upcoming_movies_featuring)
+        r = requests.get('http://127.0.0.1:5000/currentmovies')
+        print(r)
+        print(r.text)
+        current_movies_json=json.loads(r.text)
+        current_movies_featuring=current_movies_json[:4]
+        r_upcoming = requests.get('http://127.0.0.1:5000/upcomingmovies')
+        upcoming_movies_json=json.loads(r_upcoming.text)
+        upcoming_movies_featuring=upcoming_movies_json[:4]
+      #   it will also have upcoming 4movies
+   return render_template("testhome.html",Featuring_movies=current_movies_featuring, upcoming_movies=upcoming_movies_featuring)
 
 @app.route('/current_movies', methods=['GET'])
 def all_current_movies():
@@ -251,7 +251,7 @@ def get_cities():
          city=json.loads(r.text)
 
          return render_template('analytics1.html',cities=city)
-@app.route('/', methods=['POST','GET'])
+@app.route('/openanalytics2', methods=['POST','GET'])
 def get_movie():
      
          
