@@ -118,23 +118,23 @@ def register():
         #error screen
    return render_template('registration.html')
 
-@app.route('/', methods=['GET'])
-def current_movies():
-   if request.method == "GET":
-        #use session variables
-        if session.get('username') :
-            print(session['username'])
+# @app.route('/', methods=['GET'])
+# def current_movies():
+#    if request.method == "GET":
+#         #use session variables
+#         if session.get('username') :
+#             print(session['username'])
         
-        r = requests.get('http://127.0.0.1:5000/currentmovies')
-        print(r)
-        print(r.text)
-        current_movies_json=json.loads(r.text)
-        current_movies_featuring=current_movies_json[:4]
-        r_upcoming = requests.get('http://127.0.0.1:5000/upcomingmovies')
-        upcoming_movies_json=json.loads(r_upcoming.text)
-        upcoming_movies_featuring=upcoming_movies_json[:4]
-      #   it will also have upcoming 4movies
-   return render_template("testhome.html",Featuring_movies=current_movies_featuring, upcoming_movies=upcoming_movies_featuring)
+#         r = requests.get('http://127.0.0.1:5000/currentmovies')
+#         print(r)
+#         print(r.text)
+#         current_movies_json=json.loads(r.text)
+#         current_movies_featuring=current_movies_json[:4]
+#         r_upcoming = requests.get('http://127.0.0.1:5000/upcomingmovies')
+#         upcoming_movies_json=json.loads(r_upcoming.text)
+#         upcoming_movies_featuring=upcoming_movies_json[:4]
+#       #   it will also have upcoming 4movies
+#    return render_template("testhome.html",Featuring_movies=current_movies_featuring, upcoming_movies=upcoming_movies_featuring)
 
 @app.route('/current_movies', methods=['GET'])
 def all_current_movies():
@@ -251,7 +251,7 @@ def get_cities():
          city=json.loads(r.text)
 
          return render_template('analytics1.html',cities=city)
-@app.route('/openanalytics2', methods=['POST','GET'])
+@app.route('/', methods=['POST','GET'])
 def get_movie():
      
          
@@ -262,10 +262,13 @@ def get_movie():
          return render_template('analytics2.html',movies=movie)
 @app.route('/showgraph', methods=['POST','GET'])
 def get_graph():
-      selected_city = request.form.get('city')
-      jsonrequest={"locationid": selected_city}
+      # selected_city = request.form.get('city')
+      selected_option = request.form['city']
+      location_id, city_name = selected_option.split('-')
+
+      jsonrequest={"locationid": location_id}
     
-      print("Selected City:", selected_city)
+      print("Selected City:", location_id)
       r = requests.post('http://127.0.0.1:5000/theaterOccupancyInfoByLocation', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
       print("r.text",r.text)
       data=json.loads(r.text)
@@ -275,6 +278,7 @@ def get_graph():
       r1= requests.get('http://127.0.0.1:5000/retrieveAllCities')
       print("r.text",r1.text)
       city=json.loads(r1.text)
+      
       if("error" in data[0]):
          return render_template('analytics1.html',cities=city)
 
@@ -287,7 +291,7 @@ def get_graph():
          bar.set_edgecolor('none')
       plt.xlabel('No of days')
       plt.ylabel('Occupancy Percentage')
-      plt.title("City: ",selected_city)
+      plt.title("City:"+city_name)
       plt.gca().spines['top'].set_visible(False)
       plt.gca().spines['right'].set_visible(False)
 

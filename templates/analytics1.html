@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/analytics1.css')}}">
     <title>Dynamic List Box</title>
 </head>
+
 <body>
     <form method="post" action="/showgraph">
         <label for="citySelect">Select a City:</label>
         <select name="city" id="citySelect">
             {% for city in cities %}
-                <option value="{{ city.locationid }}">{{ city.city }}</option>
-            {% endfor %}
+            <option value="{{ city.locationid }}-{{ city.city }}">{{ city.city }}</option>
+        {% endfor %}
         </select>
         <input type="submit" value="Submit">
     </form>
@@ -23,6 +25,7 @@
             <!-- </tr> -->
             
             <tr>
+                
                 <td><img src="data:image/png;base64,{{ img_base64 }}"></td>
                 <!-- <td><img src="data:image/png;base64,{{ img_base64 }}" alt="Line Chart"></td> -->
             </tr>
