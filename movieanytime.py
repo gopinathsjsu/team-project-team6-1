@@ -241,7 +241,7 @@ def book_movies():
       print(r.text)
       theaters = json.loads(r.text)
    return render_template("bookmovie.html",theaters=theaters) 
-@app.route('/getallcities', methods=['POST','GET'])
+@app.route('/openanalytics1', methods=['POST','GET'])
 def get_cities():
       
       
@@ -287,7 +287,7 @@ def get_graph():
          bar.set_edgecolor('none')
       plt.xlabel('No of days')
       plt.ylabel('Occupancy Percentage')
-      plt.title('Pie Chart')
+      plt.title("City: ",selected_city)
       plt.gca().spines['top'].set_visible(False)
       plt.gca().spines['right'].set_visible(False)
 
@@ -303,6 +303,50 @@ def get_graph():
       img_base64 = base64.b64encode(img.getvalue()).decode()
        
       return render_template('analytics1.html',img_base64=img_base64,cities=city)
+      
+@app.route('/showgraph2', methods=['POST','GET'])
+def get_graph2():
+      selected_moviename= request.form.get('Movie')
+      jsonrequest={"moviename": selected_moviename}
+    
+      print("Selected movie:"+ selected_moviename)
+      r = requests.post('http://127.0.0.1:5000/theaterOccupancyInfoByMovie', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+      print("r.text",r.text)
+      data=json.loads(r.text)
+      
+         
+      print("data",data[0])
+      r1= requests.get('http://127.0.0.1:5000/retrieveMoviesPlayedPast90Days')
+      print("r.text",r1.text)
+      movie=json.loads(r1.text)
+      if("error" in data[0]):
+         return render_template('analytics2.html',movies=movie)
+
+      df = pd.DataFrame(data[0])
+      
+      plt.figure()
+      
+      bars = plt.bar(df['No of days'], df['Occupancy Percentage'],color=['lightpink','skyblue'], width=0.5)
+      for bar in bars:
+         bar.set_edgecolor('none')
+      plt.xlabel('No of days')
+      plt.ylabel('Occupancy Percentage')
+      plt.title("Movie: "+selected_moviename)
+      plt.gca().spines['top'].set_visible(False)
+      plt.gca().spines['right'].set_visible(False)
+
+      # Add value labels to each bar
+      for bar in bars:
+         yval = bar.get_height()
+         plt.text(bar.get_x() + bar.get_width() / 2, yval, round(yval, 2), ha='center', va='bottom')
+
+      # Save the plot to a BytesIO object
+      img = BytesIO()
+      plt.savefig(img, format='png')
+      img.seek(0)
+      img_base64 = base64.b64encode(img.getvalue()).decode()
+       
+      return render_template('analytics2.html',img_base64=img_base64,movies=movie)
       
 
 

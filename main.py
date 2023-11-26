@@ -288,6 +288,7 @@ def theaterOccupancyInfoByLocation():
 def theaterOccupancyInfoByMovie():
     movieInfo = request.get_json()
     moviename = movieInfo['moviename']
+    print("moviename in main",moviename)
     response = dbc.theaterOccupancyByMovie(moviename)
     print('retrieve theater occupancy info by movie over past 30, 60, 90 days : ', response)
     print(type(response))

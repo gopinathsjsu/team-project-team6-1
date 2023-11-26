@@ -790,6 +790,7 @@ def theaterOccupancyByLocation(locationid):
 
 # function to calculate theater occupancy by specific movie over the past 30, 60, and 90 days
 def theaterOccupancyByMovie(moviename):
+    print("moviename in dbconnector",moviename)
     data = []
     try:
         #establish connection
@@ -802,7 +803,8 @@ def theaterOccupancyByMovie(moviename):
                 movieid = cursor.fetchone()[0]
                 cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
 
-                queryForOccupancyInfo30days = "select sum(seatstaken) as taken, sum(noofseats) as total from (select showdate, seatstaken, theaterid, movieid,noofseats from theater inner join (select * from showingdetails inner join showingmaster using (showingid)) using (theaterid) group by theaterid,movieid,seatstaken,showdate,noofseats having movieid=%s and showdate >= CURRENT_DATE-30 and showdate <= CURRENT_DATE);"
+                # queryForOccupancyInfo30days = "select sum(seatstaken) as taken, sum(noofseats) as total from (select showdate, seatstaken, theaterid, movieid,noofseats from theater inner join (select * from showingdetails inner join showingmaster using (showingid)) using (theaterid) group by theaterid,movieid,seatstaken,showdate,noofseats having movieid=%s and showdate >= CURRENT_DATE-30 and showdate <= CURRENT_DATE);"
+                queryForOccupancyInfo30days="select sum(seatstaken) as taken,sum(noofseats) as total from (select showdate, seatstaken, theaterid, movieid,noofseats from theater inner join (select * from showingdetails inner join showingmaster using (showingid)) as subquery_2 using (theaterid) group by theaterid,movieid,seatstaken,showdate,noofseats having movieid=%s and showdate >= CURRENT_DATE-30 and showdate <= CURRENT_DATE) as subquery_1;"
                 cursor.execute(queryForOccupancyInfo30days,(movieid,))
                 row = cursor.fetchone()
                 print(row)
@@ -813,7 +815,7 @@ def theaterOccupancyByMovie(moviename):
                     totalSeatsTakenAtMovie30days = row['taken']
                     totalSeatsAvailableAtMovie30days = row['total']
 
-                queryForOccupancyInfo60days = "select sum(seatstaken) as taken, sum(noofseats) as total from (select showdate, seatstaken, theaterid, movieid,noofseats from theater inner join (select * from showingdetails inner join showingmaster using (showingid)) using (theaterid) group by theaterid,movieid,seatstaken,showdate,noofseats having movieid=%s and showdate >= CURRENT_DATE-60 and showdate <= CURRENT_DATE);"
+                queryForOccupancyInfo60days="select sum(seatstaken) as taken,sum(noofseats) as total from (select showdate, seatstaken, theaterid, movieid,noofseats from theater inner join (select * from showingdetails inner join showingmaster using (showingid)) as subquery_2 using (theaterid) group by theaterid,movieid,seatstaken,showdate,noofseats having movieid=%s and showdate >= CURRENT_DATE-60 and showdate <= CURRENT_DATE) as subquery_1;"
                 cursor.execute(queryForOccupancyInfo60days,(movieid,))
                 row = cursor.fetchone()
                 print(row)
@@ -824,7 +826,7 @@ def theaterOccupancyByMovie(moviename):
                     totalSeatsTakenAtMovie60days = row['taken']
                     totalSeatsAvailableAtMovie60days = row['total']
 
-                queryForOccupancyInfo90days = "select sum(seatstaken) as taken, sum(noofseats) as total from (select showdate, seatstaken, theaterid, movieid,noofseats from theater inner join (select * from showingdetails inner join showingmaster using (showingid)) using (theaterid) group by theaterid,movieid,seatstaken,showdate,noofseats having movieid=%s and showdate >= CURRENT_DATE-90 and showdate <= CURRENT_DATE);"
+                queryForOccupancyInfo90days="select sum(seatstaken) as taken,sum(noofseats) as total from (select showdate, seatstaken, theaterid, movieid,noofseats from theater inner join (select * from showingdetails inner join showingmaster using (showingid)) as subquery_2 using (theaterid) group by theaterid,movieid,seatstaken,showdate,noofseats having movieid=%s and showdate >= CURRENT_DATE-90 and showdate <= CURRENT_DATE) as subquery_1;"
                 cursor.execute(queryForOccupancyInfo90days,(movieid,))
                 row = cursor.fetchone()
                 print(row)

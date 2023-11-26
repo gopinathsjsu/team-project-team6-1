@@ -6,14 +6,31 @@
     <title>Dynamic List Box</title>
 </head>
 <body>
-    <form>
+    <form method="post" action="/showgraph2">
         <label for="movieSelect">Select a Movie:</label>
         <select name="Movie" id="movieSelect">
             {% for movie in movies %}
-                <option value="{{ movie.movieid }}">{{ movie.moviename }}</option>
+                <option value="{{ movie.moviename }}">{{ movie.moviename }}</option>
             {% endfor %}
         </select>
         <input type="submit" value="Submit">
     </form>
+    {% if img_base64 %}
+    <table>
+        <!-- <tr>
+        <td><h1>Summarized by Location</h1></td> -->
+            <!-- <td><h1>Summarized by Movies</h1></td> -->
+        <!-- </tr> -->
+        
+        <tr>
+            <td><img src="data:image/png;base64,{{ img_base64 }}"></td>
+            <!-- <td><img src="data:image/png;base64,{{ img_base64 }}" alt="Line Chart"></td> -->
+        </tr>
+        
+    </table>
+    {% else %}
+    <p>No Data Available,Select a Movie and press Submit</p>
+{% endif %}
+
 </body>
 </html>
