@@ -1,0 +1,63 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+    
+    background-color:white;
+   
+}
+
+.discount-config {
+    max-width: 500px;
+   
+    margin: 50px auto;
+    padding: 20px;
+    background-color:transparent;
+    border:0.5px solid black;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgb(240, 92, 0.877);
+     
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    
+    color: rgb(240, 92, 0.877);
+    font:bolder;
+}
+
+input,select {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    box-sizing: border-box;
+    border-bottom: 1px solid rgb(240, 92, 0.877);
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: transparent;
+    color:#333;
+    background-color:white;
+}
+
+
+.menu-bar {
+   
+    color: rgb(240, 92, 0.877);
+    text-align: center;
+    border-bottom:3px solid  rgb(240, 92, 0.877);
+   
+   border-radius:50%;
+   
+}
+.button{
+    background-color: rgb(240, 92, 0.877);
+    border-radius: 20px;
+    width: 200px;
+    align-items: center;
+    color: white;
+    margin-left: 30%;
+}
+img{
+    width: 500px;
+    height: 200px;
+}
