@@ -293,6 +293,17 @@ def theaterOccupancyInfoByMovie():
     print(type(response))
     return response
 
+# api to configure discount prices for showings
+@app.route('/configDiscount', methods=['GET','POST'])
+def configDiscounts():
+    discountInfo = request.get_json()
+    movieid = discountInfo['movieid']
+    discount = discountInfo['discount']
+    response = dbc.configDiscount(movieid,discount)
+    print('configure discount price for movie showing on Tuesday or pre-6pm : ', response)
+    print(type(response))
+    return response
+
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1',port=5000)

@@ -608,6 +608,7 @@ def cancelBooking(bookingId):
                 cursor = conn.cursor()
                 query = "delete FROM booking WHERE bookingid = %s;"
                 cursor.execute(query,(bookingId,))
+                conn.commit()
                 cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
                 queryValidate = "select * from booking where bookingid = %s;"
                 cursor.execute(queryValidate,(bookingId,))
@@ -851,6 +852,40 @@ def theaterOccupancyByMovie(moviename):
                     data.append({"error details": "No occupancy found in db"})
     except (Exception, psycopg2.DatabaseError) as error:
         data.append({"error":"Error in retrieving theater occupancy info"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            print('database connection closed')
+        data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
+        data = json.loads(data)
+        return jsonify(data)
+    
+
+# function to configure discount prices for a particular movie that's showing on Tuesday or pre-6pm 
+def configDiscount(movieid, discount):
+    data = []
+    try:
+        #establish connection
+        with psycopg2.connect(**params) as conn:
+
+            # create a cursor 
+                cursor = conn.cursor()
+                query = "update showingdetails set discount=%s where showingdetailid in (SELECT showingdetailid FROM showingdetails inner join showingmaster using (showingid) WHERE (extract(DOW FROM showdate) = 2 or showtime<'06:00:00') and showdate>CURRENT_DATE and movieid=%s);"
+                cursor.execute(query,(discount,movieid,))
+                conn.commit()
+                cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
+                queryValidate="select * from showingdetails where showingdetailid in (SELECT showingdetailid FROM showingdetails inner join showingmaster using (showingid) WHERE (extract(DOW FROM showdate) = 2 or showtime<'06:00:00') and showdate>CURRENT_DATE and movieid=%s);"
+                cursor.execute(queryValidate,(movieid,))
+                data = cursor.fetchall()
+                for row in data:
+                    if row['discount'] != discount:
+                        data.append({"error":"Error"})
+                        data.append({"error details": "Discount price was not updated successfully."})
+                        break
+                    
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Discount price was not updated successfully."})
         data.append({"error details": str(error)})
     finally:
         if conn is not None:
