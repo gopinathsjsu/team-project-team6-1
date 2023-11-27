@@ -174,6 +174,9 @@ def register():
     response= dbc.registeruser(fullname, phoneno, address, username,password, role)
     print("response:",response)
     data=response.get_json()
+    print("data in main.py",data)
+    if("error" in data ):
+        return data
     data = dbc.registerUserMembership(username)
     print("Data : ",data)
     print(type(data))

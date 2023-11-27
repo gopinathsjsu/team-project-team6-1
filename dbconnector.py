@@ -388,6 +388,7 @@ def registeruser(fullname, phoneno, address, username, password, role):
         data['success'] = False
         data['error'] = 'Error in user registration'
         data['error_details'] = str(error)
+        print("jsonifydata",jsonify(data))
     return jsonify(data)
 
 # to register user as having Regular membership as soon as they register
@@ -401,7 +402,7 @@ def registerUserMembership(username):
 
             # create a cursor 
                 cursor = conn.cursor()
-                print("hello world")
+               
                 query = '''INSERT INTO usermembership (membershipid, rewardpoints, ispremium, membershiptilldate, userid, membershiptype) VALUES (%s, %s, %s, %s, %s, %s);'''
                 cursor.execute('''select max(membershipid) from usermembership;''')
                 max_id = cursor.fetchone()[0]
