@@ -65,7 +65,7 @@ body{
 }
 p{
     font-size: larger;
-    margin-left:  15%;
+    margin-left:  5%;
 
     
     
@@ -124,6 +124,7 @@ h3{
 }
 a{
     color: palevioletred;
+    margin-right: 5%;
 }
 .tickets{
     border: 1px solid white;

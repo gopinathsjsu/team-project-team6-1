@@ -14,7 +14,7 @@ app.secret_key = 'fwe_5HvBK=9CvoqSD87xm'
 # def openloginpage():
 # #    return render_template('Login.html')
 # @app.route("/")
-# def openregisterpage():
+# def openregisterpage1():
 #    return render_template("testhome.html")
 
 
@@ -112,6 +112,9 @@ def register():
         print("jsonreq:",jsonrequest)
         r = requests.post('http://127.0.0.1:5000/signup', data=jsonrequest, headers= {'Content-Type': 'application/json'})
         print("r.text",r.text)
+        data=json.loads(r.text)
+        if("error" in r.text ):
+           return render_template('registration.html',message=data['error_details'])
         #if successful
         #render_template(main.html)
         #else
@@ -207,14 +210,37 @@ def user_details():
 def upgrade_membership():
       
       #   as of now its hardcoded need to figure our session user or current user
-         jsonrequest={"username": "fhg@gmail.com"}
+         jsonrequest={"username": "divijayuvraj30@gmail.com"}
          print("jsonreq",json.dumps(jsonrequest))
 
          r = requests.post('http://127.0.0.1:5000/upgradeToPremium', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
          print("r.text",r.text)
          
+         jsonrequest={"username": "divijayuvraj30@gmail.com"}
+      
+         r1 = requests.post('http://127.0.0.1:5000/upcomingMovieBookings', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+         print("upcoming",r1.text)
+         futuremoviejson=json.loads(r1.text)
+         r = requests.post('http://127.0.0.1:5000/pastMovieBookings', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+         print("past",r.text)
+         pastmoviejson=json.loads(r.text)
+      
+         r = requests.post('http://127.0.0.1:5000/profileInfo', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+         print("profile",r.text)
+         user_details=json.loads(r.text)
+         r = requests.post('http://127.0.0.1:5000/moviesPast30Days', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+         print("profile",r.text)
+         pastmovies=json.loads(r.text)
+         # print("userdetails",json.dumps(user_details))
+         # print("addressofusr",user_details['address'])
+         # futuremovieticket=futuremoviejson
+         # pastmovieticket=pastmoviejson,
+         return render_template("commonprofile.html",futuremovieticket=futuremoviejson,pastmovieticket=pastmoviejson,address=user_details['address'],fullname=user_details['fullname'],
+                                 membershiptilldate=user_details['membershiptilldate'],membershiptype=user_details['membershiptype'],
+                                 rewardpoints=user_details['rewardpoints'],movies=pastmovies)
+         
 
-         return "membership updated"
+         
       
 @app.route('/bookmovie', methods=['POST'])
 def book_movies():
