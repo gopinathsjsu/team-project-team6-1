@@ -28,13 +28,19 @@
         
         
     </form>
-    
+    <div>
+        {% if "duplicate key value violates unique constraint" in message %}
+        
+        {% else %}
+        <p>{{message}}</p>
+    {% endif %}
+    </div>
     </div>
     <div class="vertical-line"></div>
     <div class="box2">
         <img src="/static/images/cinema.png" alt="Your Image Description">
         <p>Make your MovieTime experience even more amazing by Joining Premium Membership today. You'll get access to exclusive deals and special offers</p>
-        <a href="/joinmembership">Join Premium Membership!</a>
+        <a href="">Sign In!</a>
     </div>
 </div>
 </body>
