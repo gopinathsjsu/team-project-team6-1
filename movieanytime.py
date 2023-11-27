@@ -351,7 +351,22 @@ def get_graph2():
       img_base64 = base64.b64encode(img.getvalue()).decode()
        
       return render_template('analytics2.html',img_base64=img_base64,movies=movie)
-      
+@app.route('/opendiscountpage', methods=['GET'])
+def open_discount_page():
+   
+        r = requests.get('http://127.0.0.1:5000/currentmovies')
+        print(r)
+        print(r.text)
+        current_movies_json=json.loads(r.text)
+      #   current_movies_featuring=current_movies_json[:4]
+        r_upcoming = requests.get('http://127.0.0.1:5000/upcomingmovies')
+        print(r_upcoming.text)
+        upcoming_movies_json=json.loads(r_upcoming.text)
+      #   upcoming_movies_featuring=upcoming_movies_json[:4]
+        combined_movies = current_movies_json + upcoming_movies_json
+        print("combined",combined_movies)
+      #   it will also have upcoming 4movies
+        return render_template("configurediscount.html",movies=combined_movies)       
 
 
 if __name__ == '__main__':

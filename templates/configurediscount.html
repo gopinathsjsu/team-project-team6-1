@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/configdiscount.css')}}">
+    <title>Dynamic List Box</title>
+</head>
+
+<body>
+<form method="post" action="">
+    <div class="menu-bar">
+        <h4>Configure Discount</h4>
+       
+    </div>
+    
+    <div class="discount-config">
+        <img src="/static/images/div2.png" alt="Your Image Description">
+        <label for="movieSelect">Select a Movie:</label>
+    <select name="Movie" id="movieSelect">
+        {% for movie in movies %}
+            <option value="{{ movie.movieid }}">{{ movie.moviename }}</option>
+        {% endfor %}
+    </select>
+    <br><br>
+        <label for="discountPrice">Enter Discount Price(in dollars):</label>
+        <input type="number" id="discountPrice" name="discountPrice" placeholder="Enter discount price">
+        <br><br><input type="button" value="Set Discount" class="button">
+    </div>
+    
+    
+
+</form>
+    
+</body>
+</html>
