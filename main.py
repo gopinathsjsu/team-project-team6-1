@@ -303,7 +303,8 @@ def configDiscounts():
     discountInfo = request.get_json()
     movieid = discountInfo['movieid']
     discount = discountInfo['discount']
-    response = dbc.configDiscount(movieid,discount)
+    showdate = discountInfo['showdate']
+    response = dbc.configDiscount(movieid,discount,showdate)
     print('configure discount price for movie showing on Tuesday or pre-6pm : ', response)
     print(type(response))
     return response
