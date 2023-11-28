@@ -866,7 +866,7 @@ def theaterOccupancyByMovie(moviename):
     
 
 # function to configure discount prices for a particular movie that's showing on Tuesday or pre-6pm 
-def configDiscount(movieid, discount):
+def configDiscount(movieid, discount, showdate):
     data = []
     try:
         #establish connection
@@ -874,15 +874,18 @@ def configDiscount(movieid, discount):
 
             # create a cursor 
                 cursor = conn.cursor()
-                query = "update showingdetails set discount=%s where showingdetailid in (SELECT showingdetailid FROM showingdetails inner join showingmaster using (showingid) WHERE (extract(DOW FROM showdate) = 2 or showtime<'06:00:00') and showdate>CURRENT_DATE and movieid=%s);"
-                cursor.execute(query,(discount,movieid,))
+                query = "update showingdetails set discount=%s where showingdetailid in (SELECT showingdetailid FROM showingdetails inner join showingmaster using (showingid) WHERE (extract(DOW FROM showdate) = 2 or showtime<'06:00:00') and showdate=%s and movieid=%s);"
+                cursor.execute(query,(discount,showdate,movieid,))
                 conn.commit()
                 cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
-                queryValidate="select * from showingdetails where showingdetailid in (SELECT showingdetailid FROM showingdetails inner join showingmaster using (showingid) WHERE (extract(DOW FROM showdate) = 2 or showtime<'06:00:00') and showdate>CURRENT_DATE and movieid=%s);"
-                cursor.execute(queryValidate,(movieid,))
+                queryValidate="select * from showingdetails where showingdetailid in (SELECT showingdetailid FROM showingdetails inner join showingmaster using (showingid) WHERE (extract(DOW FROM showdate) = 2 or showtime<'06:00:00') and showdate=%s and movieid=%s);"
+                cursor.execute(queryValidate,(showdate, movieid,))
                 data = cursor.fetchall()
+                print(data)
                 for row in data:
-                    if row['discount'] != discount:
+                    if row['discount'] != '$'+discount:
+                        print(row)
+                        print(row['discount'])
                         data.append({"error":"Error"})
                         data.append({"error details": "Discount price was not updated successfully."})
                         break
