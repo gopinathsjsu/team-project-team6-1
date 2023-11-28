@@ -49,29 +49,27 @@ function loadTheaters(multiplexId) {
                 theaterBox.innerHTML = `
                 <h2>Theater ${theater.theaternumber}</h2>
                 <div class="editable-field" data-field="showtimes">
-                    <label for="showtimes">Showtimes:</label>
                     <div class="editable-container">
+                        <label for="showtimes">Showtimes :</label>
                         <div contenteditable="false" id="showtimes">${theater.mshowtimes}</div>
                         <span class="pen-icon" onclick="toggleEditable('showtimes')">✎</span>
                     </div>
                 </div>
                 <div class="editable-field" data-field="movies">
-                    <label for="movies">Movies Playing:</label>
                     <div class="editable-container">
+                        <label for="movies">Movies Playing :</label>
                         <div contenteditable="false" id="movies">${theater.mmovienames}</div>
                         <span class="pen-icon" onclick="toggleEditable('movies')">✎</span>
                     </div>
                 </div>
-                <div class="editable-field" data-field="seatingCapacity">
-                    <label for="seatingCapacity">Seating Capacity:</label>
+                <div class="editable-field" data-field="seatingCapacity">                    
                     <div class="editable-container">
+                        <label for="seatingCapacity">Seating Capacity :</label>
                         <div contenteditable="false" id="seatingCapacity">${theater.noofseats}</div>
                         <span class="pen-icon" onclick="toggleEditable('seatingCapacity')">✎</span>
                     </div>
                 </div>
-                <button class="update-btn" id="update-btn" onclick="navigateToUpdatePage()">Update</button>
                 <button class="save-btn" id="save-btn" onclick="saveChanges(${theater.theaterid})">Save Changes</button>
-                
                 `;
 
                 theaterContainer.appendChild(theaterBox);
@@ -86,14 +84,16 @@ function toggleEditable(fieldName) {
     var field = document.querySelector(`[data-field="${fieldName}"] div`);
     var penIcon = document.querySelector(`[data-field="${fieldName}"] .pen-icon`);
 
-    if (field.contentEditable === "false") {
-        field.contentEditable = "true";
+    if (field.getAttribute("contentEditable") === "false" || field.contentEditable === "false") {
+        field.setAttribute("contentEditable", "true");
+        field.focus(); 
         penIcon.textContent = "✓";
     } else {
-        field.contentEditable = "false";
+        field.setAttribute("contentEditable", "false");
         penIcon.textContent = "✎";
     }
 }
+
 function saveChanges(theaterId) {
     var showtimes = document.getElementById('showtimes').value;
     var movies = document.getElementById('movies').value;
@@ -120,20 +120,38 @@ function saveChanges(theaterId) {
     });
 }
 
-
 function addTheater() {
     var theaterContainer = document.getElementById('theaterContainer');
     var newTheaterBox = document.createElement('div');
     newTheaterBox.className = 'theater-box';
     newTheaterBox.innerHTML = `
         <h2>New Theater</h2>
-        <p>Showtimes: [Add showtimes]</p>
-        <p>Movies Playing: [Add movies]</p>
-        <p>Seating Capacity: [Add capacity]</p>
+        <div class="editable-field" data-field="showtimes">
+            <label for="showtimes">Showtimes:</label>
+            <div class="editable-container">
+                <input type="text" class="showtimes-input" value="[Add showtimes]" id="showtimes" readonly>
+                <span class="pen-icon" onclick="toggleEditable('showtimes')">✎</span>
+            </div>
+        </div>
+        <div class="editable-field" data-field="movies">
+            <label for="movies">Movies Playing:</label>
+            <div class="editable-container">
+                <input type="text" class="movies-input" value="[Add movies]" id="movies" readonly>
+                <span class="pen-icon" onclick="toggleEditable('movies')">✎</span>
+            </div>
+        </div>
+        <div class="editable-field" data-field="seatingCapacity">
+            <label for="seatingCapacity">Seating Capacity:</label>
+            <div class="editable-container">
+                <input type="text" class="seatingCapacity-input" value="[Add capacity]" id="seatingCapacity" readonly>
+                <span class="pen-icon" onclick="toggleEditable('seatingCapacity')">✎</span>
+            </div>
+        </div>
         <button class="update-btn">Update</button>
     `;
     theaterContainer.appendChild(newTheaterBox);
 }
+
 function navigateToUpdatePage() {
     window.location.href = 'templates/sample.html';
 }
