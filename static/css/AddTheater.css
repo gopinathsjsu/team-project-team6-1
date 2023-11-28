@@ -49,3 +49,18 @@ header {
     border: none;
     cursor: pointer;
 }
+
+.editable-container {
+    display: flex;
+    align-items: center;
+}
+
+.editable-container div {
+    margin-right: 8px; /* Adjust the spacing as needed */
+}
+
+.pen-icon {
+    cursor: pointer;
+    color: black;
+}
+
