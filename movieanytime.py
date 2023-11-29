@@ -10,17 +10,11 @@ app = Flask(__name__)
 
 app.secret_key = 'fwe_5HvBK=9CvoqSD87xm'
 
-# @app.route("/openloginpage")
-# def openloginpage():
-# #    return render_template('Login.html')
-# @app.route("/")
-# def openregisterpage1():
-#    return render_template("testhome.html")
 
-
-@app.route("/openupgradepage")
-def openregisterpage():
-   return render_template('upgrademembership.html')
+#for bookmoviehtml and testhome integration
+@app.route("/bookmovie_now/<movieid>")
+def bookmovie_now(movieid):
+   return render_template('bookmovie.html',movieid=movieid)
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -247,6 +241,7 @@ def upgrade_membership():
       
 @app.route('/bookmovie', methods=['POST'])
 def book_movies():
+   # print(movieid)
    if request.method =="POST":
       movieid = request.form.get('movieid')
       multiplexid = request.form.get('multiplexid')
