@@ -29,7 +29,15 @@ header {
     border: none;
     cursor: pointer;
 }
-
+.add-btn {
+    display: block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
 .save-btn {
     display: block;
     margin-top: 10px;
@@ -50,13 +58,34 @@ header {
     cursor: pointer;
 }
 
+.save-button {
+    display: block;
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.close-button {
+    display: block;
+    margin-top: 10px; 
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
 .editable-container {
+    margin-bottom: 30px;
     display: flex;
     align-items: center;
 }
 
 .editable-container div {
-    margin-right: 8px; /* Adjust the spacing as needed */
+    margin-right: 8px; 
 }
 
 .pen-icon {
@@ -64,3 +93,27 @@ header {
     color: black;
 }
 
+.dialog {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-dialog {
+    width: 50%;
+    background-color: white;
+    border: 1px dotted black;
+    padding: 20px;
+}
+
+.custom-dialog label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.custom-dialog input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}

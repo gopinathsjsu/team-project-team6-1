@@ -49,27 +49,30 @@ function loadTheaters(multiplexId) {
                 theaterBox.innerHTML = `
                 <h2>Theater ${theater.theaternumber}</h2>
                 <div class="editable-field" data-field="showtimes">
-                    <div class="editable-container">
-                        <label for="showtimes">Showtimes :</label>
-                        <div contenteditable="false" id="showtimes">${theater.mshowtimes}</div>
-                        <span class="pen-icon" onclick="toggleEditable('showtimes')">✎</span>
+                    <div class="editable-container">                                               
+                        <div contenteditable="false" id="showtimes">
+                            <label for="showtimes">Showtimes :</label> 
+                            ${theater.mshowtimes}
+                        </div>                        
                     </div>
                 </div>
                 <div class="editable-field" data-field="movies">
-                    <div class="editable-container">
-                        <label for="movies">Movies Playing :</label>
-                        <div contenteditable="false" id="movies">${theater.mmovienames}</div>
-                        <span class="pen-icon" onclick="toggleEditable('movies')">✎</span>
+                    <div class="editable-container">                        
+                        <div contenteditable="false" id="movies">
+                            <label for="movies">Movies Playing :</label>
+                            ${theater.mmovienames}
+                        </div>
                     </div>
                 </div>
                 <div class="editable-field" data-field="seatingCapacity">                    
-                    <div class="editable-container">
-                        <label for="seatingCapacity">Seating Capacity :</label>
-                        <div contenteditable="false" id="seatingCapacity">${theater.noofseats}</div>
-                        <span class="pen-icon" onclick="toggleEditable('seatingCapacity')">✎</span>
+                    <div class="editable-container">                        
+                        <div name="seatingCapacity" id="seatingCapacity">
+                            <label for="seatingCapacity">Seating Capacity :</label>
+                            ${theater.noofseats}
+                        </div>
                     </div>
                 </div>
-                <button class="save-btn" id="save-btn" onclick="saveChanges(${theater.theaterid})">Save Changes</button>
+                <button class="save-btn" id="save-btn" onclick="openEditDialog(${multiplexId},${theater.theaterid},'${theater.mshowtimes}','${theater.mmovienames}',${theater.noofseats})">Edit</button>
                 `;
 
                 theaterContainer.appendChild(theaterBox);
@@ -80,35 +83,34 @@ function loadTheaters(multiplexId) {
         });
 }
 
-function toggleEditable(fieldName) {
-    var field = document.querySelector(`[data-field="${fieldName}"] div`);
-    var penIcon = document.querySelector(`[data-field="${fieldName}"] .pen-icon`);
-
-    if (field.getAttribute("contentEditable") === "false" || field.contentEditable === "false") {
-        field.setAttribute("contentEditable", "true");
-        field.focus(); 
-        penIcon.textContent = "✓";
-    } else {
-        field.setAttribute("contentEditable", "false");
-        penIcon.textContent = "✎";
-    }
+function openEditDialog(multiplexId, theaterId, mshowtimes, mmovienames, noofseats) {
+    var dialog = document.getElementById("edit-theater-dialog");
+    document.getElementById("theaterId").value = theaterId;
+    document.getElementById("multiplexId").value = multiplexId;
+    document.getElementById("mshowtimes").value = mshowtimes;
+    document.getElementById("mmovienames").value = mmovienames;
+    document.getElementById("noofseats").value = noofseats;
+    dialog.showModal();
 }
 
 function saveChanges(theaterId) {
+    var theaterId =  document.getElementById('theaterId').value;
     var showtimes = document.getElementById('showtimes').value;
     var movies = document.getElementById('movies').value;
     var seatingCapacity = document.getElementById('seatingCapacity').value;
+    var multiplexId = document.getElementById('multiplexId').value;
 
-    fetch('/updateTheater', {
+    fetch('/addTheater', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+            multiplexid: multiplexId,
             theaterId: theaterId,
             showtimes: showtimes,
             movies: movies,
-            seatingCapacity: seatingCapacity
+            noofseats: seatingCapacity
         }),
     })
     .then(response => response.json())
@@ -152,6 +154,39 @@ function addTheater() {
     theaterContainer.appendChild(newTheaterBox);
 }
 
-function navigateToUpdatePage() {
-    window.location.href = 'templates/sample.html';
+async function addTheater() {
+    const showtimes = document.getElementById("showtimes").value;
+    const movies = document.getElementById("movies").value;
+    const seatingCapacity = document.getElementById("seatingCapacity").value;
+
+    const requestData = {
+        multiplexid: 14, 
+        noofseats: seatingCapacity,
+        theaternumber: 4, 
+        noofrows: 4,  
+        noofcolumns: 5,  
+        movieid: movies,
+        price: "12.00, 12.00, 12.25, 12.25",  
+        showtimes: showtimes
+    };
+    const response = await fetch('/addTheater', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+    });
+
+    if (response.ok) {
+        const result = await response.json();
+        console.log('Theater added successfully. Theater ID:', result[0].theaterid);
+    } else {
+        console.error('Failed to add theater. Status:', response.status);
+    }
+    document.getElementById("add-theater-dialog").close();
+}
+
+function openDialog() {
+    var dialog = document.getElementById("add-theater-dialog");
+    dialog.showModal();
 }

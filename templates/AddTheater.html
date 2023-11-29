@@ -14,14 +14,65 @@
     <div class="container">
         <div>
             <label for="multiplex">Select Multiplex:</label>
-            <select id="multiplex" name="multiplex" class="multiplex-dropdown">
-                
-            </select>
-            <button class="add-theater-btn" onclick="addTheater()" id="add-theater-btn">Add Theater</button>
+            <select id="multiplex" name="multiplex" class="multiplex-dropdown"></select>
+            <button class="add-theater-btn" id="add-theater-btn" onclick="openDialog()">Add Theater</button>
         </div>
     </div>
-    <div class="container" id="theaterContainer">
-        
+    <div class="dialog">
+        <dialog id="add-theater-dialog" style="width:50%;background-color:white;border:1px dotted black;">  
+            <h2>New Theater</h2>
+        <div class="editable-field" data-field="showtimes">            
+            <div class="editable-container">
+                <label for="showtimes">Showtimes:</label>
+                <input type="text" class="showtimes-input" value="[Add showtimes]" id="showtimes">
+            </div>
+        </div>
+        <div class="editable-field" data-field="movies">            
+            <div class="editable-container">
+                <label for="movies">Movies Playing:</label>
+                <input type="text" class="movies-input" value="[Add movies]" id="movies">
+            </div>
+        </div>
+        <div class="editable-field" data-field="seatingCapacity">            
+            <div class="editable-container">
+                <label for="seatingCapacity">Seating Capacity:</label>
+                <input type="text" class="seatingCapacity-input" value="[Add capacity]" id="seatingCapacity">
+            </div>
+        </div>
+        <button class="add-btn" id="add-btn" onclick="addTheater()">Add</button>
+        </dialog>
     </div>
+    <div class="dialog">
+        <dialog id="edit-theater-dialog">
+                <div class="editable-container">
+                    <label for="MultiplexId">Multiplex ID:</label>
+                    <input type="text" id="multiplexId" readonly>
+                </div>
+                <div class="editable-container">
+                    <label for="theaterId">Theater ID:</label>
+                    <input type="text" id="theaterId" readonly>
+                </div>
+                    
+                <div class="editable-container">
+                    <label for="mshowtimes">Showtimes:</label>
+                    <input type="text" id="mshowtimes">
+                </div>
+        
+                <div class="editable-container">
+                    <label for="mmovienames">Movies Playing:</label>
+                    <input type="text" id="mmovienames">
+                </div>
+                
+                <div class="editable-container">
+                    <label for="noofseats">Seating Capacity:</label>
+                    <input type="text" id="noofseats">
+                </div>
+                
+                <div class="editable-container">        
+                    <button class="save-button" id="save-button" onclick="saveChanges()">Save Changes</button><br>
+                <div>
+        </dialog>
+    </div>
+    <div class="container" id="theaterContainer"></div>
 </body>
 </html>
