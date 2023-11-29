@@ -1,0 +1,119 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+header {
+    text-align: center;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+}
+.container {
+    margin-top: 20px;
+}
+.multiplex-dropdown {
+    width: 200px;
+}
+.theater-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    width: 30%;
+}
+.update-btn {
+    display: block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+.add-btn {
+    display: block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+.save-btn {
+    display: block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.add-theater-btn {
+    display: block;
+    margin-top: 20px;
+    padding: 8px 16px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.save-button {
+    display: block;
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.close-button {
+    display: block;
+    margin-top: 10px; 
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.editable-container {
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.editable-container div {
+    margin-right: 8px; 
+}
+
+.pen-icon {
+    cursor: pointer;
+    color: black;
+}
+
+.dialog {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-dialog {
+    width: 50%;
+    background-color: white;
+    border: 1px dotted black;
+    padding: 20px;
+}
+
+.custom-dialog label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.custom-dialog input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
