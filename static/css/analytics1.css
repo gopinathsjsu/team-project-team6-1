@@ -1,55 +1,68 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color:#333;
     margin: 20px;
-    background-image: linear-gradient(to bottom right,black,rgb(54, 1, 22),black);
+    /* background-image: linear-gradient(to bottom right,black,rgb(54, 1, 22),black);
     background-repeat: no-repeat;
     background-size: cover;
-    background-attachment: fixed;
-    color: white;
+    background-attachment: fixed; */
+    color: white;text-align:center
+    
 }
-
+.menu-bar {
+   
+    color: goldenrod;
+    text-align: center;
+    border-bottom:3px solid  goldenrod;
+   
+   border-radius:50%;
+   
+}
 form {
     margin-bottom: 20px;
 }
 
-label {
+label{
     font-weight: bold;
 }
 
-select {
+select{
     padding: 8px;
-    border-radius: 5px;
+    border-radius: 20px;
     color: white;
+    background-color: #333;
 }
 
 input[type="submit"] {
-    padding: 10px 20px;
-    background-color:pink;
+    padding: 8px;
+    background-color:goldenrod;
     color: black;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
 input[type="submit"]:hover {
-    background-color: #333;
+    background-color: wheat;
 }
 
-table {
+table{
     align-items: center;
     border-collapse: collapse;
     margin-top: 20px;
+    margin-left: 30%;
+  
 }
 
 td {
     padding: 10px;
-    border: 1px solid #ddd;
+   
 }
 
 img {
     max-width: 100%;
-    height: auto;
+    height: 400px;
     display: block;
     margin: 0 auto;
+    border-radius: 10px;
 }

@@ -6,7 +6,10 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='css/analytics2.css')}}">
     <title>Dynamic List Box</title>
 </head>
-<body>
+<body><div class="menu-bar">
+    <h4>Analytics Dashboard(Summarized by Movies)</h4>
+   
+</div><br><br>
     <form method="post" action="/showgraph2">
         <label for="movieSelect">Select a Movie:</label>
         <select name="Movie" id="movieSelect">

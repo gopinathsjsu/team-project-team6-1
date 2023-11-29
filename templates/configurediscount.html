@@ -8,7 +8,7 @@
 </head>
 
 <body>
-<form method="post" action="">
+<form action="/setdiscount" method="POST">
     <div class="menu-bar">
         <h4>Configure Discount</h4>
        
@@ -17,15 +17,19 @@
     <div class="discount-config">
         <img src="/static/images/div2.png" alt="Your Image Description">
         <label for="movieSelect">Select a Movie:</label>
-    <select name="Movie" id="movieSelect">
+    <select name="movieid" id="movieSelect">
         {% for movie in movies %}
             <option value="{{ movie.movieid }}">{{ movie.moviename }}</option>
         {% endfor %}
     </select>
     <br><br>
         <label for="discountPrice">Enter Discount Price(in dollars):</label>
-        <input type="number" id="discountPrice" name="discountPrice" placeholder="Enter discount price">
-        <br><br><input type="button" value="Set Discount" class="button">
+        <input type="text" id="discountAmount" name="discount" placeholder="Enter discount amount" required>
+        <br><br>
+        <label for="discountPrice">Select ShowDate:</label>
+        <input type="date" id="chosenDate" name="showdate">
+        <br><br><button type="submit" id="addDetails" class="button">Set Discount</button><br><br>
+        {{message}}
     </div>
     
     
