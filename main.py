@@ -232,10 +232,19 @@ def addTheater():
     
     if 'theaterid' in requestdata:
         theaterid = requestdata["theaterid"]
-        responsedata = dbc.updateMultiplex(multiplexid, theaterid)
+        responsedata = dbc.updateTheater(theaternumber, theaterid)
+        if 'showingid' in requestdata:
+            showingid = requestdata["showingid"]
+            data, showingdetails = dbc.updateshowingmaster(movieid, showtimes, theaterid, noofseats, showingid)
+            data, seats = dbc.getseats(theaterid)
+            dbc.createSeatDetails(seats, showingdetails)
+
     else:
         responsedata = dbc.createTheater(multiplexid, noofseats, theaternumber, noofrows, noofcolumns, movieid, showtimes, price)
-        dbc. createshowingmaster(movieid, showtimes, price, responsedata[0]["theaterid"], noofseats)
+        data,seats = dbc.createSeat(responsedata[0]["theaterid"], noofrows, noofcolumns)
+        data, showingdetails = dbc.createshowingmaster(movieid, showtimes, price, responsedata[0]["theaterid"], noofseats, seats)
+                            
+        dbc.createSeatDetails(seats, showingdetails)
     if "error" in responsedata[0]:
         return responsedata, 400
     return responsedata, 200
@@ -251,6 +260,48 @@ def getalltheaters():
     if "error" in responsedata[0]:
         return responsedata, 400
     return responsedata, 200
+
+
+#api to Delete theaters in schedule and respective seats in seat table
+@app.route("/removeTheater", methods=["POST"])
+def removeTheater():
+    requestdata = request.get_json()
+    theaterid = requestdata["theaterid"]
+    
+    responsedata = dbc.deleteshowingmaster(theaterid)
+    responsedata = dbc.deleteseat(theaterid)
+    responsedata = dbc.deleteTheater(theaterid)
+    
+    if len(responsedata) == 0:
+        return responsedata, 200
+    return responsedata, 400
+
+#to remove a movie from theater
+@app.route("/removeMovie", methods=["POST"])
+def removeMovie():
+    requestdata = request.get_json()
+    showingid = requestdata["showingid"]
+    
+    responsedata, showingdetailid = dbc.deleteshowingmaster1(showingid)
+    responsedata = dbc.deleteseat1(showingdetailid)
+    
+    if len(responsedata) == 0:
+        return responsedata, 200
+    return responsedata, 400
+
+#api to remove a showtime
+@app.route("/removeShowtime", methods=["POST"])
+def removeShowtime():
+    requestdata = request.get_json()
+    showingid = requestdata["showingid"]
+    showtime = requestdata["showtime"]
+    
+    responsedata, showingdetailid  = dbc.deleteshowtime(showingid, showtime)
+    responsedata = dbc.deleteseat1(showingdetailid)
+    
+    if len(responsedata) == 0:
+        return responsedata, 200
+    return responsedata, 400
 
 
 # api to register a user and add their info to database

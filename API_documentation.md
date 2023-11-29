@@ -1,5 +1,77 @@
 #API Documentation
 
+
+<details>
+
+<summary> Delete showtime</summary>
+
+URL format: POST
+/removeMovie
+
+Request format:
+
+```yaml
+{
+    "showingid": 22,
+    "showtime": "17:00:00"
+}
+```
+
+Response format: Response truncated to two records only 
+
+```yaml
+[   ]
+```
+
+</details>
+
+
+<details>
+
+<summary> Delete movie from showing </summary>
+
+URL format: POST
+/removeMovie
+
+Request format:
+
+```yaml
+{
+    "showingid": 1
+}
+```
+
+Response format: Response truncated to two records only 
+
+```yaml
+[   ]
+```
+
+</details>
+
+<details>
+
+<summary> Delete theater details from multiplex </summary>
+
+URL format: POST
+/removeTheater
+
+Request format:
+
+```yaml
+{
+    "theaterid": 1
+}
+```
+
+Response format: Response truncated to two records only 
+
+```yaml
+[   ]
+```
+
+</details>
+
 <details>
 
 <summary> Fetch theater details from multiplex </summary>

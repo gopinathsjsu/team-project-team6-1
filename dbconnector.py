@@ -457,7 +457,6 @@ def createMultiplex(name, locationid, address, nooftheaters):
             conn.close()
             return data
 
-
 #create new theater record and respective seat records in seat table in db
 def createTheater(multiplexid, noofseats, theaternumber, noofrows, noofcolumns, movieid, showtimes, price):
     data = []
@@ -472,19 +471,6 @@ def createTheater(multiplexid, noofseats, theaternumber, noofrows, noofcolumns, 
                 if len(data) ==0:
                     data.append({"error":"Record not created"})
                     data.append({"error details": "Theater record not created"})
-                else:
-                    query = f'''INSERT INTO seat(rownum, seatno, theaterid) VALUES (%s, %s, %s) RETURNING seatid;'''
-                    values = []
-                    for i in range(noofrows):
-                        for j in range(noofcolumns):
-                            values.append(tuple((i, j, data[0]["theaterid"])))
-                    cur.executemany(query,values)
-                    '''
-                    seatdata = cur.fetchall()
-                    if len(seatdata) < noofseats:
-                        data[0]["error"]="Record not created"
-                        data[0]["error details"] = "Seat record not created"
-                    '''
     except (Exception, psycopg2.DatabaseError) as error:
         data.append({"error":"Error in createTheater()"})
         data.append({"error details": str(error)})
@@ -493,15 +479,16 @@ def createTheater(multiplexid, noofseats, theaternumber, noofrows, noofcolumns, 
             conn.close()
             return data
 
-def createshowingmaster(movieid, showtimes, price, theaterid, no_seats):
+def createshowingmaster(movieid, showtimes, price, theaterid, no_seats, seats):
     data = []
+    values = []
     try:
         with psycopg2.connect(**params) as conn:
 
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
-                movies = movieid.split(", ")
-                showtimesarr = showtimes.split(", ")
-                prices = price.split(", ")
+                movies = movieid.split(",")
+                showtimesarr = showtimes.split(",")
+                prices = price.split(",")
                 prev = 0
                 s = 0
 
@@ -516,22 +503,67 @@ def createshowingmaster(movieid, showtimes, price, theaterid, no_seats):
                         data = cur.fetchall()
                     if len(data) ==0:
                         data.append({"error":"Record not created"})
-                        data.append({"error details": "Theater record not created"})
+                        data.append({"error details": "showingmaster record not created"})
                     else:
                         s = data[0]["showingid"]
                         query = f'''INSERT INTO showingdetails(showingid, showdate, showtime, discount, seatsavailable, seatstaken)
-	                                VALUES (%s, %s, %s, %s, %s, %s);'''
-                        values = []
+	                                VALUES (%s, %s, %s, %s, %s, %s) RETURNING showingdetailid;'''
                         for j in range(10):
-                            values.append(tuple((s, datetime.date.today()+ datetime.timedelta(j), showtimesarr[i], "$0.00", no_seats, 0)))
-                        cur.executemany(query,values)
+                            cur.execute(query,(s, datetime.date.today()+ datetime.timedelta(j), showtimesarr[i], "$0.00", no_seats, 0))
+                            data2 = cur.fetchall()
+                            values.append(data2[0]["showingdetailid"])
     except (Exception, psycopg2.DatabaseError) as error:
         data.append({"error":"Error in createshowingmaster()"})
         data.append({"error details": str(error)})
     finally:
         if conn is not None:
             conn.close()
-            return data
+            return data, values
+
+def createSeat(theaterid, num_row, num_col):
+    data = []
+    seatarr = []
+    try:
+        with psycopg2.connect(**params) as conn:
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                for i in range(0, num_row):
+                    for j in range(0, num_col):
+                        query = f'''INSERT INTO seat(rownum, seatno, theaterid) VALUES (%s, %s, %s) RETURNING seatid;'''
+                        cur.execute(query,(i, j, theaterid))
+                        data = cur.fetchall()
+                        seatarr.append(data[0]["seatid"])
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(str(error))
+        data.append({"error":"Error in createSeat()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data, seatarr
+
+
+def createSeatDetails(seats, showingdetailid):
+    data = []
+    seatarr = []
+    print(type(seats))
+    print(seats)
+    try:
+        with psycopg2.connect(**params) as conn:
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                query = f'''INSERT INTO public.seatdetails(seatid, showingdetailid, istaken) VALUES (%s, %s, false);'''
+                values = []
+                for i in showingdetailid:
+                    for j in seats:
+                        values.append(tuple((j,i)))
+                cur.executemany(query,values)
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(str(error))
+        data.append({"error":"Error in createSeatDetails()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data, seatarr
 
 
 #update movie record in db
@@ -608,12 +640,14 @@ def updateTheater(theaternumber, theaterid):
         with psycopg2.connect(**params) as conn:
 
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
-                query = f'''UPDATE theater SET theaternumber = %s WHERE theaterid = %S RETURNING theaterid;'''
+                query = f'''UPDATE theater SET theaternumber = %s WHERE theaterid = %s RETURNING theaterid;'''
+                
                 cur.execute(query, (theaternumber, theaterid))
 
                 data = cur.fetchall()
-                data.append({"error":"Record not updated"})
-                data.append({"error details": "Theater record not updated"})
+                if len(data) ==0:
+                    data.append({"error":"Record not updated"})
+                    data.append({"error details": "Theater record not updated"})
                 
     except (Exception, psycopg2.DatabaseError) as error:
         data.append({"error":"Error in updateTheater()"})
@@ -622,6 +656,222 @@ def updateTheater(theaternumber, theaterid):
         if conn is not None:
             conn.close()
             return data
+
+def updateshowingmaster(movieid, showtimes, theaterid, noofseats, showingid):
+    data = []
+    values = []
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                movies = movieid.split(",")
+                showtimesarr = showtimes.split(",")
+                showingidarr = showingid.split(",")
+                prev = 0
+                s = 0
+
+                for i in range(0, len(movies)):
+                    if(movies[i] == prev):
+                        query= f'''UPDATE showingmaster SET showtimes = array_append(showtimes,%s) WHERE showingid = %s'''
+                        cur.execute(query,(showtimesarr[i],s))
+                    else:
+                        prev = movies[i]
+                        query = f'''UPDATE showingmaster SET theaterid =%s, movieid =%s, showtimes = Array [%s] WHERE showingid = %s RETURNING showingid;'''
+                        cur.execute(query,(theaterid, movies[i], showtimesarr[i], showingidarr[i]))
+                        data = cur.fetchall()
+                    if len(data) ==0:
+                        data.append({"error":"Record not updated"})
+                        data.append({"error details": "showingmaster record not updated"})
+                    else:
+                        s = data[0]["showingid"]
+                        query = f'''SELECT MAX( showdate) FROM showingdetails WHERE showingid = %s'''
+                        cur.execute(query,(s,))
+                        data1 = cur.fetchall()
+                        query = f'''INSERT INTO showingdetails(showingid, showdate, showtime, discount, seatsavailable, seatstaken)
+	                                VALUES (%s, %s, %s, %s, %s, %s) RETURNING showingdetailid;'''
+                        for j in range(10):
+                            cur.execute(query,(s, datetime.date.today()+ datetime.timedelta(j), showtimesarr[i], "$0.00", noofseats, 0))
+                            data2 = cur.fetchall()
+                            values.append(data2[0]["showingdetailid"])
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(str(error))
+        data.append({"error":"Error in updateshowingmaster()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data, values
+
+def getseats(theaterid):
+    data = []
+    seats =[]
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                query = f'''SELECT seatid FROM seat WHERE theaterid =%s;'''
+                cur.execute(query, (theaterid,))
+
+                data = cur.fetchall()
+                if len(data) ==0:
+                    data.append({"error":"No record found"})
+                    data.append({"error details": "No seats records for the selected theater!"})
+                else:
+                    for rec in data:
+                        seats.append(rec["seatid"])
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in getseats()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data, seats
+
+def deleteTheater(theaterid):
+    data=[]
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                query = f'''DELETE FROM theater WHERE theaterid = %s'''
+                
+                cur.execute(query, (theaterid,))
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in deleteTheater()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data
+
+def deleteshowingmaster(theaterid):
+    data=[]
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                query = f'''SELECT showingid FROM showingmaster WHERE theaterid = %s'''
+                cur.execute(query,(theaterid,))
+                data = cur.fetchall()
+            
+                for rec in data:
+                    query = f'' 'DELETE FROM showingdetails WHERE showingid = %s'' '
+                    cur.execute(query,(rec["showingid"],))
+                query = f'' 'DELETE FROM showingmaster WHERE theaterid = %s'' '
+                
+                cur.execute(query, (theaterid,))
+                
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in deleteshowingmaster()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data
+
+def deleteseat(theaterid):
+    data=[]
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                query = f'''SELECT seatid FROM seat WHERE theaterid = %s'''
+                cur.execute(query,(theaterid,))
+                data = cur.fetchall()
+            
+                for rec in data:
+                    query = f'' 'DELETE FROM seatdetails WHERE seatid = %s'' '
+                    cur.execute(query,(rec["seatid"],))
+                query = f'' 'DELETE FROM seat WHERE theaterid = %s'' '
+                
+                cur.execute(query, (theaterid,))
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in deleteseat()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data
+
+def deleteshowingmaster1(showingid):
+    data=[]
+    values = []
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                query = f'''SELECT showingdetailid FROM showingdetails WHERE showingid = %s'''
+                cur.execute(query,(showingid,))
+                data = cur.fetchall()
+                for rec in data:
+                    values.append(rec["showingdetailid"])
+                query = f'''DELETE FROM showingdetails WHERE showingid = %s'''
+                cur.execute(query,(showingid,))
+                query = f'''DELETE FROM showingmaster WHERE showingid = %s'''
+                cur.execute(query, (showingid,))
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(str(error))
+        data.append({"error":"Error in deleteshowingmaster1()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data, values
+
+def deleteseat1(showingdetailid):
+    data=[]
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+
+                query = f'''SELECT seatid FROM seatdetails WHERE showingdetailid = ANY (%s::int[]) GROUP BY seatid'''
+                cur.execute(query, ("{" + (",".join(map(str, showingdetailid))) + "}",))
+                
+                data = cur.fetchall()
+            
+                query = f'' 'DELETE FROM seatdetails WHERE showingdetailid = ANY (%s::int[])'' '
+                cur.execute(query, ("{" + (",".join(map(str, showingdetailid))) + "}",))
+                for rec in data:
+                    query = f'' 'DELETE FROM seat WHERE seatid = %s'' '
+                    cur.execute(query, (rec["seatid"],))
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(str(error))
+        data.append({"error":"Error in deleteseat1()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data
+
+def deleteshowtime(showingid, showtime):
+    data=[]
+    values =[]
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                query = f'''SELECT ARRAY_REMOVE(showtimes, %s) FROM showingmaster WHERE showingid = %s'''
+                cur.execute(query, (showtime, showingid))
+
+                query = f'''SELECT showingdetailid FROM showingdetails WHERE showtime = %s AND showingid = %s AND showdate>CURRENT_DATE'''
+                cur.execute(query, (showtime, showingid))
+                data = cur.fetchall()
+                for rec in data:
+                    values.append(rec["showingdetailid"])
+                query = f'''DELETE FROM showingdetails WHERE showtime = %s AND showingid = %s AND showdate>CURRENT_DATE'''
+                cur.execute(query, (showtime, showingid))
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(str(error))
+        data.append({"error":"Error in deleteshowtime()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data, values
 
 #retuns all theater and their showtime, movies for the given mulitplex
 def getTheaterInfo(multiplexid):
