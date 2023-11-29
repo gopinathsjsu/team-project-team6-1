@@ -1431,18 +1431,20 @@ def configDiscount(movieid, discount, showdate):
 
             # create a cursor 
                 cursor = conn.cursor()
-                query = "update showingdetails set discount=%s where showingdetailid in (SELECT showingdetailid FROM showingdetails inner join showingmaster using (showingid) WHERE (extract(DOW FROM showdate) = 2 or showtime<'06:00:00') and showdate=%s and movieid=%s);"
+                query = "update showingdetails set discount=%s where showingdetailid in (SELECT showingdetailid FROM showingdetails inner join showingmaster using (showingid) WHERE (extract(DOW FROM showdate) = 2 or showtime<'18:00:00') and showdate=%s and movieid=%s);"
                 cursor.execute(query,(discount,showdate,movieid,))
                 conn.commit()
                 cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
-                queryValidate="select * from showingdetails where showingdetailid in (SELECT showingdetailid FROM showingdetails inner join showingmaster using (showingid) WHERE (extract(DOW FROM showdate) = 2 or showtime<'06:00:00') and showdate=%s and movieid=%s);"
+                queryValidate="select * from showingdetails where showingdetailid in (SELECT showingdetailid FROM showingdetails inner join showingmaster using (showingid) WHERE (extract(DOW FROM showdate) = 2 or showtime<'18:00:00') and showdate=%s and movieid=%s);"
                 cursor.execute(queryValidate,(showdate, movieid,))
                 data = cursor.fetchall()
+                print("data in dbconeector",data)
                 print(data)
                 for row in data:
-                    if row['discount'] != '$'+discount:
-                        print(row)
-                        print(row['discount'])
+                    print("row before",row)
+                    if row['discount'] != ('$'+ discount):
+                        print("row",row)
+                        print("discount",row['discount'])
                         data.append({"error":"Error"})
                         data.append({"error details": "Discount price was not updated successfully."})
                         break
@@ -1456,4 +1458,5 @@ def configDiscount(movieid, discount, showdate):
             print('database connection closed')
         data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
         data = json.loads(data)
+        print("before jsonify",data)
         return jsonify(data)

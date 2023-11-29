@@ -20,7 +20,7 @@ body {
 
 label {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     
     color: rgb(240, 92, 0.877);
     font:bolder;
@@ -28,7 +28,7 @@ label {
 
 input,select {
     width: 100%;
-    padding: 10px;
+    padding: 5px;
     border: none;
     box-sizing: border-box;
     border-bottom: 1px solid rgb(240, 92, 0.877);
@@ -53,11 +53,13 @@ input,select {
     background-color: rgb(240, 92, 0.877);
     border-radius: 20px;
     width: 200px;
+    height: 30px;
     align-items: center;
     color: white;
     margin-left: 30%;
 }
 img{
     width: 500px;
-    height: 200px;
+    height: 190px;
+    margin-top: 0;
 }

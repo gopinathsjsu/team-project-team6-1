@@ -316,7 +316,7 @@ def get_graph():
       
       plt.figure()
       
-      bars = plt.bar(df['No of days'], df['Occupancy Percentage'],color=['lightpink','skyblue'], width=0.5)
+      bars = plt.bar(df['No of days'], df['Occupancy Percentage'],color=['goldenrod','khaki','darkgoldenrod'], width=0.5)
       for bar in bars:
          bar.set_edgecolor('none')
       plt.xlabel('No of days')
@@ -360,7 +360,7 @@ def get_graph2():
       
       plt.figure()
       
-      bars = plt.bar(df['No of days'], df['Occupancy Percentage'],color=['lightpink','skyblue'], width=0.5)
+      bars = plt.bar(df['No of days'], df['Occupancy Percentage'],color=['goldenrod','khaki','darkgoldenrod'], width=0.5)
       for bar in bars:
          bar.set_edgecolor('none')
       plt.xlabel('No of days')
@@ -397,7 +397,24 @@ def open_discount_page():
         print("combined",combined_movies)
       #   it will also have upcoming 4movies
         return render_template("configurediscount.html",movies=combined_movies)       
-
-
+@app.route('/setdiscount', methods=['POST'])
+def set_discount():
+   if request.method == "POST":
+        jsonrequest = json.dumps(request.form)
+        print("jsonreq:",jsonrequest)
+        r = requests.post('http://127.0.0.1:5000/configDiscount', data=jsonrequest, headers= {'Content-Type': 'application/json'})
+        print("r.text",r.text)
+        data=json.loads(r.text)
+        if(data):
+          return render_template('configurediscount.html',message="Discount configured succesfully!")
+         #  return render_template('configurediscount.html',message=data['error details'])
+        else:
+         #   return render_template('configurediscount.html',message="Discount configured succesfully!")
+         return render_template('configurediscount.html',message=data['error details'])
+      #   if successful
+        #render_template(main.html)
+        #else
+        #error screen
+   return "success"
 if __name__ == '__main__':
     app.run(host='127.0.0.1',port=5001,debug=True)
