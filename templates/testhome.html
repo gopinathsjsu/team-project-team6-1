@@ -135,7 +135,7 @@
             
             <div class="slide s{{ loop.index }}">
                 <img src="/static/images/{{ movie['poster'] }}" class="img1">
-                <a href="#" class="button">Advance Tickets!</a>
+                <a href="{{ url_for('bookmovie_now',movieid=movie['movieid']) }}" class="button">Advance Tickets!</a>
                 
             </div>
             
@@ -168,7 +168,7 @@
                     <h4 class="movie-duration">{{movie['runtimeminutes']}}min</h4>
                     <!-- <h3 class="release-date">{{movie['releaseDate']}}</h3> -->
                     <div class="booking">
-                        <a href="" class="btn">Buy Tickets</a>
+                        <a href="{{ url_for('bookmovie_now',movieid=movie['movieid']) }}" class="btn">Buy Tickets</a>
                     </div>
                 </div>
                 {% endfor %}
@@ -211,7 +211,7 @@
                     <h4 class="movie-duration">{{movie['runtimeminutes']}}min</h4>
                     <!-- <h1 class="release-date">{{movie['releaseDate']}}</h1> -->
                     <div class="booking">
-                        <a href="" class="btn">Buy Tickets</a>
+                        <a href="{{ url_for('bookmovie_now',movieid=movie['movieid']) }}" class="btn">Buy Tickets</a>
                     </div>
                 </div>
                 {% endfor %}
@@ -236,7 +236,7 @@
                     <h4 class="movie-duration">{{movie['runtimeminutes']}}min</h4>
                     <!-- <h1 class="release-date">{{movie['releaseDate']}}</h1> -->
                     <div class="booking">
-                        <a href="" class="btn">Buy Advance Tickets </a>
+                        <a href="{{ url_for('bookmovie_now',movieid=movie['movieid'])}}" class="btn">Buy Advance Tickets </a>
                     </div>
                 </div>
                 {% endfor %}

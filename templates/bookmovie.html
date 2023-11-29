@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="static/css/bookmovie.css">
+    <link rel="stylesheet" href="/static/css/bookmovie.css">
     <title data-rh="true">ShowTime at MovieAnytime Multiplexes</title>
 </head>
 
@@ -15,7 +15,7 @@
             <form action="/bookmovie" method="POST">
                 <ul class="navigation">
                     <li>
-                        <input type="movieid" id="movieid" name="movieid">
+                        <input type="movieid" id="movieid" name="movieid"  value="{{ movieid }}" readonly>
                     <li>
                         <input type="multiplexid" id="multiplexid" name="multiplexid">
                     </li>
@@ -27,12 +27,12 @@
             </form>
         </div>
         <div class="right-content">
-            <img src="./static/images/filter.png" alt="" class="filter">
-            <img src="./static/images/cart.png" alt="" class="cart">
+            <img src="/static/images/filter.png" alt="" class="filter">
+            <img src="/static/images/cart.png" alt="" class="cart">
             <div class="profile-img-box">
-                <img src="./static/images/profile.png" alt="">
+                <img src="/static/images/profile.png" alt="">
             </div>
-            <img src="./static/images/menu.png" alt="" class="menu">
+            <img src="/static/images/menu.png" alt="" class="menu">
         </div>
     </section>
 
