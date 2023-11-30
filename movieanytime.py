@@ -195,9 +195,9 @@ def upcoming_movies1():
         upcoming_movies_json=json.loads(r_upcoming.text)
         upcoming_movies_featuring=upcoming_movies_json[:4]
    if(session.get('username')):
-         return render_template("testhome.html",Featuring_movies=current_movies_featuring, upcoming_movies=upcoming_movies_featuring,signin="View Profile",logout="Logout",movies=current_movies_json,upcoming_movie_all=upcoming_movies_json)
+         return render_template("testhome.html",Featuring_movies=current_movies_featuring, upcoming_movies=upcoming_movies_featuring,signin="View Profile",logout="Logout",upcoming_movie_all=upcoming_movies_json)
    else:
-           return render_template("testhome.html",Featuring_movies=current_movies_featuring, upcoming_movies=upcoming_movies_featuring,signin="Sign In",movies=current_movies_json,upcoming_movie_all=upcoming_movies_json)         
+           return render_template("testhome.html",Featuring_movies=current_movies_featuring, upcoming_movies=upcoming_movies_featuring,signin="Sign In",upcoming_movie_all=upcoming_movies_json)         
    # return render_template("testhome.html",Featuring_movies=current_movies_featuring,upcoming_movie_all=upcoming_movies_json,upcoming_movies=upcoming_movies_featuring)
 
 @app.route('/viewprofiledetails', methods=['POST', 'GET'])
@@ -450,5 +450,13 @@ def set_discount():
         #else
         #error screen
    return "success"
+
+@app.route("/cancelbooking/<bookingid>")
+def cancelbooking(bookingid):
+   jsonrequest={"bookingid": bookingid}
+   r = requests.post('http://127.0.0.1:5000/cancelBooking', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+   print(r.text)
+   return redirect(url_for('user_details'))
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1',port=5001,debug=True)

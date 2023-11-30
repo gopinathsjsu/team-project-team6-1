@@ -385,7 +385,7 @@ def moviesPast30Days():
     return response
 
 # api to delete user's movie booking
-@app.route('/cancelBooking', methods=['DELETE'])
+@app.route('/cancelBooking', methods=['POST'])
 def cancelBooking():
     bookingInfo = request.get_json()
     bookingId = bookingInfo['bookingid']
