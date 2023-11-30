@@ -5,12 +5,117 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="{{ url_for('static', filename='js/AddTheater.js')}}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/AddTheater.css')}}">
+    <style>
+        body {
+          font-family: Arial, Helvetica, sans-serif;
+          
+        }
+        h2{
+            color: wheat;
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: large;
+            /* 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; */
+        }
+        
+        /* tabnavigationhover */
+        /* styles.css */
+        .left-content {
+            flex: 1;
+            
+        }
+        .navbar {
+          overflow: hidden;
+          background-color: #333;
+        }
+        
+        .navbar a {
+          float: right;
+          font-size: 16px;
+          color:goldenrod;
+          text-align: center;
+          padding: 12px 14px;
+          text-decoration: none;
+        }
+        
+        .dropdown {
+          float: right;
+          overflow: hidden;
+        }
+        
+        .dropdown .dropbtn {
+          font-size: 16px;  
+          border: none;
+          outline: none;
+          color: goldenrod;
+          padding: 14px 16px;
+          background-color: inherit;
+          font-family: inherit;
+          margin: 0;
+         
+        }
+        
+        .navbar a:hover, .dropdown:hover .dropbtn {
+          background-color: goldenrod;
+          color: white;
+        }
+        
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #f9f9f9;
+          min-width: 216px;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+        }
+        
+        .dropdown-content a {
+          float: none;
+          color: black;
+          padding: 12px 14px;
+          text-decoration: none;
+          display: block;
+          text-align: left;
+          min-width: 165px;
+        }
+        
+        .dropdown-content a:hover {
+          background-color: #ddd;
+          color: goldenrod;
+          min-width: 165px;
+        }
+        
+        .dropdown:hover .dropdown-content {
+          display: block;
+        }
+        
+        </style>
     <title>MovieAnytime</title>
+    
 </head>
+
 <body>
     <header>
-        <h1>MovieAnytime</h1>
+        <div class="left-content">
+            
+        <h2 class="title">MovieAnytime</h2>
+        </div>
+        <div class="navbar">
+            
+            <a href="#home">Logout</a>
+            <!-- <a href="#news">News</a> -->
+            <div class="dropdown">
+              <button class="dropbtn">View Analytics Dashboard
+                <i class="fa fa-caret-down"></i>
+              </button>
+              <div class="dropdown-content">
+                <a href="/openanalytics1">Summarized by Location</a>
+                <a href="/openanalytics2">Summarized by Movies</a>
+                
+              </div>
+            </div> 
+          </div>
     </header>
+    
     <div class="container">
         <div>
             <label for="multiplex">Select Multiplex:</label>
