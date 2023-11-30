@@ -11,12 +11,14 @@
         <a href="#content-past-movies" class="tab">Booking History</a>
         <a href="#content-past-30-movies" class="tab">Movies Watched in past 30 days</a>
     </div>
+    
 <br>
     <div id="content-view-profile" class="tab-content">
         <!-- <p>This is the View Profile content.</p>
         <h3>Profile</h3> -->
-     
+        <a href="{{url_for('current_movies')}}" class="tab">Back</a>
         <div class="container">
+            
         <section class="main-container1" >
            
                 
@@ -75,6 +77,7 @@
     </div> -->
 
     <div id="content-upcoming-movies" class="tab-content">
+        <a href="{{url_for('current_movies')}}" class="tab">Back</a>
         <p>Bookings</p>
         <!-- {% if futuremovieticket %}
            {% for tickets in futuremovieticket %}
@@ -122,6 +125,7 @@
     </div>
 
     <div id="content-past-movies" class="tab-content">
+        <a href="{{url_for('current_movies')}}" class="tab">Back</a>
         <p>History</p>
        
         {% if pastmovieticket and pastmovieticket[0].error %}
@@ -142,6 +146,7 @@
     {% endif %}
     </div>
     <div id="content-past-30-movies" class="tab-content">
+        <a href="{{url_for('current_movies')}}" class="tab">Back</a>
         <!-- <p>Movies </p> -->
         <!-- {% for ticket in movies%}
                 <div class="current-movie2">
