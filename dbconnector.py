@@ -1489,7 +1489,10 @@ def configDiscount(movieid, discount, showdate):
                         data.append({"error":"Error"})
                         data.append({"error details": "Discount price was not updated successfully."})
                         break
-                    
+                if(len(data)==0):
+                        data.append({"error":"Error"})
+                        data.append({"error details": "No such details Found"})
+                        
     except (Exception, psycopg2.DatabaseError) as error:
         data.append({"error":"Discount price was not updated successfully."})
         data.append({"error details": str(error)})

@@ -22,6 +22,9 @@ def openregisterpage():
 @app.route("/opensigninpage")
 def opensigninpage():
    return render_template('signin.html')
+# @app.route("/")
+# def openadmin():
+#    return render_template('AddTheater.html')
 
 #for signin.html and registeration.html integration
 @app.route("/register_now")
@@ -425,12 +428,23 @@ def set_discount():
         r = requests.post('http://127.0.0.1:5000/configDiscount', data=jsonrequest, headers= {'Content-Type': 'application/json'})
         print("r.text",r.text)
         data=json.loads(r.text)
-        if(data):
-          return render_template('configurediscount.html',message="Discount configured succesfully!")
+        print("data of movieanytime",data)
+        r = requests.get('http://127.0.0.1:5000/currentmovies')
+        print(r)
+        print(r.text)
+        current_movies_json=json.loads(r.text)
+      #   current_movies_featuring=current_movies_json[:4]
+        r_upcoming = requests.get('http://127.0.0.1:5000/upcomingmovies')
+        print(r_upcoming.text)
+        upcoming_movies_json=json.loads(r_upcoming.text)
+      #   upcoming_movies_featuring=upcoming_movies_json[:4]
+        combined_movies = current_movies_json + upcoming_movies_json
+        if('error' in data[0]):
+          return render_template('configurediscount.html',message=data[1].get('error details'),movies=combined_movies)
          #  return render_template('configurediscount.html',message=data['error details'])
         else:
          #   return render_template('configurediscount.html',message="Discount configured succesfully!")
-         return render_template('configurediscount.html',message=data['error details'])
+         return render_template('configurediscount.html',message="Discount Configured Successfully",movies=combined_movies)
       #   if successful
         #render_template(main.html)
         #else
