@@ -169,7 +169,7 @@ def getShowingInfo(movieid, multiplexid, date):
                             ON showingmaster.movieid = m1.movieid
                             INNER JOIN (
                                 SELECT showingdetails.showingid, STRING_AGG(showtime::text, ', ' ORDER BY showtime) AS mshowtimes,
-                                STRING_AGG(showingdetails.showingid::text, ', ' ORDER BY showingdetails.showingid) AS showingids,
+                                STRING_AGG(showingdetailid::text, ', ' ORDER BY showingdetailid) AS showingdetailids,
                                 STRING_AGG(discount::text, ', ' ORDER BY discount) AS discounts
                                 FROM showingdetails WHERE showdate = %s AND seatsavailable >0 
                                 GROUP BY showingdetails.showingid

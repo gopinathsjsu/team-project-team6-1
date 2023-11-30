@@ -524,7 +524,7 @@ Response format:
         "poster": "KillersOfTheFlowerMoon.jpeg",
         "price": "$2.50",
         "showingid": 1,
-        "showingids": "1, 1",
+        "showingdetailids": "1, 2",
         "theaterid": 1,
         "theaternumber": 1
     }
