@@ -71,6 +71,7 @@ var reserve = {
     toggle: (seat) => seat.classList.toggle("selected"),
 
     updateSelectedSeatsMessage: (messageElement) => {
+
         let selected = document.querySelectorAll("#layout .selected");
     
         if (selected.length === 0) {
@@ -97,7 +98,7 @@ var reserve = {
             const userid = 1;
 
             const requestData = {
-                seatid: 1,
+                seatid: reserve.selectedSeats,
                 showingdetailid: document.getElementById("showingdetailid").value, 
                 userid: 1,
             };

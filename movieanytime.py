@@ -31,7 +31,12 @@ def register_now():
 # for bookmovie.html and seatselection.html Integration
 @app.route("/seatselection/<theaterid>/<showingdetailid>")
 def seatselection(theaterid, showingdetailid):
-   return render_template('seatselection.html', theaterid=theaterid, showingdetailid=showingdetailid)
+   loggedin = False
+   if session.get('userid'):
+      loggedin = True
+   else:
+      loggedin = False
+   return render_template('seatselection.html', theaterid=theaterid, showingdetailid=showingdetailid, loggedin=loggedin)
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
