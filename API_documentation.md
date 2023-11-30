@@ -151,7 +151,7 @@ Response format: Response truncated to two records only
 
 <details>
 
-<summary> Add new movie to db </summary>
+<summary> Add/Update new movie to db </summary>
 
 URL format: POST
 /addMovie
@@ -160,7 +160,7 @@ Request format:
 
 ```yaml
 {
-    "movieid": 6,
+    "movieid": 6,//provide this only for update, else do not send this
     "moviename": "Utah",
     "runtimeminutes": "66",
     "releasedate": "2024-10-13",
@@ -183,7 +183,7 @@ Response format: Response truncated to two records only
 
 <details>
 
-<summary> Add new theater to db </summary>
+<summary> Add/Update new theater to db </summary>
 
 URL format: POST
 /addTheater
@@ -192,6 +192,8 @@ Request format:
 
 ```yaml
 {
+    "theaterid": 55,//provide this only for update, else do not send this
+    "showingid": "29,29,30,30",//provide this only for update, else do not send this
     "multiplexid": 7,
     "noofseats": 20,
     "theaternumber": 6,
@@ -219,7 +221,7 @@ Response format: Response truncated to two records only
 
 <details>
 
-<summary> Add new multiplex to db </summary>
+<summary> Add/Update new multiplex to db </summary>
 
 URL format: POST
 /addMultiplex
@@ -228,7 +230,7 @@ Request format:
 
 ```yaml
 {
-    "multiplexid": 7,
+    "multiplexid": 7,//provide this only for update, else do not send this
     "multiplexname": "AMC Saratoga",
     "locationid": 3,
     "address": "Utah",
@@ -250,7 +252,7 @@ Response format: Response truncated to two records only
 
 <details>
 
-<summary> Add new location to db </summary>
+<summary> Add/Update new location to db </summary>
 
 URL format: POST
 /addLocation
@@ -259,7 +261,7 @@ Request format:
 
 ```yaml
 {
-    "locationid": 3,
+    "locationid": 3,//provide this only for update, else do not send this
     "city":"San Jose",
     "postalcode": 95126,
     "noofmultiplex": 3
@@ -280,7 +282,7 @@ Response format: Response truncated to two records only
 
 <details>
 
-<summary> Add new movie to db </summary>
+<summary> Add/Update new movie to db </summary>
 
 URL format: POST
 /addMovie
@@ -289,7 +291,7 @@ Request format:
 
 ```yaml
 {
-    "movieid": 6,
+    "movieid": 6,//provide this only for update, else do not send this
     "moviename": "Utah",
     "runtimeminutes": "66",
     "releasedate": "2024-10-13",
@@ -541,6 +543,12 @@ URL format: GET
 /multiplexlist
 
 Request format:
+
+{
+    "locationid": 1
+}
+OR
+{}
 
 Response format: Response truncated to two records only 
 
