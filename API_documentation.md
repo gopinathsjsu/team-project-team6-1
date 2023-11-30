@@ -1,5 +1,43 @@
 #API Documentation
 
+<details>
+
+<summary> Release seats</summary>
+
+URL format: POST
+/removeMovie
+
+Request format:
+
+```yaml
+{
+    "bookingid": 1
+}
+```
+
+Response format: Response truncated to two records only 
+
+```yaml
+[
+    {
+        "seatdetailid": 1
+    },
+    {
+        "seatdetailid": 5
+    },
+    {
+        "seatdetailid": 6
+    },
+    [
+        {
+            "showingdetailid": 1
+        }
+    ]
+]
+```
+
+</details>
+
 
 <details>
 
@@ -213,6 +251,8 @@ Response format: Response truncated to two records only
 ```
 
 </details>
+
+<details>
 
 <summary> Add new location to db </summary>
 

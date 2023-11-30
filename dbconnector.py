@@ -1153,6 +1153,41 @@ def getMoviesPast30Days(username):
             print('database connection closed')
         return jsonify(data)
     
+# function to release seats for user's cancelled movie booking
+def releaseSeats(bookingId):
+    data = []
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                query = f'''select seatid, showingdetailid from booking where bookingid = %s;'''
+                cur.execute(query, (bookingId,))
+                
+                data = cur.fetchall()
+                seats = data[0]["seatid"]
+                showingdetailid = data[0]["showingdetailid"]
+                query = f'''UPDATE seatdetails SET istaken = false WHERE seatdetailid = ANY (%s::int[]) RETURNING seatdetailid'''
+                cur.execute(query, ("{" + (",".join(map(str, seats))) + "}",))
+                data = cur.fetchall()
+                if len(data) ==0:
+                    data.append({"error":"Record found"})
+                    data.append({"error details": "Seats could not be released."})
+                query = f'''UPDATE showingdetails SET seatsavailable = seatsavailable+%s, seatstaken =seatstaken-%s WHERE showingdetailid = %s RETURNING showingdetailid'''
+                cur.execute(query, (len(seats), len(seats), showingdetailid))
+                data.append(cur.fetchall())
+                if len(data) ==0:
+                    data.append({"error":"Record found"})
+                    data.append({"error details": "Seats could not be released."})
+                
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in releaseSeats()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            print('database connection closed')
+        return data
+  
 
 
 # function to cancel user's movie booking
