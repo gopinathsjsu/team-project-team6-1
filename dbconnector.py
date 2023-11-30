@@ -123,14 +123,18 @@ def getUpcomingMovies():
             return data
 
 #returns list of all multiplexes
-def getMultiplexList():
+def getMultiplexList(locationid):
     data = []
     try:
         with psycopg2.connect(**params) as conn:
 
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
 
-                query = f'''SELECT multiplexid, multiplexname FROM multiplex'''
+                if(locationid ==0):
+                    query = f'''SELECT multiplexid, multiplexname FROM multiplex'''
+                else:
+                    query = f'''SELECT multiplexid, multiplexname FROM multiplex WHERE locationid ={locationid}'''
+
                 
                 cur.execute(query)
 

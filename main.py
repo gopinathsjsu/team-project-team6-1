@@ -65,7 +65,11 @@ def upcomingmovies():
 #api to get all multiplexes  
 @app.route("/multiplexlist",methods=["GET"])
 def multiplexlist():
-    responsedata = dbc.getMultiplexList()
+    requestdata = request.get_json()
+    locationid =0
+    if 'locationid' in requestdata:
+        locationid = requestdata["locationid"]
+    responsedata = dbc.getMultiplexList(locationid)
 
     if "error" in responsedata[0]:
         return responsedata, 400
