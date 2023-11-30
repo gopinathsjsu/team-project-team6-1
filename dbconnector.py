@@ -1199,16 +1199,18 @@ def cancelBooking(bookingId):
 
             # create a cursor 
                 cursor = conn.cursor()
-                query = "delete FROM booking WHERE bookingid = %s;"
+                query = "update booking set status='FALSE',refundstatus='TRUE' WHERE bookingid = %s;"
                 cursor.execute(query,(bookingId,))
                 conn.commit()
                 cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
                 queryValidate = "select * from booking where bookingid = %s;"
                 cursor.execute(queryValidate,(bookingId,))
-                data = cursor.fetchall()
+                data = cursor.fetchone()
                 print(data)
-                if len(data) !=0:
-                    data.append({"error":"Record found"})
+                print(data['status'])
+                print(data['refundstatus'])
+                if data['status'] != False and data['refundstatus'] != True:
+                    data.append({"error":"Incorrect record found"})
                     data.append({"error details": "Booking could not be deleted."})
     except (Exception, psycopg2.DatabaseError) as error:
         data.append({"error":"Error in deleting movie booking"})
