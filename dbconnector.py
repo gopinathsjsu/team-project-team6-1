@@ -81,7 +81,7 @@ def getCurrentMovies():
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
 
                 query = f'''SELECT movieid, moviename, runtimeminutes, poster
-	                    FROM movie WHERE releasedate < CURRENT_DATE AND endshowingdate > CURRENT_DATE'''
+	                    FROM movie WHERE releasedate <= CURRENT_DATE AND endshowingdate >= CURRENT_DATE'''
                 
                 cur.execute(query)
 
