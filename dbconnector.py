@@ -224,16 +224,25 @@ def getseatAllocation(theaterid, showdetailid):
             return data
 
 #creates temperory booking number
-def createBooking(seatid, showingdetailid,userid):
+def createBooking(seatid, showingdetailid, userid):
     data = []
+    seat_id_int = [int(x) for x in seatid]
+    # print("seatid in db", seatid)
+    # print("showingdetailid in db", showingdetailid)
+    # print("userid in db", userid)
     try:
         with psycopg2.connect(**params) as conn:
 
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
-                query = f'''INSERT INTO booking(num_seats_booked, seatid, showingdetailid, userid) VALUES (%s, %s, %s,%s) RETURNING bookingid;'''
-                cur.execute(query, (len(seatid), seatid, showingdetailid, userid))
+                # print("seat id length in db", len(seatid))
+                # print("seatid in query", seat_id_int)
+
+                query = f'''INSERT INTO booking(num_seats_booked, seatid, status, refundstatus, totalcost, discount, servicefee, rewardpointsused,rewardpointsearned, showingdetailid, userid) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING bookingid;'''
+                cur.execute(query, (len(seat_id_int), seat_id_int, False, False, 0, 0, 0, 0.0, 0.0, showingdetailid, userid))
+                
 
                 data = cur.fetchall()
+                
                 if len(data) ==0:
                     data.append({"error":"Record not created"})
                     data.append({"error details": "Booking record not created"})
