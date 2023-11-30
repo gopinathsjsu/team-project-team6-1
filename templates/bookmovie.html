@@ -15,10 +15,10 @@
             <form action="/bookmovie" method="POST">
                 <ul class="navigation">
                     <li>
-                        <input type="movieid" id="movieid" name="movieid"  value="{{ movieid }}" readonly>
+                        <input type="hidden" id="movieid" name="movieid"  value="{{ movieid }}" readonly>                    
                     <li>
-                        <input type="multiplexid" id="multiplexid" name="multiplexid">
-                    </li>
+                        <input type="multiplex" id="multiplexid" name="multiplexid">
+                    <li>
                     <li>
                         <input type="date" id="chosenDate" name="chosenDate">
                     </li>
@@ -52,9 +52,12 @@
                 <p class="screen-name">Showing at {{ theater['theaternumber'] }}</p>
                 <div class="booking">
                     {% for showtime in theater['mshowtimes'].split(', ') %}
-                        <button class="btn" type="submit">{{ showtime }}</button>
+                        {% set index = loop.index0 %}
+                            <a class="btn" href="{{ url_for('seatselection', theaterid=theater['theaterid'], showingdetailid=theater['showingdetailids'].split(', ')[index]) }}">
+                                {{ showtime }}
+                            </a>
                     {% endfor %}
-                </div>
+                </div>                                                       
             </div>
             {% endfor %}
         </div>

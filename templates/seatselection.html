@@ -7,6 +7,12 @@
     <script src="{{ url_for('static', filename='js/seatselection.js')}}"></script>
 </head>
 <body>
+    <li>
+        <input type="hidden" id="theaterid" name="theaterid" value="{{ theaterid }}" readonly>
+    </li>
+    <li>
+        <input type="hidden" id="showingdetailid" name="showingdetailid" value="{{ showingdetailid }}" readonly>
+    </li>    
     <div id="screen">
         <h2>Screen</h2>
     </div>
