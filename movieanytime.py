@@ -173,7 +173,11 @@ def all_current_movies():
         r_upcoming = requests.get('http://127.0.0.1:5000/upcomingmovies')
         upcoming_movies_json=json.loads(r_upcoming.text)
         upcoming_movies_featuring=upcoming_movies_json[:4]
-   return render_template("testhome.html",movies=current_movies_json,Featuring_movies=current_movies_featuring, upcoming_movies=upcoming_movies_featuring)
+   if(session.get('username')):
+         return render_template("testhome.html",Featuring_movies=current_movies_featuring, upcoming_movies=upcoming_movies_featuring,signin="View Profile",logout="Logout",movies=current_movies_json)
+   else:
+           return render_template("testhome.html",Featuring_movies=current_movies_featuring, upcoming_movies=upcoming_movies_featuring,signin="Sign In",movies=current_movies_json)     
+   # return render_template("testhome.html",movies=current_movies_json,Featuring_movies=current_movies_featuring, upcoming_movies=upcoming_movies_featuring)
 
 @app.route('/upcoming_movies', methods=['GET'])
 def upcoming_movies1():
@@ -187,7 +191,11 @@ def upcoming_movies1():
         current_movies_featuring=current_movies_json[:4]
         upcoming_movies_json=json.loads(r_upcoming.text)
         upcoming_movies_featuring=upcoming_movies_json[:4]
-   return render_template("testhome.html",Featuring_movies=current_movies_featuring,upcoming_movie_all=upcoming_movies_json,upcoming_movies=upcoming_movies_featuring)
+   if(session.get('username')):
+         return render_template("testhome.html",Featuring_movies=current_movies_featuring, upcoming_movies=upcoming_movies_featuring,signin="View Profile",logout="Logout",movies=current_movies_json,upcoming_movie_all=upcoming_movies_json)
+   else:
+           return render_template("testhome.html",Featuring_movies=current_movies_featuring, upcoming_movies=upcoming_movies_featuring,signin="Sign In",movies=current_movies_json,upcoming_movie_all=upcoming_movies_json)         
+   # return render_template("testhome.html",Featuring_movies=current_movies_featuring,upcoming_movie_all=upcoming_movies_json,upcoming_movies=upcoming_movies_featuring)
 
 @app.route('/viewprofiledetails', methods=['POST', 'GET'])
 def user_details():
