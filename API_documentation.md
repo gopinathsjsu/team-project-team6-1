@@ -15,7 +15,6 @@ Request format:
 }
 ```
 
-Response format: Response truncated to two records only 
 
 ```yaml
 [
@@ -55,7 +54,6 @@ Request format:
 }
 ```
 
-Response format: Response truncated to two records only 
 
 ```yaml
 [   ]
@@ -79,7 +77,6 @@ Request format:
 }
 ```
 
-Response format: Response truncated to two records only 
 
 ```yaml
 [   ]
@@ -102,7 +99,6 @@ Request format:
 }
 ```
 
-Response format: Response truncated to two records only 
 
 ```yaml
 [   ]
