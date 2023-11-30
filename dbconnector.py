@@ -1,4 +1,5 @@
 
+import time
 from connection import connection
 import psycopg2
 import psycopg2.extras
@@ -826,17 +827,8 @@ def deleteseat1(showingdetailid):
         with psycopg2.connect(**params) as conn:
 
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
-
-                query = f'''SELECT seatid FROM seatdetails WHERE showingdetailid = ANY (%s::int[]) GROUP BY seatid'''
+                query = f'''DELETE FROM seatdetails WHERE showingdetailid = ANY (%s::int[])'''
                 cur.execute(query, ("{" + (",".join(map(str, showingdetailid))) + "}",))
-                
-                data = cur.fetchall()
-            
-                query = f'' 'DELETE FROM seatdetails WHERE showingdetailid = ANY (%s::int[])'' '
-                cur.execute(query, ("{" + (",".join(map(str, showingdetailid))) + "}",))
-                for rec in data:
-                    query = f'' 'DELETE FROM seat WHERE seatid = %s'' '
-                    cur.execute(query, (rec["seatid"],))
     except (Exception, psycopg2.DatabaseError) as error:
         print(str(error))
         data.append({"error":"Error in deleteseat1()"})
@@ -845,7 +837,6 @@ def deleteseat1(showingdetailid):
         if conn is not None:
             conn.close()
             return data
-
 def deleteshowtime(showingid, showtime):
     data=[]
     values =[]
