@@ -105,7 +105,14 @@
         <h4>ShowDate:-{{tickets['showdate']}}</h4>
         <h4 >ShowTime:-{{tickets['showtime']}}</h4>
         <h4>TotalCost:-{{tickets['totalcost']}}</h4>
-        <button type="button">Cancel Ticket!</button>
+        {%if tickets['status']==true %}
+        <a href="{{ url_for('cancelbooking',bookingid=tickets['bookingid']) }}" class="button">Cancel Ticket</a>
+        {% else %}
+        <!-- <h4>Status:-{{tickets['status']}}</h4> -->
+        <h4>Status:-Cancelled(Refund Issued)</h4>
+        <!-- <h4>Refund Status:-Refund Issued</h4> -->
+        {% endif%}
+        <!-- <button type="button">Cancel Ticket!</button> -->
     </div><br>
         {% endfor %}
     
