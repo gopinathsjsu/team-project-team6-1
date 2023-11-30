@@ -5,11 +5,12 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
 import pandas as pd
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 app.secret_key = 'fwe_5HvBK=9CvoqSD87xm'
-
 
 #for bookmoviehtml and testhome integration
 @app.route("/bookmovie_now/<movieid>")
@@ -21,6 +22,16 @@ def openregisterpage():
 @app.route("/opensigninpage")
 def opensigninpage():
    return render_template('signin.html')
+
+#for signin.html and registeration.html integration
+@app.route("/register_now")
+def register_now():
+   return render_template('registration.html')
+
+# for bookmovie.html and seatselection.html Integration
+@app.route("/seatselection/<theaterid>/<showingdetailid>")
+def seatselection(theaterid, showingdetailid):
+   return render_template('seatselection.html', theaterid=theaterid, showingdetailid=showingdetailid)
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -130,8 +141,7 @@ def current_movies():
    if request.method == "GET":
         #use session variables
         if session.get('username') :
-            print(session['username'])
-            
+            print(session['username'])            
         
         r = requests.get('http://127.0.0.1:5000/currentmovies')
         print(r)
@@ -210,17 +220,14 @@ def logout():
     return redirect(url_for('current_movies'))
  
 @app.route('/upgrademembership', methods=['POST'])
-def upgrade_membership():
-      
+def upgrade_membership():    
       
          jsonrequest={"username": session.get('username') }
          print("jsonreq",json.dumps(jsonrequest))
 
          r = requests.post('http://127.0.0.1:5000/upgradeToPremium', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
-         print("r.text",r.text)
+         print("r.text",r.text)     
          
-         
-      
          r1 = requests.post('http://127.0.0.1:5000/upcomingMovieBookings', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
          print("upcoming",r1.text)
          futuremoviejson=json.loads(r1.text)
@@ -242,9 +249,7 @@ def upgrade_membership():
                                  membershiptilldate=user_details['membershiptilldate'],membershiptype=user_details['membershiptype'],
                                  rewardpoints=user_details['rewardpoints'],movies=pastmovies)
          
-
-         
-      
+#API to retrive the details of showtimes based on movieid, multiplexid and chosenDate
 @app.route('/bookmovie', methods=['POST'])
 def book_movies():
    # print(movieid)
@@ -266,24 +271,26 @@ def book_movies():
          "multiplexid":multiplexid,
          "chosenDate": chosenDate      
       }
+      
       headers = {'Content-Type': 'application/json'}
       r = requests.post('http://127.0.0.1:5000/getmovietheaters', json=data1, headers=headers)
       print(r.text)
       theaters = json.loads(r.text)
-   return render_template("bookmovie.html",theaters=theaters) 
+      
+      # print("showtimes",showtimes)
+      # print("showingdetailids",showingdetailids)
+       
+   return render_template("bookmovie.html",theaters=theaters)
+
 @app.route('/openanalytics1', methods=['POST','GET'])
-def get_cities():
-      
-      
-         
+def get_cities():  
          r = requests.get('http://127.0.0.1:5000/retrieveAllCities')
          print("r.text",r.text)
          city=json.loads(r.text)
 
          return render_template('analytics1.html',cities=city)
 @app.route('/openanalytics2', methods=['POST','GET'])
-def get_movie():
-     
+def get_movie():   
          
          r = requests.get('http://127.0.0.1:5000/retrieveMoviesPlayedPast90Days')
          print("r.text",r.text)
