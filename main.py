@@ -384,6 +384,7 @@ def moviesPast30Days():
 def cancelBooking():
     bookingInfo = request.get_json()
     bookingId = bookingInfo['bookingid']
+    response = dbc.releaseSeats(bookingId)
     response = dbc.cancelBooking(bookingId)
     print('cancel movie bookings - response : ', response)
     print(type(response))
