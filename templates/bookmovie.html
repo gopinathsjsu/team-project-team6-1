@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/static/css/bookmovie.css">
+    <script src="{{ url_for('static', filename='js/bookmovie.js')}}"></script>
     <title data-rh="true">ShowTime at MovieAnytime Multiplexes</title>
 </head>
 
@@ -12,18 +13,22 @@
     <section class="top-bar">
         <div class="left-content">
             <h2 class="title">MovieAnytime</h2>
-            <form action="/bookmovie" method="POST">
+            <form id="bookMovieForm" onclick="return submitForm()" action="/bookmovie" method="POST">
                 <ul class="navigation">
                     <li>
-                        <input type="hidden" id="movieid" name="movieid"  value="{{ movieid }}" readonly>                    
+                        <input type="hidden" id="movieid" name="movieid"  value="{{ movieid }}" readonly>  
+                    </li>                  
                     <li>
-                        <input type="multiplex" id="multiplexid" name="multiplexid">
-                    <li>
-                    <li>
-                        <input type="date" id="chosenDate" name="chosenDate">
+                        <input type="date" id="chosenDate" name="chosenDate" value="{{chosenDate}}">
                     </li>
+                    <label for="locations">Select a location:</label>
+                    <select type="locations" id="locations" name="locations"></select>
+
+                    <label for="multiplexs">Select a location:</label>
+                    <select type="multiplexs" id="multiplexs" value="Multiplexs" name="multiplexs"></select>                          
                 </ul>
-                <button class="btn" type="submit">Apply</button>
+                <button type="submit" class="btn">Apply</button>
+
             </form>
         </div>
         <div class="right-content">

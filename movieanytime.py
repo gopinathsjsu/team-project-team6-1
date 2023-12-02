@@ -34,12 +34,11 @@ def register_now():
 # for bookmovie.html and seatselection.html Integration
 @app.route("/seatselection/<theaterid>/<showingdetailid>")
 def seatselection(theaterid, showingdetailid):
-   loggedin = False
    if session.get('userid'):
-      loggedin = True
+      userid = session.get('userid')
    else:
-      loggedin = False
-   return render_template('seatselection.html', theaterid=theaterid, showingdetailid=showingdetailid, loggedin=loggedin)
+      userid = None
+   return render_template('seatselection.html', theaterid=theaterid, showingdetailid=showingdetailid, userid=userid)
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -271,12 +270,12 @@ def book_movies():
    # print(movieid)
    if request.method =="POST":
       movieid = request.form.get('movieid')
-      multiplexid = request.form.get('multiplexid')
+      multiplexid = request.form.get('multiplexs')
       chosenDate = request.form.get('chosenDate')   
       
-      print(movieid)       
-      print(multiplexid)
-      print(chosenDate)
+      # print(movieid)       
+      # print(multiplexid)
+      # print(chosenDate)
       
       # movieid=6
       # multiplexid=14

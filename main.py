@@ -61,12 +61,22 @@ def upcomingmovies():
     if "error" in responsedata[0]:
         return responsedata, 400
     return responsedata, 200
+
+#api to get all locations  
+@app.route("/locationlist",methods=["GET"])
+def getlocationlist():
     
+    responsedata = dbc.getListofAllLocations()
+    
+    if "error" in responsedata[0]:
+        return responsedata, 400
+    return responsedata, 200
+
 #api to get all multiplexes  
-@app.route("/multiplexlist",methods=["GET"])
+@app.route("/multiplexlist",methods=["POST"])
 def multiplexlist():
     requestdata = request.get_json()
-    locationid =0
+    locationid = 0
     if 'locationid' in requestdata:
         locationid = requestdata["locationid"]
     responsedata = dbc.getMultiplexList(locationid)
@@ -108,8 +118,9 @@ def createbooking():
     requestdata = request.get_json()
 
     seatid = requestdata["seatid"]
-    showingdetailid = requestdata["showingdetailid"]
-    userid = requestdata["userid"]
+    showingdetailid = requestdata["showingdetailid"]    
+    userid = requestdata.get("userid")
+
     responsedata = dbc.createBooking(seatid, showingdetailid, userid)
 
     if "error" in responsedata[0]:

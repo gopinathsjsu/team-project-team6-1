@@ -14,16 +14,19 @@
         <input type="hidden" id="showingdetailid" name="showingdetailid" value="{{ showingdetailid }}" readonly>
     </li>    
     <li>
-        <input type="hidden" id="loggedin" name="loggedin" value="{{ loggedin }}" readonly>
-    </li>  
+        <input type="hidden" id="userid" name="userid" value="{{ userid }}" readonly>
+    </li>
+    <li>
+        <input type="hidden" id="bookingid" name="bookingid" value="{{ bookingid }}" readonly>
+    </li>
     <div id="screen">
         <h2>Screen</h2>
     </div>
     <br>
     <div id="layout"></div>   
-    <div id="selected-seats-message"></div>
+    <div id="selected-seats-message" class="selected-seats"></div>
     <br>
-    <div id="seats">
+    <div id="seats" class="seatColours">
         <div class="seat"></div> <div class="txt">Available</div>
         <div class="seat taken"></div> <div class="txt">Taken</div>
         <div class="seat selected"></div> <div class="txt">Your Chosen Seats</div>

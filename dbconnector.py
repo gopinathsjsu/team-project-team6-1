@@ -227,6 +227,31 @@ def getseatAllocation(theaterid, showdetailid):
             conn.close()
             return data
 
+
+#returns list of all Locations
+def getListofAllLocations():
+    data = []
+    try:
+        with psycopg2.connect(**params) as conn:
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+                query = f'''SELECT locationid, city FROM location'''
+                
+                cur.execute(query)
+                data = cur.fetchall()
+                if len(data) ==0:
+                    data.append({"error":"No record found"})
+                    data.append({"error details": "No multiplexes found!"})
+                    
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in getLocationList()"})
+        data.append({"error details": str(error)})
+        
+    finally:
+        if conn is not None:
+            conn.close()
+            return data
+
+
 #creates temperory booking number
 def createBooking(seatid, showingdetailid, userid):
     data = []
