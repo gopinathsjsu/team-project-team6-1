@@ -71,36 +71,55 @@ var reserve = {
     toggle: (seat) => seat.classList.toggle("selected"),
 
     updateSelectedSeatsMessage: (messageElement) => {
-
+        let userid = document.getElementById("userid").value;
         let selected = document.querySelectorAll("#layout .selected");
+        let allSeats = document.querySelectorAll("#layout .seat");
+    
+        console.log(userid)
+        let maxSeats = (userid !== "none") ? 1 : 8;
     
         if (selected.length === 0) {
             messageElement.innerHTML = "No seats selected.";
+        } else if (selected.length > maxSeats) {
+            messageElement.innerHTML = `You can only select up to ${maxSeats} seats.`;
         } else {
             let seats = Array.from(selected).map((s) => s.innerHTML);
             reserve.selectedSeats = Array.from(selected).map((s) => s.innerHTML);
             console.log("Selected Seats ids:", seats);
             messageElement.innerHTML = `Selected Seats: ${seats}`;
+    
+            // Disable unselected seats if the user has reached the limit
+            allSeats.forEach((seat) => {
+                if (!seat.classList.contains("selected") && selected.length === maxSeats) {
+                    seat.disabled = true;
+                } else {
+                    seat.disabled = false;
+                }
+            });
         }
-    },   
+    },
+    
     
     save: () => {
         let selected = document.querySelectorAll("#layout .selected");
+        let userid = document.getElementById("userid").value;
+        let maxSeats = (userid !== "none") ? 1 : 8;
 
+        if (selected.length > maxSeats)
+            alert("You can only select up to ", maxSeats)
         if (selected.length === 0) {
             alert("No seats selected.");
-        } else {
+        } 
+        else {
             console.log("Selected Seat IDs:", reserve.selectedSeats);
             let seatIds = Array.from(selected).map((s) => {
                 return s.getAttribute("data-seatid");
-            });
-
-            const userid = 1;
+            });            
 
             const requestData = {
                 seatid: reserve.selectedSeats,
                 showingdetailid: document.getElementById("showingdetailid").value, 
-                userid: 1,
+                userid: userid,
             };
             const url = "http://127.0.0.1:5000/createbooking";
             fetch(url, {

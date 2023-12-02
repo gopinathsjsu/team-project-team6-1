@@ -1,16 +1,25 @@
 body{
-  background-color: white;
+  background-color: black;
 }
 
 .seat {
   text-align: center;
   padding: 10px 5px; 
   border-radius: 5px;
-  background: #f1f1f1;
+  background: white;
+}
+
+.seatColours
+{
+  color: white;
+}
+
+.selected-seats{
+  color: white;
 }
 
 #screen {
-  background-color: black;
+  background-color: brown;
   color: white;
   text-align: center;
   padding: 20px;
@@ -20,9 +29,12 @@ body{
   margin: 0 auto;
 }
 
+.taken { 
+  background: grey; 
+  color: #fff; 
+}
 
-.taken { background: grey; color: #fff; }
-.selected { background: #87ff96; }
+.selected { background: red; }
  
 #layout {
   max-width: 400px;
@@ -38,6 +50,7 @@ body{
   grid-gap: 10px;
   grid-template-columns: 50px auto ;
 }
+
 #seats .txt {
   display: flex;
   align-items: center;
