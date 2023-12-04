@@ -1,8 +1,5 @@
-from datetime import date
-import json
-from flask import Flask, request, jsonify
+from flask import Flask, request
 import dbconnector as dbc
-import rsa
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -94,9 +91,6 @@ def getmovietheaters():
     multiplexid = requestdata["multiplexid"]
     date = requestdata["chosenDate"]
     responsedata = dbc.getShowingInfo(movieid, multiplexid, date)
-
-    print(responsedata)
-
     if "error" in responsedata[0]:
         return responsedata, 400
     return responsedata, 200
@@ -145,7 +139,6 @@ def getCardDetails():
 @app.route("/saveBooking", methods=["POST"])
 def saveBooking():
     requestdata = request.get_json()
-    print(requestdata)
     card_number = requestdata["card_number"]
     cvv = requestdata["cvv"]
     exp = requestdata["exp"]

@@ -44,14 +44,14 @@ var reserve = {
         layout.innerHTML = "";
     
         const uniqueRows = [...new Set(data.map((seatData) => seatData.rownum))];
-        const uniqueColumns = [...new Set(data.map((seatData) => seatData.noofcolumns))];
+        const uniqueColumns = [...new Set(data.map((seatData) => seatData.seatno))];
     
-        uniqueRows.forEach((row) => {
-            const rowDiv = document.createElement("div");
-            rowDiv.className = "row";
+        uniqueColumns.forEach((column) => {
+            const colDiv = document.createElement("div");
+            colDiv.className = "row";
     
-            uniqueColumns.forEach((column) => {
-                const seatData = data.find((seat) => seat.rownum === row && seat.noofcolumns === column);
+            uniqueRows.forEach((row) => {
+                const seatData = data.find((seat) => seat.rownum === row && seat.seatno === column);
                 const seat = document.createElement("div");
                 seat.innerHTML = seatData ? seatData.seatid : "";
                 seat.className = "seat";
@@ -62,10 +62,10 @@ var reserve = {
                     seat.classList.add("available");
                 }
     
-                rowDiv.appendChild(seat);
+                colDiv.appendChild(seat);
             });
     
-            layout.appendChild(rowDiv);
+            layout.appendChild(colDiv);
         });
     },
     toggle: (seat) => seat.classList.toggle("selected"),
