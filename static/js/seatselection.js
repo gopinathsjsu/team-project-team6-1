@@ -103,6 +103,10 @@ var reserve = {
     save: () => {
         let selected = document.querySelectorAll("#layout .selected");
         let userid = document.getElementById("userid").value;
+        //alert (userid);
+        if(userid == 'None'){
+            userid =0;
+        }
         let maxSeats = (userid !== "none") ? 1 : 8;
 
         if (selected.length > maxSeats)
@@ -134,7 +138,7 @@ var reserve = {
                 console.log("API Response:", data);
 
                 if (data && data.length > 0 && data[0].bookingid) {
-                    alert(`Seats reserved successfully! Booking ID: ${data[0].bookingid}`);
+                    //alert(`Seats reserved successfully! Booking ID: ${data[0].bookingid}`);
                 } else {
                     alert("Failed to reserve seats.");
                 }

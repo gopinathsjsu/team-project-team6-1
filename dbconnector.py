@@ -266,8 +266,8 @@ def createBooking(seatid, showingdetailid, userid):
                 # print("seat id length in db", len(seatid))
                 # print("seatid in query", seat_id_int)
 
-                query = f'''INSERT INTO booking(num_seats_booked, seatid, status, refundstatus, totalcost, discount, servicefee, rewardpointsused,rewardpointsearned, showingdetailid, userid) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING bookingid;'''
-                cur.execute(query, (len(seat_id_int), seat_id_int, False, False, 0, 0, 0, 0.0, 0.0, showingdetailid, userid))
+                query = f'''INSERT INTO booking(num_seats_booked, seatid, showingdetailid, userid) VALUES (%s, %s, %s, %s) RETURNING bookingid;'''
+                cur.execute(query, (len(seat_id_int), seat_id_int, showingdetailid, userid))
                 
 
                 data = cur.fetchall()
