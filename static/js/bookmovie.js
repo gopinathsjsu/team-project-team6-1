@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
         alert('Please select a date equal to or greater than today.');
     }
 
-    const locationUrl = "http://127.0.0.1:5000/locationlist";
+    const locationUrl = "http://127.0.0.1:5000/getlocationlist";
     
     fetch(locationUrl, {
         method: "GET",
@@ -45,8 +45,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const fetchMultiplexes = (locationid) => {
         const multiplexUrl = `http://127.0.0.1:5000/multiplexlist`;
         const requestData = {
-            locationid: locationid,
-        };
+                locationid: locationid,
+            };
 
         fetch(multiplexUrl, {
             method: "POST",
