@@ -3,6 +3,7 @@ function paymentconfirmation(userdetails, payment, moviedetails){
         var cvv;
         var exp;
         var rewardpoints = 0;
+        var bookingid = JSON.parse(moviedetails.replace(/'/g, '"'))['bookingid'];
         var checkBox = document.getElementById("rewardpoints");
         if (checkBox != null && checkBox.checked == true){
             rewardpoints = userdetails.rewardpoints;
@@ -55,7 +56,7 @@ function paymentconfirmation(userdetails, payment, moviedetails){
         })
         .then(data => {
             if(data =="error"){
-                window.location.href = '/bookingerror';
+                window.location.href = `/bookingerror/${bookingid}`;
             }
             else{
                 window.location.href = '/bookingconfirmation';
@@ -135,12 +136,20 @@ function enablePaymentbtn(){
     var exp;
     if (document.getElementById('card_number') != null) {
         card_number = document.getElementById('card_number').value;
+        if(card_number.length !=16 || card_number.match(/^[0-9]+$/) == null){
+            card_number = ""
+            document.getElementById('card_number').value = "";
+        }
     }
     else{
         card_number = ""
     }
     if (document.getElementById('cvv') != null) {
         cvv = document.getElementById('cvv').value;
+        if(cvv.length !=3 || cvv.match(/^[0-9]+$/) == null){
+            cvv = ""
+            document.getElementById('cvv').value = "";
+        }
     }
     else{
         cvv = ""
@@ -161,7 +170,5 @@ function enablePaymentbtn(){
         document.getElementById('purchasebtn').disabled = false;
         document.getElementById('purchasebtn').style.backgroundColor = 'red';
     }
-    document.getElementById('purchasebtn').disabled = false;
-    document.getElementById('purchasebtn').style.backgroundColor = 'red';
     
 }

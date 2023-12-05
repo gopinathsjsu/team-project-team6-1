@@ -283,6 +283,25 @@ def createBooking(seatid, showingdetailid, userid):
             conn.close()
             return data
 
+#creates temperory booking number
+def deleteBooking(bookingid):
+    data = []
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+
+                query = f'''DELETE FROM booking WHERE bookingid = %s;'''
+                cur.execute(query, (bookingid,))
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in deleteBooking()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data
+
+
 #add all the booking info after payment is successful
 def completeBooking(bookingid, payment, rewardpointsused, seats):
     data = []
