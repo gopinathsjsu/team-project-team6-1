@@ -12,20 +12,26 @@
 <body>
     <section class="top-bar">
         <div class="left-content">
-            <h2 class="title">MovieAnytime</h2>
-            <form id="bookMovieForm" onclick="return submitForm()" action="/bookmovie" method="POST">
+            <h1 class="title">MovieAnytime</h1>
+            <form id="bookMovieForm" onclick="return submitForm()" 
+            action= "{{ url_for('bookmovie', movieid = theaters[0]['movieid'], multiplexs= theaters[0]['multiplexid']) }}"
+            method="POST">
                 <ul class="navigation">
                     <li>
-                        <input type="hidden" id="movieid" name="movieid"  value="{{ movieid }}" readonly>  
+                        <input type="hidden" id="movieid" name="movieid"  value="{{theaters[0]['movieid']}}" readonly>  
                     </li>                  
                     <li>
                         <input type="date" id="chosenDate" name="chosenDate" value="{{chosenDate}}">
                     </li>
-                    <label for="locations">Select a location:</label>
+                    <label for="locations"style="color: aliceblue;">Select a location:</label>
                     <select type="locations" id="locations" name="locations"></select>
 
-                    <label for="multiplexs">Select a location:</label>
-                    <select type="multiplexs" id="multiplexs" value="Multiplexs" name="multiplexs"></select>                          
+                    <label for="multiplexs" style="color: aliceblue;">Select a multiplex:</label>
+                    <select type="multiplexs" id="multiplexs" value="Multiplexs" name="multiplexs">
+                        {% for multiplex in multiplexes %}
+                        <option value="{{multiplex['multiplexid']}}">{{multiplex['multiplexname']}}</option>
+                        {% endfor %}
+                    </select>                           
                 </ul>
                 <button type="submit" class="btn">Apply</button>
 
@@ -48,7 +54,7 @@
     <section class="main-container-booking">
         <div class="movies-container">
             <div class="movie-header">
-                <h4>moviename</h4>
+                <h4>{{theaters[0]['moviename']}}</h4>
             </div>
         <div class="current-theaters">
             {% for theater in theaters %}

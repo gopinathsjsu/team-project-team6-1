@@ -1,8 +1,5 @@
-from datetime import date
-import json
-from flask import Flask, request, jsonify
+from flask import Flask, request
 import dbconnector as dbc
-import rsa
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -63,7 +60,7 @@ def upcomingmovies():
     return responsedata, 200
 
 #api to get all locations  
-@app.route("/locationlist",methods=["GET"])
+@app.route("/getlocationlist",methods=["GET"])
 def getlocationlist():
     
     responsedata = dbc.getListofAllLocations()
@@ -73,14 +70,14 @@ def getlocationlist():
     return responsedata, 200
 
 #api to get all multiplexes  
-@app.route("/multiplexlist",methods=["POST"])
+@app.route("/multiplexlist",methods=["POST", "GET"])
 def multiplexlist():
-    requestdata = request.get_json()
     locationid = 0
-    if 'locationid' in requestdata:
-        locationid = requestdata["locationid"]
+    if request.method == "POST":
+        requestdata = request.get_json()
+        if 'locationid' in requestdata:
+            locationid = requestdata["locationid"]
     responsedata = dbc.getMultiplexList(locationid)
-
     if "error" in responsedata[0]:
         return responsedata, 400
     return responsedata, 200
@@ -94,7 +91,6 @@ def getmovietheaters():
     multiplexid = requestdata["multiplexid"]
     date = requestdata["chosenDate"]
     responsedata = dbc.getShowingInfo(movieid, multiplexid, date)
-
     if "error" in responsedata[0]:
         return responsedata, 400
     return responsedata, 200
@@ -143,7 +139,6 @@ def getCardDetails():
 @app.route("/saveBooking", methods=["POST"])
 def saveBooking():
     requestdata = request.get_json()
-    print(requestdata)
     card_number = requestdata["card_number"]
     cvv = requestdata["cvv"]
     exp = requestdata["exp"]
@@ -154,13 +149,26 @@ def saveBooking():
     userdetails = eval(requestdata["userdetails"].replace("'", "\""))
     #if(userdetails is not None and "card_num" not in userdetails):
 
-    if card_number != "":
+    if card_number != "" and userdetails["userid"] !=0:
         responsedata = dbc.saveCardDetails(card_number, cvv,exp, userdetails["userid"])
         print(responsedata)
     responsedata = dbc.completeBooking(moviedetails["bookingid"], payment, rewardpointsused, moviedetails["seats"])
-    if "error" in responsedata[0]:
-        return responsedata, 400
+    for res in responsedata:
+        if "error" in res:
+            return responsedata, 400
     return responsedata, 200
+
+@app.route("/deleteBooking", methods=["POST"])
+def deleteBooking():
+    requestdata = request.get_json()
+    bookingid = requestdata["bookingid"]
+    responsedata = dbc.deleteBooking(bookingid)
+    for res in responsedata:
+        if "error" in res:
+            return responsedata, 400
+    return responsedata, 200
+
+
 
 #api to add/update movie in schedule
 @app.route("/addMovie", methods=["POST"])

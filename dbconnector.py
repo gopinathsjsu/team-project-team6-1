@@ -266,8 +266,8 @@ def createBooking(seatid, showingdetailid, userid):
                 # print("seat id length in db", len(seatid))
                 # print("seatid in query", seat_id_int)
 
-                query = f'''INSERT INTO booking(num_seats_booked, seatid, status, refundstatus, totalcost, discount, servicefee, rewardpointsused,rewardpointsearned, showingdetailid, userid) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING bookingid;'''
-                cur.execute(query, (len(seat_id_int), seat_id_int, False, False, 0, 0, 0, 0.0, 0.0, showingdetailid, userid))
+                query = f'''INSERT INTO booking(num_seats_booked, seatid, showingdetailid, userid) VALUES (%s, %s, %s, %s) RETURNING bookingid;'''
+                cur.execute(query, (len(seat_id_int), seat_id_int, showingdetailid, userid))
                 
 
                 data = cur.fetchall()
@@ -282,6 +282,25 @@ def createBooking(seatid, showingdetailid, userid):
         if conn is not None:
             conn.close()
             return data
+
+#creates temperory booking number
+def deleteBooking(bookingid):
+    data = []
+    try:
+        with psycopg2.connect(**params) as conn:
+
+            with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+
+                query = f'''DELETE FROM booking WHERE bookingid = %s;'''
+                cur.execute(query, (bookingid,))
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error":"Error in deleteBooking()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data
+
 
 #add all the booking info after payment is successful
 def completeBooking(bookingid, payment, rewardpointsused, seats):

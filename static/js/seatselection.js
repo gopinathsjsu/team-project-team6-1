@@ -44,16 +44,16 @@ var reserve = {
         layout.innerHTML = "";
     
         const uniqueRows = [...new Set(data.map((seatData) => seatData.rownum))];
-        const uniqueColumns = [...new Set(data.map((seatData) => seatData.noofcolumns))];
+        const uniqueColumns = [...new Set(data.map((seatData) => seatData.seatno))];
     
-        uniqueRows.forEach((row) => {
-            const rowDiv = document.createElement("div");
-            rowDiv.className = "row";
+        uniqueColumns.forEach((column) => {
+            const colDiv = document.createElement("div");
+            colDiv.className = "row";
     
-            uniqueColumns.forEach((column) => {
-                const seatData = data.find((seat) => seat.rownum === row && seat.noofcolumns === column);
+            uniqueRows.forEach((row) => {
+                const seatData = data.find((seat) => seat.rownum === row && seat.seatno === column);
                 const seat = document.createElement("div");
-                seat.innerHTML = seatData ? seatData.seatid : "";
+                seat.innerHTML = seatData ? seatData.seatdetailid : "";
                 seat.className = "seat";
     
                 if (seatData && seatData.istaken) {
@@ -62,10 +62,10 @@ var reserve = {
                     seat.classList.add("available");
                 }
     
-                rowDiv.appendChild(seat);
+                colDiv.appendChild(seat);
             });
     
-            layout.appendChild(rowDiv);
+            layout.appendChild(colDiv);
         });
     },
     toggle: (seat) => seat.classList.toggle("selected"),
@@ -103,6 +103,10 @@ var reserve = {
     save: () => {
         let selected = document.querySelectorAll("#layout .selected");
         let userid = document.getElementById("userid").value;
+        //alert (userid);
+        if(userid == 'None'){
+            userid =0;
+        }
         let maxSeats = (userid !== "none") ? 1 : 8;
 
         if (selected.length > maxSeats)
@@ -134,7 +138,11 @@ var reserve = {
                 console.log("API Response:", data);
 
                 if (data && data.length > 0 && data[0].bookingid) {
-                    alert(`Seats reserved successfully! Booking ID: ${data[0].bookingid}`);
+
+                    const url = `http://127.0.0.1:5001/payment/${data[0].bookingid}`;
+                    window.location.href = url;
+
+                    //alert(`Seats reserved successfully! Booking ID: ${data[0].bookingid}`);
                 } else {
                     alert("Failed to reserve seats.");
                 }

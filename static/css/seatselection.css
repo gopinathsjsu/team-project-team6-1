@@ -37,10 +37,10 @@ body{
 .selected { background: red; }
  
 #layout {
-  max-width: 400px;
-  margin: 0 auto; 
+  max-width: 800px;
+  margin: auto; 
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(10, 2fr);
   grid-gap: 10px;
   margin-bottom: 20px;
 }
