@@ -53,7 +53,7 @@ var reserve = {
             uniqueRows.forEach((row) => {
                 const seatData = data.find((seat) => seat.rownum === row && seat.seatno === column);
                 const seat = document.createElement("div");
-                seat.innerHTML = seatData ? seatData.seatid : "";
+                seat.innerHTML = seatData ? seatData.seatdetailid : "";
                 seat.className = "seat";
     
                 if (seatData && seatData.istaken) {
@@ -138,6 +138,10 @@ var reserve = {
                 console.log("API Response:", data);
 
                 if (data && data.length > 0 && data[0].bookingid) {
+
+                    const url = `http://127.0.0.1:5001/payment/${data[0].bookingid}`;
+                    window.location.href = url;
+
                     //alert(`Seats reserved successfully! Booking ID: ${data[0].bookingid}`);
                 } else {
                     alert("Failed to reserve seats.");

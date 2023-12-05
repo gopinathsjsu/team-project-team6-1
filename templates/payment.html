@@ -103,7 +103,7 @@
                     </tr>
                     <tr id = "newcard" hidden>
                         <td><label for="card_number">Card Number:</label></td>
-                        <td><input onChange="enablePaymentbtn();" type="text" id="card_number" name="card_number" placeholder="1234567812345678" pattern="\d{16}" required></td>
+                        <td><input onChange="enablePaymentbtn();" type="text" id="card_number" name="card_number" placeholder="1234567812345678" pattern="^[0-9]{16}$" required></td>
                     </tr>
                     <tr id = "newexp" hidden>
                         <td><label for="expiry_date">Expiry Date:</label></td>
@@ -116,7 +116,7 @@
                     </tr>
                     <tr id = "newcvv" hidden>
                         <td><label for="cvv">CVV:</label></td>
-                        <td><input onChange="enablePaymentbtn();" type="password" id="cvv" name="cvv" pattern="\d{3}" required></td>
+                        <td><input onChange="enablePaymentbtn();" type="password" id="cvv" name="cvv" pattern="^[0-9]{3}$" required></td>
                     </tr>
                     <tr  id = "newsubmit" hidden>
                         <td colspan="2" align="center"><button id="carddetailsbtn" onclick="cardFormSubmit();return false;">Save Payment</button></td>
@@ -124,7 +124,7 @@
                     {% else %}
                     <tr>
                         <td><label for="card_number">Card Number:</label></td>
-                        <td><input onChange="enablePaymentbtn();" type="text" id="card_number" name="card_number" placeholder="1234567812345678" pattern="\d{16}" required></td>
+                        <td><input onChange="enablePaymentbtn();" type="text" id="card_number" name="card_number" placeholder="1234567812345678" pattern="^[0-9]{16}$" required></td>
                     </tr>
                     <tr>
                         <td><label for="expiry_date">Expiry Date:</label></td>
@@ -137,7 +137,7 @@
                     </tr>
                     <tr>
                         <td><label for="cvv">CVV:</label></td>
-                        <td><input onChange="enablePaymentbtn();" type="password" id="cvv" name="cvv" pattern="\d{3}" required></td>
+                        <td><input onChange="enablePaymentbtn();" type="password" id="cvv" name="cvv" pattern="^[0-9]{3}$" required></td>
                     </tr>
                     <tr>
                         <td colspan="2" align="center"><button id="carddetailsbtn" onclick="cardFormSubmit();return false;">Save Payment</button></td>

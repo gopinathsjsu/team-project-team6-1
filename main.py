@@ -149,13 +149,26 @@ def saveBooking():
     userdetails = eval(requestdata["userdetails"].replace("'", "\""))
     #if(userdetails is not None and "card_num" not in userdetails):
 
-    if card_number != "":
+    if card_number != "" and userdetails["userid"] !=0:
         responsedata = dbc.saveCardDetails(card_number, cvv,exp, userdetails["userid"])
         print(responsedata)
     responsedata = dbc.completeBooking(moviedetails["bookingid"], payment, rewardpointsused, moviedetails["seats"])
-    if "error" in responsedata[0]:
-        return responsedata, 400
+    for res in responsedata:
+        if "error" in res:
+            return responsedata, 400
     return responsedata, 200
+
+@app.route("/deleteBooking", methods=["POST"])
+def deleteBooking():
+    requestdata = request.get_json()
+    bookingid = requestdata["bookingid"]
+    responsedata = dbc.deleteBooking(bookingid)
+    for res in responsedata:
+        if "error" in res:
+            return responsedata, 400
+    return responsedata, 200
+
+
 
 #api to add/update movie in schedule
 @app.route("/addMovie", methods=["POST"])

@@ -35,6 +35,7 @@ def seatselection(theaterid, showingdetailid):
       userid = session.get('userid')
    else:
       userid = None
+   session['theater'] = theaterid
    return render_template('seatselection.html', theaterid=theaterid, showingdetailid=showingdetailid, userid=userid)
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -81,10 +82,14 @@ def payment(bookingid):
        moviedetails['multiplex'] = session['multiplex']
        moviedetails['theater'] = session['theater']
    else:
+       return render_template('error2.html')
+   '''
+   else:
        #error remove this part afterwards
        moviedetails['moviename'] = 'Paw Patrol'
        moviedetails['multiplex'] = 'AMC SARATOGA'
        moviedetails['theater'] = 3
+   '''
 
    jsonrequest={"bookingid": bookingid}
    moviedetails['bookingid'] = bookingid
@@ -108,19 +113,22 @@ def payment(bookingid):
 def bookingconfirmation():
    if request.method == "POST":
       jsonrequest = json.dumps(request.get_json())
+      print(type(jsonrequest))
       r = requests.post('http://127.0.0.1:5000/saveBooking', data=jsonrequest, headers= {'Content-Type': 'application/json'})
       if(r.status_code == 200):
-         #session.pop('moviename')
-         #session.pop('multiplex')
-         #session.pop('theater')
+         session.pop('moviename')
+         session.pop('multiplex')
+         session.pop('theater')
          return jsonify({'response': r.text}), 200
       else:
           return jsonify({'response': r.text}), 400
           
    return render_template('confirmation.html')
 
-@app.route('/bookingerror', methods=['POST', 'GET'])
-def bookingerror():
+@app.route('/bookingerror/<bookingid>', methods=['POST', 'GET'])
+def bookingerror(bookingid):
+   jsonrequest = {'bookingid':bookingid}
+   r = requests.post('http://127.0.0.1:5000/deleteBooking', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
    return render_template('error.html')
 
 
@@ -262,10 +270,6 @@ def upgrade_membership():
                                  rewardpoints=user_details['rewardpoints'],movies=pastmovies)
          
 #API to retrive the details of showtimes based on movieid, multiplexid and chosenDate
-# #for bookmoviehtml and testhome integration
-# @app.route("/bookmovie_now/<movieid>")
-# def bookmovie_now(movieid):
-#    return render_template('bookmovie.html',movieid=movieid)
 
 @app.route('/bookmovie/<movieid>', methods=['POST', 'GET'])
 def bookmovie(movieid):
@@ -284,6 +288,7 @@ def bookmovie(movieid):
       multiplexid = request.form.get('multiplexs')
       chosenDate = request.form.get('chosenDate')   
    
+   session['multiplex'] = multiplexid
    
    data1 = {
       "movieid": movieid,
@@ -294,11 +299,13 @@ def bookmovie(movieid):
    headers = {'Content-Type': 'application/json'}
    r = requests.post('http://127.0.0.1:5000/getmovietheaters', json=data1, headers=headers)
    if("error" in r.text):
-      return render_template("error.html")
+      return render_template("error2.html")
    theaters = json.loads(r.text)
    
    # print("showtimes",showtimes)
    # print("showingdetailids",showingdetailids)
+   session['moviename'] = theaters[0]['moviename']
+
        
    return render_template("bookmovie.html",theaters=theaters, multiplexes =multiplexes, chosenDate = datetime.date.today())
 
