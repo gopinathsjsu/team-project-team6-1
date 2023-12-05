@@ -3,34 +3,50 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function loadMultiplexList() {
-    fetch('/multiplexlist')
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            var multiplexDropdown = document.getElementById('multiplex');
-            data.forEach(multiplex => {
-                var option = document.createElement('option');
-                option.value = multiplex.multiplexid;
-                option.textContent = multiplex.multiplexname;
-                multiplexDropdown.appendChild(option);
-            });
+    
+    url = "http://127.0.0.1:5000/multiplexlist";
 
-            multiplexDropdown.addEventListener('change', function () {
-                console.log('Dropdown value changed');
-                var selectedMultiplexId = multiplexDropdown.value;
-                console.log('Selected Multiplex ID:', selectedMultiplexId);
-                loadTheaters(selectedMultiplexId);
-            });
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
 
-            loadTheaters(multiplexDropdown.value);
-        })
-        .catch(error => {
-            console.error('Error fetching multiplex list:', error);
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        var multiplexDropdown = document.getElementById('multiplex');
+        data.forEach(multiplex => {
+        var option = document.createElement('option');
+        option.value = multiplex.multiplexid;
+        option.textContent = multiplex.multiplexname;
+        multiplexDropdown.appendChild(option);
+    });
+
+    multiplexDropdown.addEventListener('change', function () {
+        console.log('Dropdown value changed');
+        var selectedMultiplexId = multiplexDropdown.value;
+        console.log('Selected Multiplex ID:', selectedMultiplexId);
+        loadTheaters(selectedMultiplexId);
         });
+        loadTheaters(multiplexDropdown.value);
+    })
+    .catch(error => {
+        console.error('Error fetching multiplex list:', error);
+    });
 }
 
 function loadTheaters(multiplexId) {
-    fetch('/getalltheaters', {
+    
+    var theaterContainer = document.getElementById('theaterContainer');
+    theaterContainer.innerHTML = '';
+
+    console.log("load theatrers multiplexid",multiplexId)
+
+    url = "http://127.0.0.1:5000/getalltheaters";
+    
+    fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -39,6 +55,7 @@ function loadTheaters(multiplexId) {
     })
         .then(response => response.json())
         .then(data => {
+
             var theaterContainer = document.getElementById('theaterContainer');
             theaterContainer.innerHTML = '';
 
@@ -72,7 +89,10 @@ function loadTheaters(multiplexId) {
                         </div>
                     </div>
                 </div>
-                <button class="save-btn" id="save-btn" onclick="openEditDialog(${multiplexId},${theater.theaterid},'${theater.mshowtimes}','${theater.mmovienames}',${theater.noofseats})">Edit</button>
+                <div class="button-container">
+                    <button class="save-btn" id="save-btn" onclick="openEditDialog(${multiplexId},${theater.theaterid},'${theater.mshowtimes}','${theater.mmovienames}',${theater.noofseats})">Edit</button>
+                    <button class="delete-btn" id="delete-btn" onclcik="deleteTheater(${theater.theaterid})">Delete</button>
+                </div>
                 `;
 
                 theaterContainer.appendChild(theaterBox);
@@ -81,6 +101,27 @@ function loadTheaters(multiplexId) {
         .catch(error => {
             console.error('Error fetching theaters:', error);
         });
+}
+
+function deleteTheater(theaterId) {
+    var url = "http://127.0.0.1:5000/removeTheater";
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            theaterid: theaterId
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Theater deleted successfully:', data);
+    })
+    .catch(error => {
+        console.error('Error deleting theater:', error);
+    });
 }
 
 function openEditDialog(multiplexId, theaterId, mshowtimes, mmovienames, noofseats) {
@@ -94,13 +135,16 @@ function openEditDialog(multiplexId, theaterId, mshowtimes, mmovienames, noofsea
 }
 
 function saveChanges(theaterId) {
+
     var theaterId =  document.getElementById('theaterId').value;
     var showtimes = document.getElementById('showtimes').value;
     var movies = document.getElementById('movies').value;
     var seatingCapacity = document.getElementById('seatingCapacity').value;
     var multiplexId = document.getElementById('multiplexId').value;
 
-    fetch('/addTheater', {
+    url = "http://127.0.0.1:5000/addTheater";
+
+    fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -150,43 +194,54 @@ function addTheater() {
             </div>
         </div>
         <button class="update-btn">Update</button>
+        <button class="close-btn">Close</button>
     `;
     theaterContainer.appendChild(newTheaterBox);
-}
-
-async function addTheater() {
-    const showtimes = document.getElementById("showtimes").value;
-    const movies = document.getElementById("movies").value;
-    const seatingCapacity = document.getElementById("seatingCapacity").value;
-
-    const requestData = {
-        multiplexid: 14, 
-        noofseats: seatingCapacity,
-        theaternumber: 4, 
-        noofrows: 4,  
-        noofcolumns: 5,  
-        movieid: movies,
-        price: "12.00, 12.00, 12.25, 12.25",  
-        showtimes: showtimes
-    };
-    const response = await fetch('/addTheater', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestData)
-    });
-
-    if (response.ok) {
-        const result = await response.json();
-        console.log('Theater added successfully. Theater ID:', result[0].theaterid);
-    } else {
-        console.error('Failed to add theater. Status:', response.status);
-    }
-    document.getElementById("add-theater-dialog").close();
 }
 
 function openDialog() {
     var dialog = document.getElementById("add-theater-dialog");
     dialog.showModal();
+    updateMovieDropdown();
+}
+
+function closeAddTheater() {
+    var dialog = document.getElementById("add-theater-dialog");
+    dialog.close();
+}
+
+function closeEditTheater()
+{
+    var dialog = document.getElementById("edit-theater-dialog");
+    dialog.close();
+}
+
+// Function to fetch current movies and update the dropdown
+function updateMovieDropdown() {
+    var dropdown = document.getElementById("movienames");
+
+    fetch("http://127.0.0.1:5000/currentmovies", {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        dropdown.innerHTML = '';
+
+        var defaultOption = document.createElement('option');
+        defaultOption.text = 'Select a movie';
+        dropdown.add(defaultOption);
+
+        data.forEach(movie => {
+            var option = document.createElement('option');
+            option.value = movie.movieid;
+            option.text = movie.moviename;
+            dropdown.add(option);
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching current movies:', error);
+    });
 }

@@ -70,17 +70,29 @@ def getlocationlist():
     return responsedata, 200
 
 #api to get all multiplexes  
-@app.route("/multiplexlist",methods=["POST", "GET"])
+@app.route("/multiplexlist",methods=["GET"])
 def multiplexlist():
-    locationid = 0
-    if request.method == "POST":
-        requestdata = request.get_json()
-        if 'locationid' in requestdata:
-            locationid = requestdata["locationid"]
+    if(not bool(request.args)) :
+        locationid = 0
+    else:
+        locationid =  request.args.get('locationid', default=0, type=int)
     responsedata = dbc.getMultiplexList(locationid)
+
     if "error" in responsedata[0]:
         return responsedata, 400
     return responsedata, 200
+
+#api to delete movie based on movieid
+@app.route("/removeMovieId", methods=["POST"])
+def removeMoviewithID():
+    requestdata = request.get_json()
+    movieid = requestdata["movieid"]
+    
+    responsedata = dbc.deleteMovie(movieid)
+    
+    if len(responsedata) == 0:
+        return responsedata, 200
+    return responsedata, 400
 
 #api to get all the multiplexes, theater and date information for a particular movie
 @app.route("/getmovietheaters",methods=["GET", "POST"])

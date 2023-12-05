@@ -16,9 +16,18 @@ app.secret_key = 'fwe_5HvBK=9CvoqSD87xm'
 @app.route("/openupgradepage")
 def openregisterpage():
    return render_template('upgrademembership.html')
+
 @app.route("/opensigninpage")
 def opensigninpage():
    return render_template('signin.html')
+
+@app.route('/addmovie')
+def add_edit_movie():
+   return render_template("AddMovie.html")
+
+@app.route('/admindashboard')
+def admindashboard():
+   return render_template("AddTheater.html")
 # @app.route("/")
 # def openadmin():
 #    return render_template('AddTheater.html')
