@@ -80,7 +80,7 @@ def getCurrentMovies():
 
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
 
-                query = f'''SELECT movieid, moviename, runtimeminutes, poster
+                query = f'''SELECT movieid, moviename, runtimeminutes, releasedate, endshowingdate, poster
 	                    FROM movie WHERE releasedate <= CURRENT_DATE AND endshowingdate >= CURRENT_DATE'''
                 
                 cur.execute(query)
@@ -105,7 +105,7 @@ def getUpcomingMovies():
 
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
 
-                query = f'''SELECT movieid, moviename, runtimeminutes, poster
+                query = f'''SELECT movieid, moviename, releasedate, endshowingdate, runtimeminutes, poster
 	                    FROM movie WHERE releasedate > CURRENT_DATE'''
                 
                 cur.execute(query)
@@ -941,7 +941,7 @@ def getTheaterInfo(multiplexid):
                             )sm
 
                             ON sm.theaterid = theater.theaterid
-                            where multiplexid = 1;
+                            where multiplexid = %s;
                             '''
                 
                 cur.execute(query, (multiplexid, ))
@@ -959,8 +959,27 @@ def getTheaterInfo(multiplexid):
             data = json.dumps(data, indent=4, sort_keys=True, default=str) # to deal with date not being JSON serializable
             data = json.loads(data)
             return data
-
-
+        
+#to delete a movie based on movieId
+def deleteMovie(movieid):
+    data = []
+    try:
+        with psycopg2.connect(**params) as conn:
+            with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+                cur.execute("DELETE FROM showingdetails WHERE showingid IN (SELECT showingid FROM showingmaster WHERE movieid = %s)", (movieid,))
+                cur.execute("DELETE FROM showingmaster WHERE movieid = %s", (movieid,))
+                cur.execute("DELETE FROM movie WHERE movieid = %s", (movieid,))
+                
+                conn.commit()
+                data.append({"message": "Movie and related records deleted successfully."})
+    except (Exception, psycopg2.DatabaseError) as error:
+        data.append({"error": "Error in deleteMovie()"})
+        data.append({"error details": str(error)})
+    finally:
+        if conn is not None:
+            conn.close()
+            return data
+        
 # to register a user 
 def registeruser(fullname, phoneno, address, username, password, role):
     data = {}  # Use a dictionary to store the response data
