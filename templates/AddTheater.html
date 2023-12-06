@@ -99,8 +99,7 @@
             
         <h2 class="title">MovieAnytime</h2>
         </div>
-        <div class="navbar">
-            
+        <div class="navbar">            
             <a href="">Logout</a>
             <a href="/opendiscountpage">Configure Discount</a>
             <div class="dropdown">
@@ -109,10 +108,10 @@
               </button>
               <div class="dropdown-content">
                 <a href="/openanalytics1">Summarized by Location</a>
-                <a href="/openanalytics2">Summarized by Movies</a>
-                
-              </div>
+                <a href="/openanalytics2">Summarized by Movies</a>                
+              </div>              
             </div> 
+            <a href="/addmovie">Add/Edit Movie</a>
           </div>
     </header>
     
@@ -126,25 +125,51 @@
     <div class="dialog">
         <dialog id="add-theater-dialog" style="width:50%;background-color:white;border:1px dotted black;">  
             <h2>New Theater</h2>
-        <div class="editable-field" data-field="showtimes">            
-            <div class="editable-container">
-                <label for="showtimes">Showtimes:</label>
-                <input type="text" class="showtimes-input" value="[Add showtimes]" id="showtimes">
-            </div>
-        </div>
+        
         <div class="editable-field" data-field="movies">            
             <div class="editable-container">
-                <label for="movies">Movies Playing:</label>
-                <input type="text" class="movies-input" value="[Add movies]" id="movies">
+                <label for="movies">Multiplex Id:</label>
+                <input type="text" class="showtimes-input" id="multiplexid">
             </div>
         </div>
         <div class="editable-field" data-field="seatingCapacity">            
             <div class="editable-container">
                 <label for="seatingCapacity">Seating Capacity:</label>
-                <input type="text" class="seatingCapacity-input" value="[Add capacity]" id="seatingCapacity">
+                <input type="text" class="showtimes-input" id="seatingCapacity">
             </div>
         </div>
-        <button class="add-btn" id="add-btn" onclick="addTheater()">Add</button>
+        <div class="editable-field" data-field="seatingCapacity">            
+          <div class="editable-container">
+              <label for="noOfColumns">Number of columns</label>
+              <input type="text" class="showtimes-input" id="noOfColumns">
+          </div>
+        </div>
+        <div class="editable-field" data-field="seatingCapacity">            
+          <div class="editable-container">
+              <label for="noOfRows">Number of rows</label>
+              <input type="text" class="showtimes-input" id="noOfRows">
+          </div>
+        </div>
+        <div class="editable-container">
+          <label for="movienames">Movies Playing:</label>
+          <select id="movienames" name="movienames"></select>
+        </div>
+        <div class="editable-field" data-field="showtimes">            
+          <div class="editable-container">
+              <label for="showtimes">price:</label>
+              <input type="text" class="showtimes-input" id="price">
+          </div>
+        </div>
+        <div class="editable-field" data-field="showtimes">            
+          <div class="editable-container">
+              <label for="showtimes">Showtimes:</label>
+              <input type="text" class="showtimes-input" id="showtimes">
+          </div>
+        </div>
+        <div class="button-container">
+          <button class="add-btn" id="add-btn" onclick="addTheater()">Add</button>
+          <button class="close-btn" id="close-btn" onclick="closeAddTheater()">Close</button>
+        </div>
         </dialog>
     </div>
     <div class="dialog">
@@ -164,17 +189,18 @@
                 </div>
         
                 <div class="editable-container">
-                    <label for="mmovienames">Movies Playing:</label>
-                    <input type="text" id="mmovienames">
-                </div>
+                  <label for="movienames">Movies Playing:</label>
+                  <select id="movienames" name="movienames"></select>
+              </div>
                 
                 <div class="editable-container">
                     <label for="noofseats">Seating Capacity:</label>
                     <input type="text" id="noofseats">
                 </div>
                 
-                <div class="editable-container">        
-                    <button class="save-button" id="save-button" onclick="saveChanges()">Save Changes</button><br>
+                <div class="button-container">        
+                    <button class="save-button" id="save-button" onclick="saveChanges()">Save Changes</button>
+                    <button class="close-btn" id="close-button" onclick="closeEditTheater()"> Close</button>
                 <div>
         </dialog>
     </div>

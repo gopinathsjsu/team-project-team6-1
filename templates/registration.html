@@ -30,10 +30,10 @@
     </form>
     <div>
         {% if "duplicate key value violates unique constraint" in message %}
-        
+        <p>Email already exists</p>
         {% else %}
         <p>{{message}}</p>
-    {% endif %}
+        {% endif %}
     </div>
     </div>
     <div class="vertical-line"></div>
