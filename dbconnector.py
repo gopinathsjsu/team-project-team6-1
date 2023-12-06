@@ -932,7 +932,7 @@ def getTheaterInfo(multiplexid):
                                 INNER JOIN(
                                     SELECT showingmaster.theaterid, STRING_AGG(distinct showingmaster.movieid::text, ', ' ORDER BY showingmaster.movieid::text) AS mmovieid,
                                     STRING_AGG(distinct m1.moviename, ', ' ) AS mmovienames,STRING_AGG(distinct showtimes::text, ', ') AS mshowtimes,
-                                    STRING_AGG(distinct price::text , ', ' ) AS prices
+                                    STRING_AGG(distinct price::text , ', ' ) AS prices, STRING_AGG(distinct showingid::text , ', ' ) AS showingid
                                     FROM showingmaster
                                     INNER JOIN (
                                         SELECT moviename, movie.movieid FROM movie
