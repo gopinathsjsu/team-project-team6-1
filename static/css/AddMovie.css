@@ -2,12 +2,6 @@ body {
     font-family: Arial, sans-serif;
     margin: 20px;
 }
-
-.button-container {
-    display: flex; 
-    gap: 10px; 
-}
-
 header {
     text-align: center;
     padding: 10px;
@@ -17,11 +11,10 @@ header {
 .container {
     margin-top: 20px;
 }
-
 .multiplex-dropdown {
     width: 200px;
 }
-.theater-box {
+.movie-box {
     border: 1px solid #ccc;
     padding: 10px;
     margin: 10px;
@@ -37,10 +30,55 @@ header {
     cursor: pointer;
 }
 
-.add-btn, .delete-btn, .save-btn, .add-theater-btn, .close-button{
+.button-container {
+    display: flex; 
+    gap: 10px; 
+}
+
+.close-btn
+{
     display: block;
     margin-top: 10px;
     padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.delete-btn{
+    display: block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.add-btn {
+    display: block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+.save-btn {
+    display: block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.add-movie-btn {
+    display: block;
+    margin-top: 20px;
+    padding: 8px 16px;
     background-color: #333;
     color: #fff;
     border: none;
