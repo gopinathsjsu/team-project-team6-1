@@ -126,6 +126,9 @@ Response format: Response truncated to two records only
 ```yaml
 [
     {
+        "noofrows": 4,
+        "noofcolumns": 5,
+        "price": "12.00, 12.00, 12.25, 12.25",
         "mmovieid": "1, 2, 3",
         "mmovienames": "Creator, Killers Of The Flower Moon, Paw Patrol",
         "mshowtimes": "{10:00:00,12:00:00}, {15:00:00,17:00:00}, {}",
