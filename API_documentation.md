@@ -43,7 +43,7 @@ Request format:
 <summary> Delete showtime</summary>
 
 URL format: POST
-/removeMovie
+/removeShowtime
 
 Request format:
 
