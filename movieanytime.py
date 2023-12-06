@@ -10,7 +10,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
-
+global_ip='127.0.0.1:5000'
 app.secret_key = 'fwe_5HvBK=9CvoqSD87xm'
 
 @app.route("/openupgradepage")
@@ -51,7 +51,7 @@ def seatselection(theaterid, showingdetailid):
 def login():
     if request.method == "POST":
         jsonrequest = json.dumps(request.form)
-        r = requests.post('http://127.0.0.1:5000/signin', data=jsonrequest, headers= {'Content-Type': 'application/json'})
+        r = requests.post(f'http://{global_ip}/signin', data=jsonrequest, headers= {'Content-Type': 'application/json'})
         response = json.loads(r.text)
         print("response of login",response)
         if r.status_code == 200:
@@ -74,7 +74,7 @@ def payment(bookingid):
       userid = session['userid']
       userdetails['userid'] = userid
       jsonrequest={"userid": userid}
-      r = requests.post('http://127.0.0.1:5000/getCardDetails', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+      r = requests.post(f'http://{global_ip}/getCardDetails', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
 
       response = json.loads(r.text)
       if r.status_code == 200:
@@ -102,7 +102,7 @@ def payment(bookingid):
 
    jsonrequest={"bookingid": bookingid}
    moviedetails['bookingid'] = bookingid
-   r = requests.post('http://127.0.0.1:5000/getTransactionDetails', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+   r = requests.post(f'http://{global_ip}/getTransactionDetails', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
 
    response = json.loads(r.text)
    if r.status_code == 200:
@@ -123,7 +123,7 @@ def bookingconfirmation():
    if request.method == "POST":
       jsonrequest = json.dumps(request.get_json())
       print(type(jsonrequest))
-      r = requests.post('http://127.0.0.1:5000/saveBooking', data=jsonrequest, headers= {'Content-Type': 'application/json'})
+      r = requests.post(f'http://{global_ip}/saveBooking', data=jsonrequest, headers= {'Content-Type': 'application/json'})
       if(r.status_code == 200):
          session.pop('moviename')
          session.pop('multiplex')
@@ -137,7 +137,7 @@ def bookingconfirmation():
 @app.route('/bookingerror/<bookingid>', methods=['POST', 'GET'])
 def bookingerror(bookingid):
    jsonrequest = {'bookingid':bookingid}
-   r = requests.post('http://127.0.0.1:5000/deleteBooking', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+   r = requests.post(f'http://{global_ip}/deleteBooking', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
    return render_template('error.html')
 
 
@@ -146,7 +146,7 @@ def register():
    if request.method == "POST":
         jsonrequest = json.dumps(request.form)
         print("jsonreq:",jsonrequest)
-        r = requests.post('http://127.0.0.1:5000/signup', data=jsonrequest, headers= {'Content-Type': 'application/json'})
+        r = requests.post(f'http://{global_ip}/signup', data=jsonrequest, headers= {'Content-Type': 'application/json'})
         print("r.text",r.text)
         data=json.loads(r.text)
         print("data in movie anytime",data)
@@ -168,12 +168,12 @@ def current_movies():
         if session.get('username') :
             print(session['username'])            
         
-        r = requests.get('http://127.0.0.1:5000/currentmovies')
+        r = requests.get(f'http://{global_ip}/currentmovies')
         print(r)
         print(r.text)
         current_movies_json=json.loads(r.text)
         current_movies_featuring=current_movies_json[:4]
-        r_upcoming = requests.get('http://127.0.0.1:5000/upcomingmovies')
+        r_upcoming = requests.get(f'http://{global_ip}/upcomingmovies')
         upcoming_movies_json=json.loads(r_upcoming.text)
         upcoming_movies_featuring=upcoming_movies_json[:4]
       #   it will also have upcoming 4movies
@@ -185,12 +185,12 @@ def current_movies():
 def all_current_movies():
    if request.method == "GET":
         
-        r = requests.get('http://127.0.0.1:5000/currentmovies')
+        r = requests.get(f'http://{global_ip}/currentmovies')
         print(r)
         print(r.text)
         current_movies_json=json.loads(r.text)
         current_movies_featuring=current_movies_json[:4]
-        r_upcoming = requests.get('http://127.0.0.1:5000/upcomingmovies')
+        r_upcoming = requests.get(f'http://{global_ip}/upcomingmovies')
         upcoming_movies_json=json.loads(r_upcoming.text)
         upcoming_movies_featuring=upcoming_movies_json[:4]
    if(session.get('username')):
@@ -203,8 +203,8 @@ def all_current_movies():
 def upcoming_movies1():
    if request.method == "GET":
         
-        r = requests.get('http://127.0.0.1:5000/currentmovies')
-        r_upcoming = requests.get('http://127.0.0.1:5000/upcomingmovies')
+        r = requests.get(f'http://{global_ip}/currentmovies')
+        r_upcoming = requests.get(f'http://{global_ip}/upcomingmovies')
         print(r)
         print(r.text)
         current_movies_json=json.loads(r.text)
@@ -224,17 +224,17 @@ def user_details():
   
             jsonrequest={"username": username}
             
-            r1 = requests.post('http://127.0.0.1:5000/upcomingMovieBookings', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+            r1 = requests.post(f'http://{global_ip}/upcomingMovieBookings', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
             print("upcoming",r1.text)
             futuremoviejson=json.loads(r1.text)
-            r = requests.post('http://127.0.0.1:5000/pastMovieBookings', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+            r = requests.post(f'http://{global_ip}/pastMovieBookings', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
             print("past",r.text)
             pastmoviejson=json.loads(r.text)
          
-            r = requests.post('http://127.0.0.1:5000/profileInfo', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+            r = requests.post(f'http://{global_ip}/profileInfo', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
             print("profile",r.text)
             user_details=json.loads(r.text)
-            r = requests.post('http://127.0.0.1:5000/moviesPast30Days', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+            r = requests.post(f'http://{global_ip}/moviesPast30Days', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
             print("profile",r.text)
             pastmovies=json.loads(r.text)
             # print("userdetails",json.dumps(user_details))
@@ -258,20 +258,20 @@ def upgrade_membership():
          jsonrequest={"username": session.get('username') }
          print("jsonreq",json.dumps(jsonrequest))
 
-         r = requests.post('http://127.0.0.1:5000/upgradeToPremium', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+         r = requests.post(f'http://{global_ip}/upgradeToPremium', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
          print("r.text",r.text)     
          
-         r1 = requests.post('http://127.0.0.1:5000/upcomingMovieBookings', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+         r1 = requests.post(f'http://{global_ip}/upcomingMovieBookings', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
          print("upcoming",r1.text)
          futuremoviejson=json.loads(r1.text)
-         r = requests.post('http://127.0.0.1:5000/pastMovieBookings', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+         r = requests.post(f'http://{global_ip}/pastMovieBookings', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
          print("past",r.text)
          pastmoviejson=json.loads(r.text)
       
-         r = requests.post('http://127.0.0.1:5000/profileInfo', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+         r = requests.post(f'http://{global_ip}/profileInfo', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
          print("profile",r.text)
          user_details=json.loads(r.text)
-         r = requests.post('http://127.0.0.1:5000/moviesPast30Days', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+         r = requests.post(f'http://{global_ip}/moviesPast30Days', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
          print("profile",r.text)
          pastmovies=json.loads(r.text)
          # print("userdetails",json.dumps(user_details))
@@ -287,7 +287,7 @@ def upgrade_membership():
 @app.route('/bookmovie/<movieid>', methods=['POST', 'GET'])
 def bookmovie(movieid):
 
-   r = requests.get('http://127.0.0.1:5000/multiplexlist')
+   r = requests.get(f'http://{global_ip}/multiplexlist')
    print("r.text",r.text)
    multiplexes=json.loads(r.text)
 
@@ -310,7 +310,7 @@ def bookmovie(movieid):
    }
    
    headers = {'Content-Type': 'application/json'}
-   r = requests.post('http://127.0.0.1:5000/getmovietheaters', json=data1, headers=headers)
+   r = requests.post(f'http://{global_ip}/getmovietheaters', json=data1, headers=headers)
    if("error" in r.text):
       return render_template("error2.html")
    theaters = json.loads(r.text)
@@ -324,7 +324,7 @@ def bookmovie(movieid):
 
 @app.route('/openanalytics1', methods=['POST','GET'])
 def get_cities():  
-         r = requests.get('http://127.0.0.1:5000/retrieveAllCities')
+         r = requests.get(f'http://{global_ip}/retrieveAllCities')
          print("r.text",r.text)
          city=json.loads(r.text)
 
@@ -332,7 +332,7 @@ def get_cities():
 @app.route('/openanalytics2', methods=['POST','GET'])
 def get_movie():   
          
-         r = requests.get('http://127.0.0.1:5000/retrieveMoviesPlayedPast90Days')
+         r = requests.get(f'http://{global_ip}/retrieveMoviesPlayedPast90Days')
          print("r.text",r.text)
          movie=json.loads(r.text)
 
@@ -346,13 +346,13 @@ def get_graph():
       jsonrequest={"locationid": location_id}
     
       print("Selected City:", location_id)
-      r = requests.post('http://127.0.0.1:5000/theaterOccupancyInfoByLocation', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+      r = requests.post(f'http://{global_ip}/theaterOccupancyInfoByLocation', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
       print("r.text",r.text)
       data=json.loads(r.text)
       
          
       print("data",data[0])
-      r1= requests.get('http://127.0.0.1:5000/retrieveAllCities')
+      r1= requests.get(f'http://{global_ip}/retrieveAllCities')
       print("r.text",r1.text)
       city=json.loads(r1.text)
       
@@ -391,13 +391,13 @@ def get_graph2():
       jsonrequest={"moviename": selected_moviename}
     
       print("Selected movie:"+ selected_moviename)
-      r = requests.post('http://127.0.0.1:5000/theaterOccupancyInfoByMovie', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+      r = requests.post(f'http://{global_ip}/theaterOccupancyInfoByMovie', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
       print("r.text",r.text)
       data=json.loads(r.text)
       
          
       print("data",data[0])
-      r1= requests.get('http://127.0.0.1:5000/retrieveMoviesPlayedPast90Days')
+      r1= requests.get(f'http://{global_ip}/retrieveMoviesPlayedPast90Days')
       print("r.text",r1.text)
       movie=json.loads(r1.text)
       if("error" in data[0]):
@@ -431,12 +431,12 @@ def get_graph2():
 @app.route('/opendiscountpage', methods=['GET'])
 def open_discount_page():
    
-        r = requests.get('http://127.0.0.1:5000/currentmovies')
+        r = requests.get(f'http://{global_ip}/currentmovies')
         print(r)
         print(r.text)
         current_movies_json=json.loads(r.text)
       #   current_movies_featuring=current_movies_json[:4]
-        r_upcoming = requests.get('http://127.0.0.1:5000/upcomingmovies')
+        r_upcoming = requests.get(f'http://{global_ip}/upcomingmovies')
         print(r_upcoming.text)
         upcoming_movies_json=json.loads(r_upcoming.text)
       #   upcoming_movies_featuring=upcoming_movies_json[:4]
@@ -449,16 +449,16 @@ def set_discount():
    if request.method == "POST":
         jsonrequest = json.dumps(request.form)
         print("jsonreq:",jsonrequest)
-        r = requests.post('http://127.0.0.1:5000/configDiscount', data=jsonrequest, headers= {'Content-Type': 'application/json'})
+        r = requests.post(f'http://{global_ip}/configDiscount', data=jsonrequest, headers= {'Content-Type': 'application/json'})
         print("r.text",r.text)
         data=json.loads(r.text)
         print("data of movieanytime",data)
-        r = requests.get('http://127.0.0.1:5000/currentmovies')
+        r = requests.get(f'http://{global_ip}/currentmovies')
         print(r)
         print(r.text)
         current_movies_json=json.loads(r.text)
       #   current_movies_featuring=current_movies_json[:4]
-        r_upcoming = requests.get('http://127.0.0.1:5000/upcomingmovies')
+        r_upcoming = requests.get(f'http://{global_ip}/upcomingmovies')
         print(r_upcoming.text)
         upcoming_movies_json=json.loads(r_upcoming.text)
       #   upcoming_movies_featuring=upcoming_movies_json[:4]
@@ -478,7 +478,7 @@ def set_discount():
 @app.route("/cancelbooking/<bookingid>")
 def cancelbooking(bookingid):
    jsonrequest={"bookingid": bookingid}
-   r = requests.post('http://127.0.0.1:5000/cancelBooking', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
+   r = requests.post(f'http://{global_ip}/cancelBooking', data=json.dumps(jsonrequest), headers= {'Content-Type': 'application/json'})
    print(r.text)
    return redirect(url_for('user_details'))
 
