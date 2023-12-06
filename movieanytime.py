@@ -149,13 +149,17 @@ def register():
         r = requests.post('http://127.0.0.1:5000/signup', data=jsonrequest, headers= {'Content-Type': 'application/json'})
         print("r.text",r.text)
         data=json.loads(r.text)
-        if("error" in r.text ):
-           return render_template('registration.html',message=data['error_details'])
-        #if successful
-        #render_template(main.html)
-        #else
-        #error screen
-   return render_template('registration.html')
+        print("data in movie anytime",data)
+        
+        if 'error' in data:
+            
+            error_details = data['error_details']
+            print("error details printing",error_details)
+            return render_template('registration.html',message=error_details)
+            
+        else:
+          
+            return render_template('registration.html',message="Registration Successfull you can login")
 
 @app.route('/', methods=['GET'])
 def current_movies():
