@@ -265,12 +265,15 @@ def addTheater():
     movieid = requestdata["movieid"]# comma seperated string
     price = requestdata["price"]# comma seperated string
     showtimes = requestdata["showtimes"]# string of set
+
+    print(requestdata)
     
     if 'theaterid' in requestdata:
         theaterid = requestdata["theaterid"]
         responsedata = dbc.updateTheater(theaternumber, theaterid)
         if 'showingid' in requestdata:
             showingid = requestdata["showingid"]
+            
             data, showingdetails = dbc.updateshowingmaster(movieid, showtimes, theaterid, noofseats, showingid)
             data, seats = dbc.getseats(theaterid)
             dbc.createSeatDetails(seats, showingdetails)
@@ -292,6 +295,7 @@ def getalltheaters():
 
     multiplexid = requestdata["multiplexid"]
     responsedata = dbc.getTheaterInfo(multiplexid)
+    print(responsedata)
 
     if "error" in responsedata[0]:
         return responsedata, 400

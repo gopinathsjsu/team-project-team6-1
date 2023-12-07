@@ -116,19 +116,23 @@ function loadTheaterDropdown(selectedMultiplexId) {
                         </div>
                         <div>
                             <label for="price">mmovienames:</label>
-                            <input type="text" name="movienames" value=${theater.mmovienames}>
+                            <input type="text" name="movienames" value="${theater.mmovienames}">
                         </div>
                         <div>
                             <label for="price">mmovienames:</label>
-                            <input type="text" name="movieid" value=${theater.mmovieid}>
+                            <input type="text" name="movieid" value="${theater.mmovieid}">
                         </div>
                         <div>
                             <label for="price">noofcolumns:</label>
-                            <input type="text" name="price" value=${theater.prices}>
+                            <input type="text" name="price" value="${theater.prices}">
                         </div>
                         <div>
                             <label for="price">noofcolumns:</label>
-                            <input type="text" name="mshowtimes" value=${theater.mshowtimes}>
+                            <input type="text" name="mshowtimes" value="${theater.mshowtimes}">
+                        </div>
+                        <div hidden>
+                            <label for="price">noofcolumns:</label>
+                            <input type="text" name="xshowingid" value="${theater.showingid}">
                         </div>
                         <div class="button-conatiner">
                     <button class="save-button" type="button" onclick="movieInTheater('formTheaterId_${theater.theaterid}')">update</button>
@@ -164,6 +168,7 @@ function movieInTheater(formId) {
     var movieId = formData.get('movieid');
     var price = formData.get('price');
     var showtimes = formData.get('mshowtimes');
+    var showingidList = formData.get("xshowingid")
 
     var updateData = {
         "theaterid": theaterId,
@@ -175,7 +180,8 @@ function movieInTheater(formId) {
         "noofcolumns": noOfColumns,
         "movieid": movieId,
         "price": price,
-        "showtimes": showtimes
+        "showtimes": showtimes, 
+        "showingid": showingidList
     };
     
     updateTheaterAPI(updateData);
