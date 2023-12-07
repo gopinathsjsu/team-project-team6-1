@@ -137,7 +137,7 @@ function loadMovies() {
                 <div class="editable-field" data-field="poster">                    
                     <div class="editable-container">                        
                         <div name="endshowingdate" id="poster">
-                            <label for="poster">End showing date ${movie.poster} mins</label>
+                            <label for="poster">Poster: ${movie.poster} </label>
                         </div>
                     </div>
                 </div>
@@ -214,3 +214,45 @@ function addMovie() {
     });
 }
 
+function saveChanges()
+{
+    var movieId = document.getElementById('editmovieid').value;
+    var movieName = document.getElementById('editmoviename').value;
+    var runtimeMinutes = document.getElementById('editruntimeminutes').value;
+    var releaseDate = document.getElementById('editreleasedate').value;
+    var endShowingDate = document.getElementById('editendshowingdate').value;
+    var poster = document.getElementById('editposter').value;
+
+
+    var requestBody = {
+        "movieid": movieId,
+        "moviename": movieName,
+        "runtimeminutes": runtimeMinutes,
+        "releasedate": releaseDate,
+        "endshowingdate": endShowingDate,
+        "poster" : poster
+    };
+
+    console.log("Request body",requestBody)
+
+    fetch(`${baseURL}/addMovie`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+    })
+
+    .then(response => response.json())
+    .then(data => {
+        console.log('Updated movie successfully, API Response:', data);
+        closeEditDialog();
+    })
+
+    .catch(error => {
+        console.error('Error:', error);
+    });
+    
+    closeEditDialog();
+
+}
