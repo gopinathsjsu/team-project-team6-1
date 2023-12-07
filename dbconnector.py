@@ -131,9 +131,9 @@ def getMultiplexList(locationid):
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
 
                 if(locationid ==0):
-                    query = f'''SELECT multiplexid, multiplexname FROM multiplex'''
+                    query = f'''SELECT multiplexid, multiplexname, address FROM multiplex'''
                 else:
-                    query = f'''SELECT multiplexid, multiplexname FROM multiplex WHERE locationid ={locationid}'''
+                    query = f'''SELECT multiplexid, multiplexname, address FROM multiplex WHERE locationid ={locationid}'''
 
                 
                 cur.execute(query)
@@ -234,7 +234,7 @@ def getListofAllLocations():
     try:
         with psycopg2.connect(**params) as conn:
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
-                query = f'''SELECT locationid, city FROM location'''
+                query = f'''SELECT locationid, city, postalcode FROM location'''
                 
                 cur.execute(query)
                 data = cur.fetchall()
@@ -540,25 +540,33 @@ def createTheater(multiplexid, noofseats, theaternumber, noofrows, noofcolumns, 
 def createshowingmaster(movieid, showtimes, price, theaterid, no_seats, seats):
     data = []
     values = []
+    movies = [int(x) for x in movieid]
     try:
         with psycopg2.connect(**params) as conn:
 
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
-                movies = movieid.split(",")
-                showtimesarr = showtimes.split(",")
-                prices = price.split(",")
+                # movies = movieid.split(",")
+                # showtimesarr = showtimes.split(",")
+                # prices = price.split(",")
+                
                 prev = 0
                 s = 0
 
                 for i in range(0, len(movies)):
+                    print("movies[i]",movies[i])
                     if(movies[i] == prev):
                         query= f'''UPDATE showingmaster SET showtimes = array_append(showtimes,%s) WHERE showingid = %s'''
-                        cur.execute(query,(showtimesarr[i],s))
+                        cur.execute(query,(showtimes[i],s))
                     else:
                         prev = movies[i]
+                        print("prev", type(prev), prev)
+                        print("thaterid", theaterid)
+                        print("movie", movies[i])
+                        print("prices",price[i])
                         query = f'''INSERT INTO showingmaster(theaterid, movieid, price, showtimes)  VALUES (%s, %s, %s, Array [%s]) RETURNING showingid;'''
-                        cur.execute(query,(theaterid, movies[i], prices[i], showtimesarr[i]))
+                        cur.execute(query,(theaterid, movies[i], price[i], showtimes[i]))
                         data = cur.fetchall()
+                        print("executed showing master")
                     if len(data) ==0:
                         data.append({"error":"Record not created"})
                         data.append({"error details": "showingmaster record not created"})
@@ -567,7 +575,7 @@ def createshowingmaster(movieid, showtimes, price, theaterid, no_seats, seats):
                         query = f'''INSERT INTO showingdetails(showingid, showdate, showtime, discount, seatsavailable, seatstaken)
 	                                VALUES (%s, %s, %s, %s, %s, %s) RETURNING showingdetailid;'''
                         for j in range(10):
-                            cur.execute(query,(s, datetime.date.today()+ datetime.timedelta(j), showtimesarr[i], "$0.00", no_seats, 0))
+                            cur.execute(query,(s, datetime.date.today()+ datetime.timedelta(j), showtimes[i], "$0.00", int(no_seats), 0))
                             data2 = cur.fetchall()
                             values.append(data2[0]["showingdetailid"])
     except (Exception, psycopg2.DatabaseError) as error:
@@ -584,10 +592,10 @@ def createSeat(theaterid, num_row, num_col):
     try:
         with psycopg2.connect(**params) as conn:
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
-                for i in range(0, num_row):
-                    for j in range(0, num_col):
+                for i in range(0, int(num_row)):
+                    for j in range(0, int(num_col)):
                         query = f'''INSERT INTO seat(rownum, seatno, theaterid) VALUES (%s, %s, %s) RETURNING seatid;'''
-                        cur.execute(query,(i, j, theaterid))
+                        cur.execute(query,(i, j, int(theaterid)))
                         data = cur.fetchall()
                         seatarr.append(data[0]["seatid"])
     except (Exception, psycopg2.DatabaseError) as error:
@@ -703,6 +711,7 @@ def updateTheater(theaternumber, theaterid):
                 cur.execute(query, (theaternumber, theaterid))
 
                 data = cur.fetchall()
+                print("executed update theater")
                 if len(data) ==0:
                     data.append({"error":"Record not updated"})
                     data.append({"error details": "Theater record not updated"})
@@ -722,20 +731,20 @@ def updateshowingmaster(movieid, showtimes, theaterid, noofseats, showingid):
         with psycopg2.connect(**params) as conn:
 
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
-                movies = movieid.split(",")
-                showtimesarr = showtimes.split(",")
-                showingidarr = showingid.split(",")
+                # movies = movieid.split(",")
+                # showtimesarr = showtimes.split(",")
+                # showingidarr = showingid.split(",")
                 prev = 0
                 s = 0
 
-                for i in range(0, len(movies)):
-                    if(movies[i] == prev):
+                for i in range(0, len(movieid)):
+                    if(movieid[i] == prev):
                         query= f'''UPDATE showingmaster SET showtimes = array_append(showtimes,%s) WHERE showingid = %s'''
-                        cur.execute(query,(showtimesarr[i],s))
+                        cur.execute(query,(showtimes[i],s))
                     else:
-                        prev = movies[i]
+                        prev = movieid[i]
                         query = f'''UPDATE showingmaster SET theaterid =%s, movieid =%s, showtimes = Array [%s] WHERE showingid = %s RETURNING showingid;'''
-                        cur.execute(query,(theaterid, movies[i], showtimesarr[i], showingidarr[i]))
+                        cur.execute(query,(theaterid, movieid[i], showtimes[i], showingid[i]))
                         data = cur.fetchall()
                     if len(data) ==0:
                         data.append({"error":"Record not updated"})
@@ -748,9 +757,10 @@ def updateshowingmaster(movieid, showtimes, theaterid, noofseats, showingid):
                         query = f'''INSERT INTO showingdetails(showingid, showdate, showtime, discount, seatsavailable, seatstaken)
 	                                VALUES (%s, %s, %s, %s, %s, %s) RETURNING showingdetailid;'''
                         for j in range(10):
-                            cur.execute(query,(s, datetime.date.today()+ datetime.timedelta(j), showtimesarr[i], "$0.00", noofseats, 0))
+                            cur.execute(query,(s, datetime.date.today()+ datetime.timedelta(j), showtimes[i], "$0.00", noofseats, 0))
                             data2 = cur.fetchall()
                             values.append(data2[0]["showingdetailid"])
+                        print("executed showing master")
     except (Exception, psycopg2.DatabaseError) as error:
         print(str(error))
         data.append({"error":"Error in updateshowingmaster()"})

@@ -28,6 +28,7 @@ def add_edit_movie():
 @app.route('/admindashboard')
 def admindashboard():
    return render_template("AddTheater.html")
+
 # @app.route("/")
 # def openadmin():
 #    return render_template('AddTheater.html')
@@ -36,6 +37,10 @@ def admindashboard():
 @app.route("/register_now")
 def register_now():
    return render_template('registration.html')
+
+@app.route("/updateTheater")
+def updateTheater():
+   return render_template('UpdateTheater.html')
 
 # for bookmovie.html and seatselection.html Integration
 @app.route("/seatselection/<theaterid>/<showingdetailid>")

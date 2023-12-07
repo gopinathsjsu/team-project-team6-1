@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     loadMultiplexList();
+    // loadTheaterDropdown();
 });
 
 function loadMultiplexList() {
@@ -28,80 +29,362 @@ function loadMultiplexList() {
         console.log('Dropdown value changed');
         var selectedMultiplexId = multiplexDropdown.value;
         console.log('Selected Multiplex ID:', selectedMultiplexId);
-        loadTheaters(selectedMultiplexId);
-        });
-        loadTheaters(multiplexDropdown.value);
+        loadTheaterDropdown(selectedMultiplexId);
+        });        
     })
     .catch(error => {
         console.error('Error fetching multiplex list:', error);
     });
 }
 
-function loadTheaters(multiplexId) {
-    
+function loadTheaterDropdown(selectedMultiplexId) {
+    if(selectedMultiplexId == null) {
+        var multiplexDropdown = document.getElementById('multiplex');
+        selectedMultiplexId = multiplexDropdown.value;
+    }
+    // var theaterDropdown = document.getElementById('theater');
     var theaterContainer = document.getElementById('theaterContainer');
+
+    // Clear existing options and containers
+    // theaterDropdown.innerHTML = '';
     theaterContainer.innerHTML = '';
 
-    console.log("load theatrers multiplexid",multiplexId)
+    var url = "http://127.0.0.1:5000/getalltheaters";
+    var requestData = {
+        "multiplexid": selectedMultiplexId
+    };
 
-    url = "http://127.0.0.1:5000/getalltheaters";
-    
     fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ multiplexid: multiplexId }),
+        body: JSON.stringify(requestData),
     })
-        .then(response => response.json())
-        .then(data => {
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
 
-            var theaterContainer = document.getElementById('theaterContainer');
-            theaterContainer.innerHTML = '';
+        data.forEach(theater => {
+            // Create a container for each theater
+            var theaterContainerDiv = document.createElement('div');
+            theaterContainerDiv.id = 'theaterContainer_' + theater.theaterid; // Unique ID for each container
+            theaterContainerDiv.className =""
+            theaterContainer.appendChild(theaterContainerDiv);
 
-            data.forEach(theater => {
-                var theaterBox = document.createElement('div');
-                theaterBox.classList.add('theater-box');
+            // Create an option for each theater in the dropdown
+            // var option = document.createElement('option');
+            // option.value = theater.theaterid;
+            // option.textContent = 'Theater ' + theater.theaternumber;
+            // theaterDropdown.appendChild(option);
 
-                theaterBox.innerHTML = `
-                <h2>Theater ${theater.theaternumber}</h2>
-                <div class="editable-field" data-field="showtimes">
-                    <div class="editable-container">                                               
-                        <div contenteditable="false" id="showtimes">
-                            <label for="showtimes">Showtimes :</label> 
-                            ${theater.mshowtimes}
-                        </div>                        
+            // Populate the theater container with relevant information
+            theaterContainerDiv.innerHTML = `
+                <form id="formTheaterId_${theater.theaterid}" class="theater-form"> 
+                    <div>
+                        <label for="theaterid">theaterid:</label>
+                        <input type="text" name="theaterid" style="width:10%;" value=${theater.theaterid} readonly>
                     </div>
-                </div>
-                <div class="editable-field" data-field="movies">
-                    <div class="editable-container">                        
-                        <div contenteditable="false" id="movies">
-                            <label for="movies">Movies Playing :</label>
-                            ${theater.mmovienames}
-                        </div>
+                    <div>
+                        <label for="price">showingid:</label>
+                        <input type="text" name="showingid" style="width:10%;" value=${theater.showingid} readonly>
+                    </div>                    
+                    <div>
+                        <label for="price">multiplexid:</label>
+                        <input type="text" name="multiplexid" style="width:10%;" value=${theater.multiplexid} readonly>
                     </div>
-                </div>
-                <div class="editable-field" data-field="seatingCapacity">                    
-                    <div class="editable-container">                        
-                        <div name="seatingCapacity" id="seatingCapacity">
-                            <label for="seatingCapacity">Seating Capacity :</label>
-                            ${theater.noofseats}
-                        </div>
+                    <div>
+                        <label for="price">theaternumber:</label>
+                        <input type="text" name="theaternumber" style="width:10%;" value=${theater.theaternumber} readonly>
                     </div>
-                </div>
-                <div class="button-container">
-                    <button class="save-btn" id="save-btn" onclick="openEditDialog(${multiplexId},${theater.theaterid},'${theater.mshowtimes}','${theater.mmovienames}',${theater.noofseats})">Edit</button>
-                    <button class="delete-btn" id="delete-btn" onclcik="deleteTheater(${theater.theaterid})">Delete</button>
-                </div>
-                `;
-
-                theaterContainer.appendChild(theaterBox);
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching theaters:', error);
+                    <div>
+                        <label for="price">noofseats:</label>
+                        <input type="text" name="noofseats" style="width:10%;" value=${theater.noofseats} readonly>
+                    </div>
+                    <div>
+                        <label for="price">noofrows:</label>
+                        <input type="text" name="noofrows" style="width:10%;" value=${theater.noofrows} readonly>
+                    </div>
+                    <div>
+                        <label for="price">noofcolumns:</label>
+                        <input type="text" name="noofcolumns" style="width:10%;" value=${theater.noofcolumns} readonly>
+                    </div>
+                    <div>
+                        <label for="price">mmovienames:</label>
+                        <input type="text" name="movienames" style="width:10%;" value=${theater.mmovienames}>
+                    </div>
+                    <div>
+                        <label for="price">mmovienames:</label>
+                        <input type="text" name="movieid" style="width:10%;" value=${theater.mmovieid}>
+                    </div>
+                    <div>
+                        <label for="price">noofcolumns:</label>
+                        <input type="text" name="price" style="width:10%;" value=${theater.prices}>
+                    </div>
+                    <div>
+                        <label for="price">noofcolumns:</label>
+                        <input type="text" name="mshowtimes" style="width:10%;" value=${theater.mshowtimes}>
+                    </div>
+                    <button type="button" onclick="movieInTheater('formTheaterId_${theater.theaterid}')">update</button>
+                    <button type="button" >Delete</button>
+                </form>
+            `;
         });
+    })
+    .catch(error => {
+        console.error('Error fetching theater list:', error);
+    });
 }
+
+function movieInTheater(formId) {
+
+    var form = document.getElementById(formId);
+    console.log(form);
+    var formData = new FormData(form);
+
+    formData.forEach((value, key) => {
+        console.log(`${key}: ${value}`);
+    });
+
+    var theaterId = formData.get('theaterid');
+    var showingId = formData.get('showingid');
+    var multiplexId = formData.get('multiplexid');
+    var noOfSeats = formData.get('noofseats');
+    var theaterNumber = formData.get('theaternumber');
+    var noOfRows = formData.get('noofrows');
+    var noOfColumns = formData.get('noofcolumns');
+    var movieId = formData.get('movieid');
+    var price = formData.get('price');
+    var showtimes = formData.get('mshowtimes');
+
+    var updateData = {
+        "theaterid": theaterId,
+        "showingid": showingId,
+        "multiplexid": multiplexId,
+        "noofseats": noOfSeats,
+        "theaternumber": theaterNumber,
+        "noofrows": noOfRows,
+        "noofcolumns": noOfColumns,
+        "movieid": movieId,
+        "price": price,
+        "showtimes": showtimes
+    };
+    
+    updateTheaterAPI(updateData);
+}
+
+function updateTheaterAPI(updateData) {
+
+    var updateUrl = "http://127.0.0.1:5000/addTheater";
+
+    fetch(updateUrl, {
+        method: 'POST', 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updateData),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Theater updated successfully:', data);
+    })
+    .catch(error => {
+        console.error('Error updating theater:', error);
+    });
+}
+            // theaterContainerDiv.innerHTML = `
+
+//             <form id = "formTheaterId_${theater.theaterid}"> 
+//                  <label for="theaterid" >theaterid:</label>
+//                 <input type="text" name="price" style="width:10%;" value=${theater.theaterid} readonly>
+//                 <label for="price" >showingid:</label>
+//                 <input type="text" name="price" style="width:10%;" value=${theater.showingid} readonly>
+//                 <label for="price" >mmovienames:</label>
+//                 <input type="text" name="price" style="width:10%;" value=${theater.mmovienames} readonly>
+//                 <label for="price" >multiplexid:</label>
+//                 <input type="text" name="price" style="width:10%;" value=${theater.multiplexid} readonly>
+//                 <label for="price" >theaternumber:</label>
+//                 <input type="text" name="price" style="width:10%;" value=${theater.theaternumber} readonly>
+//                 <label for="price" >noofcolumns:</label>
+//                 <input type="text" name="price" style="width:10%;" value=${theater.noofcolumns} readonly>
+//                 <label for="theaterid" >theaterid:</label>
+//                 <input type="text" name="price" style="width:10%;" value=${theater.theaterid} readonly>
+
+//                 <button type="button" onclick="movieInTheater(formTheaterId_${theater.theaterid})">update</button>
+//             <form>
+//                 <!-- Add more information as needed -->
+//             `;
+//         });
+//     })
+//     .catch(error => {
+//         console.error('Error fetching theater list:', error);
+//     });
+// }
+
+// function movieInTheater(formId) {
+//     var form = document.getElementById("${formId}");
+//     const formData = new FormData(form);
+//     console.log(formData);
+
+// }
+// function loadTheaterDropdown(multiplexId)
+// {
+//     url = "http://127.0.0.1:5000/getalltheaters";
+    
+//     const requestData = {
+//         multiplexid: multiplexId,
+//     };
+
+//     fetch(url, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(requestData),
+//     })
+
+//     .then(response => response.json())
+//     .then(data => {
+//         console.log(data);
+
+//         var theaterDropdown = document.getElementById('theaterid');
+
+//         theaterDropdown.innerHTML = '';
+
+//         console.log("theater dropdown", theaterDropdown)
+//         data.forEach(theater => {
+//         var option = document.createElement('option');
+//         option.value = theater.theaterid;
+//         option.textContent = theater.theaternumber;
+//         theaterDropdown.appendChild(option);
+//     });
+
+//     theaterDropdown.addEventListener('change', function () {
+//         console.log('Dropdown value changed');
+//         var selectedTheaterId = theaterDropdown.value;
+//         console.log('Selected Theater ID:', selectedTheaterId);
+//         });
+//     })
+//     .catch(error => {
+//         console.error('Error fetching Theater list:', error);
+//     });   
+// }
+
+// function loadTheaters(multiplexId) {
+    
+//     var theaterContainer = document.getElementById('theaterContainer');
+//     theaterContainer.innerHTML = '';
+
+//     console.log("load theatrers multiplexid",multiplexId)
+
+//     url = "http://127.0.0.1:5000/getalltheaters";
+    
+//     fetch(url, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({ multiplexid: multiplexId }),
+//     })
+//         .then(response => response.json())
+//         .then(data => {
+
+//             var theaterContainer = document.getElementById('theaterContainer');
+//             theaterContainer.innerHTML = '';
+
+//             data.forEach(theater => {
+//                 var theaterBox = document.createElement('div');
+//                 theaterBox.classList.add('theater-box');
+
+//                 theaterBox.innerHTML = `
+//                 <h2 id="theaternumber" >Theater ${theater.theaternumber}</h2>
+//                 <div class="editable-field" data-field="showtimes">
+//                     <div class="editable-container">                                               
+//                         <div contenteditable="false" id="theaterid">
+//                             <label for="theaterid">Theater Id :</label> 
+//                             ${theater.theaterid}
+//                         </div>                        
+//                     </div>
+//                 </div>
+//                 <div class="editable-field" data-field="showingid">
+//                     <div class="editable-container">                        
+//                         <div contenteditable="false" id="showingid">
+//                             <label for="showingid">Showing Id :</label>
+//                             ${theater.showingid}
+//                         </div>
+//                     </div>
+//                 </div>
+//                 <div class="editable-field" data-field="noofseats">                    
+//                     <div class="editable-container">                        
+//                         <div name="noofseats" id="noofseats">
+//                             <label for="noofseats">Seating Capacity :</label>
+//                             ${theater.noofseats}
+//                         </div>
+//                     </div>
+//                 </div>
+//                 <div class="editable-field" data-field="noofrows">                    
+//                     <div class="editable-container">                        
+//                         <div name="noofrows" id="noofrows">
+//                             <label for="noofrows">number of rows :</label>
+//                             ${theater.noofrows}
+//                         </div>
+//                     </div>
+//                 </div>
+//                 <div class="editable-field" data-field="seatingCapacity">                    
+//                     <div class="editable-container">                        
+//                         <div name="noofcolumns" id="noofcolumns">
+//                             <label for="noofcolumns">no of columns :</label>
+//                             ${theater.noofcolumns}
+//                         </div>
+//                     </div>
+//                 </div>
+//                 <div class="editable-field" data-field="mmovieid">                    
+//                     <div class="editable-container">                        
+//                         <div name="mmovieid" id="mmovieid">
+//                             <label for="mmovieid">movieid :</label>
+//                             ${theater.mmovieid}
+//                         </div>
+//                     </div>
+//                 </div>
+//                 <div class="editable-field" data-field="mmovienames">                    
+//                     <div class="editable-container">                        
+//                         <div name="mmovienames" id="mmovienames">
+//                             <label for="mmovienames">movienames :</label>
+//                             ${theater.mmovienames}
+//                         </div>
+//                     </div>
+//                 </div>
+//                 <div class="editable-field" data-field="prices">                    
+//                     <div class="editable-container">                        
+//                         <div name="seatingCapacity" id="prices">
+//                             <label for="prices">Prices:</label>
+//                             ${theater.prices}
+//                         </div>
+//                     </div>
+//                 </div>
+//                 <div class="editable-field" data-field="mshowtimes">                    
+//                     <div class="editable-container">                        
+//                         <div name="mshowtimes" id="mshowtimes">
+//                             <label for="mshowtimes">Showtimes :</label>
+//                             ${theater.mshowtimes}
+//                         </div>
+//                     </div>
+//                 </div>
+//                 <div class="button-container">
+//                     <button class="save-btn" id="save-btn" onclick="openEditDialog(${theater.theaternumber},${theater.theaterid},${theater.showingid},${theater.noofseats},${theater.noofrows},${theater.noofcolumns},
+//                         ${theater.mmovieid}, '${theater.mmovienames}','${theater.prices}','${theater.mshowtimes}')">Edit</button>
+//                     <button class="delete-btn" id="delete-btn" onclcik="deleteTheater(${theater.theaterid})">Delete</button>
+//                 </div>
+//                 `;
+
+//                 theaterContainer.appendChild(theaterBox);
+//             });
+//         })
+//         .catch(error => {
+//             console.error('Error fetching theaters:', error);
+//         });
+// }
+
 
 function deleteTheater(theaterId) {
     var url = "http://127.0.0.1:5000/removeTheater";
@@ -124,13 +407,20 @@ function deleteTheater(theaterId) {
     });
 }
 
-function openEditDialog(multiplexId, theaterId, mshowtimes, mmovienames, noofseats) {
+function openEditDialog(theaternumber,theaterid,showingid,noofseats, noofrows, noofcolumns
+    ,mmovieid,mmovienames,prices,mshowtimes) {
     var dialog = document.getElementById("edit-theater-dialog");
-    document.getElementById("theaterId").value = theaterId;
-    document.getElementById("multiplexId").value = multiplexId;
-    document.getElementById("mshowtimes").value = mshowtimes;
+    document.getElementById("theaternumber").value = theaternumber;
+    document.getElementById("theaterid").value = theaterid;
+    document.getElementById("showingid").value = showingid;
     document.getElementById("mmovienames").value = mmovienames;
     document.getElementById("noofseats").value = noofseats;
+    document.getElementById("noofrows").value = noofrows;
+    document.getElementById("noofcolumns").value = noofcolumns;
+    document.getElementById("mmovieid").value = mmovieid;
+    document.getElementById("mmovienames").value = mmovienames;
+    document.getElementById("prices").value = prices;
+    document.getElementById("mshowtimes").value = mshowtimes;
     dialog.showModal();
 }
 
@@ -166,39 +456,6 @@ function saveChanges(theaterId) {
     });
 }
 
-function addTheater() {
-    var theaterContainer = document.getElementById('theaterContainer');
-    var newTheaterBox = document.createElement('div');
-    newTheaterBox.className = 'theater-box';
-    newTheaterBox.innerHTML = `
-        <h2>New Theater</h2>
-        <div class="editable-field" data-field="showtimes">
-            <label for="showtimes">Showtimes:</label>
-            <div class="editable-container">
-                <input type="text" class="showtimes-input" value="[Add showtimes]" id="showtimes" readonly>
-                <span class="pen-icon" onclick="toggleEditable('showtimes')">✎</span>
-            </div>
-        </div>
-        <div class="editable-field" data-field="movies">
-            <label for="movies">Movies Playing:</label>
-            <div class="editable-container">
-                <input type="text" class="movies-input" value="[Add movies]" id="movies" readonly>
-                <span class="pen-icon" onclick="toggleEditable('movies')">✎</span>
-            </div>
-        </div>
-        <div class="editable-field" data-field="seatingCapacity">
-            <label for="seatingCapacity">Seating Capacity:</label>
-            <div class="editable-container">
-                <input type="text" class="seatingCapacity-input" value="[Add capacity]" id="seatingCapacity" readonly>
-                <span class="pen-icon" onclick="toggleEditable('seatingCapacity')">✎</span>
-            </div>
-        </div>
-        <button class="update-btn">Update</button>
-        <button class="close-btn">Close</button>
-    `;
-    theaterContainer.appendChild(newTheaterBox);
-}
-
 function openDialog() {
     var dialog = document.getElementById("add-theater-dialog");
     dialog.showModal();
@@ -216,7 +473,6 @@ function closeEditTheater()
     dialog.close();
 }
 
-// Function to fetch current movies and update the dropdown
 function updateMovieDropdown() {
     var dropdown = document.getElementById("movienames");
 
