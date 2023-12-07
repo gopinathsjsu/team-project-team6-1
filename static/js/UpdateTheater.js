@@ -92,10 +92,12 @@ function submitForm(event) {
     let movieList = formData.getAll("movieid")
     let priceList = formData.getAll("price")
     let showtimesList = formData.getAll("showtimes")
+    let showingidList = formData.getAll("xshowingid")
 
     console.log(movieList)
     console.log(priceList)
     console.log(showtimesList)
+    console.log(showingidList)
     console.log(form);
 
     const formObject = {};
@@ -118,7 +120,8 @@ function submitForm(event) {
         noofcolumns: formObject.noofcolumns,
         movieid: movieList,
         price: priceList,
-        showtimes: showtimesList
+        showtimes: showtimesList,
+        showingid: showingidList,
     };
     console.log("request data for adding a theater",request)
 

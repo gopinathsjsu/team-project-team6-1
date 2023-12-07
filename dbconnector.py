@@ -530,6 +530,7 @@ def createTheater(multiplexid, noofseats, theaternumber, noofrows, noofcolumns, 
                     data.append({"error":"Record not created"})
                     data.append({"error details": "Theater record not created"})
     except (Exception, psycopg2.DatabaseError) as error:
+        print(str(error))
         data.append({"error":"Error in createTheater()"})
         data.append({"error details": str(error)})
     finally:
@@ -579,6 +580,7 @@ def createshowingmaster(movieid, showtimes, price, theaterid, no_seats, seats):
                             data2 = cur.fetchall()
                             values.append(data2[0]["showingdetailid"])
     except (Exception, psycopg2.DatabaseError) as error:
+        print(str(error))
         data.append({"error":"Error in createshowingmaster()"})
         data.append({"error details": str(error)})
     finally:
@@ -717,6 +719,7 @@ def updateTheater(theaternumber, theaterid):
                     data.append({"error details": "Theater record not updated"})
                 
     except (Exception, psycopg2.DatabaseError) as error:
+        print(str(error))
         data.append({"error":"Error in updateTheater()"})
         data.append({"error details": str(error)})
     finally:
@@ -731,36 +734,51 @@ def updateshowingmaster(movieid, showtimes, theaterid, noofseats, showingid):
         with psycopg2.connect(**params) as conn:
 
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
-                # movies = movieid.split(",")
-                # showtimesarr = showtimes.split(",")
-                # showingidarr = showingid.split(",")
+                movies = movieid.split(",")
+                showtimesarr = showtimes.split(",")
+                showingidarr = showingid.split(",")
                 prev = 0
                 s = 0
 
-                for i in range(0, len(movieid)):
-                    if(movieid[i] == prev):
-                        query= f'''UPDATE showingmaster SET showtimes = array_append(showtimes,%s) WHERE showingid = %s'''
-                        cur.execute(query,(showtimes[i],s))
-                    else:
-                        prev = movieid[i]
-                        query = f'''UPDATE showingmaster SET theaterid =%s, movieid =%s, showtimes = Array [%s] WHERE showingid = %s RETURNING showingid;'''
-                        cur.execute(query,(theaterid, movieid[i], showtimes[i], showingid[i]))
-                        data = cur.fetchall()
+                for i in range(0, len(movies)):
+                    # if(movies[i] == prev):
+                    #     query= f'''UPDATE showingmaster SET showtimes = array_append(showtimes,%s) WHERE showingid = %s'''
+                    #     # print("1")
+                    #     # # print(showtimesarr)
+                    #     # # print(type(showtimesarr))
+                    #     # print(showtimesarr[i].strip(' ').strip("{").strip("}"))
+                    #     # print(showingidarr[i])
+                    #     # cur.execute(query,(showtimesarr[i].strip(' ').strip("{").strip("}") ,showingidarr[i]))
+                    # else:
+                    prev = movies[i]
+                    query = f'''UPDATE showingmaster SET theaterid =%s, movieid =%s, showtimes = Array [%s] WHERE showingid = %s RETURNING showingid;'''
+                    print("2")
+                    
+                    # print(showtimesarr)
+                    # print(type(showtimesarr))
+                    print(showtimesarr[i].strip(' ').strip("{").strip("}"))
+                    print(showingidarr[i])
+
+                    cur.execute(query,(theaterid, movies[i], showtimesarr[i].strip(' ').strip("{").strip("}"), showingidarr[i]))
+                    data = cur.fetchall()
                     if len(data) ==0:
                         data.append({"error":"Record not updated"})
                         data.append({"error details": "showingmaster record not updated"})
                     else:
-                        s = data[0]["showingid"]
                         query = f'''SELECT MAX( showdate) FROM showingdetails WHERE showingid = %s'''
                         cur.execute(query,(s,))
                         data1 = cur.fetchall()
                         query = f'''INSERT INTO showingdetails(showingid, showdate, showtime, discount, seatsavailable, seatstaken)
 	                                VALUES (%s, %s, %s, %s, %s, %s) RETURNING showingdetailid;'''
+                        # print("3")
+                        # print(showtimesarr)
+                        # print(type(showtimesarr))
+                        #print(showtimesarr[i].strip(' ').strip("{").strip("}"))
                         for j in range(10):
-                            cur.execute(query,(s, datetime.date.today()+ datetime.timedelta(j), showtimes[i], "$0.00", noofseats, 0))
+                            cur.execute(query,(showingidarr[i], datetime.date.today()+ datetime.timedelta(j), showtimesarr[i].strip(' ').strip("{").strip("}"), "$0.00", noofseats, 0))
                             data2 = cur.fetchall()
                             values.append(data2[0]["showingdetailid"])
-                        print("executed showing master")
+                        #print("executed showing master")
     except (Exception, psycopg2.DatabaseError) as error:
         print(str(error))
         data.append({"error":"Error in updateshowingmaster()"})
@@ -940,9 +958,9 @@ def getTheaterInfo(multiplexid):
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
                 query = f'''SELECT theater.theaterid,noofseats, multiplexid, theaternumber, noofrows, noofcolumns, sm.*  from theater
                                 INNER JOIN(
-                                    SELECT showingmaster.theaterid, STRING_AGG(distinct showingmaster.movieid::text, ', ' ORDER BY showingmaster.movieid::text) AS mmovieid,
-                                    STRING_AGG(distinct m1.moviename, ', ' ) AS mmovienames,STRING_AGG(distinct showtimes::text, ', ') AS mshowtimes,
-                                    STRING_AGG(distinct price::text , ', ' ) AS prices, STRING_AGG(distinct showingid::text , ', ' ) AS showingid
+                                    SELECT showingmaster.theaterid, STRING_AGG(showingmaster.movieid::text, ', ') AS mmovieid,
+                                    STRING_AGG( m1.moviename, ', ' ) AS mmovienames,STRING_AGG(distinct showtimes::text, ', ') AS mshowtimes,
+                                    STRING_AGG( price::text , ', ' ) AS prices, STRING_AGG( showingid::text , ', ' ) AS showingid
                                     FROM showingmaster
                                     INNER JOIN (
                                         SELECT moviename, movie.movieid FROM movie
