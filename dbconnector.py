@@ -40,7 +40,7 @@ def checkLoginCredentials(username, password):
             with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
 
                 #write query
-                query = f'''SELECT username, membership.* FROM usertable
+                query = f'''SELECT username, userrole, membership.* FROM usertable
                         INNER JOIN (
                             SELECT * from usermembership
                         )membership
