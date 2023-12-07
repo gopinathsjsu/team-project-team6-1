@@ -120,6 +120,7 @@ function submitForm(event) {
         price: priceList,
         showtimes: showtimesList
     };
+    console.log("request data for adding a theater",request)
 
     const addTheaterUrl = `${baseURL}/addTheater`;
     fetch(addTheaterUrl, {
@@ -132,6 +133,7 @@ function submitForm(event) {
     .then(response => response.json())
     .then(data => {
         console.log('Theater added/updated successfully:', data);
+        alert("Theater Added successfully")
     })
     .catch(error => console.error('Error adding/updating theater:', error));
 }
