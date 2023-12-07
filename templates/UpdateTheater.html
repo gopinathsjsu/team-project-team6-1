@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add/Update Theater</title>
+    <script src="{{ url_for('static', filename='js/UpdateTheater.js')}}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/UpdateTheater.css')}}">
+</head>
+<body>
+
+<header>
+    <h1>MovieAnytime</h1>
+    <div class="navbar">      
+        <a href="/admindashboard">Home</a>
+    </div>
+</header>
+
+<div class="container">
+    <form id="theaterForm" onsubmit="submitForm(event)">
+        <label for="theaternumber">Theater number :</label>
+        <input type="number" id="theaternumber" name="theaternumber">
+
+        <label for="multiplexid">Multiplex:</label>
+        <select id="multiplexid" name="multiplexid" required></select>
+
+        <label for="noofseats">Number of Seats:</label>
+        <input type="number" id="noofseats" name="noofseats" required>
+
+        <label for="noofrows">Number of Rows:</label>
+        <input type="number" id="noofrows" name="noofrows" required>
+
+        <label for="noofcolumns">Number of Columns:</label>
+        <input type="number" id="noofcolumns" name="noofcolumns" required>
+
+        <div class="col-sm-12 row" id="dynamicMovies">
+            
+        </div>
+
+        <button type="button" onclick="addMovieField()">Add Movie</button>
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+</body>
+</html>

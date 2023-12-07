@@ -74,7 +74,6 @@ function loadMovies() {
                 </div>
                 <div class="button-container">
                     <button class="save-btn" id="save-btn" onclick="openEditDialog(${movie.movieid},'${movie.moviename}',${movie.runtimeminutes},'${movie.releasedate}','${movie.endshowingdate}','${movie.poster}')">Edit</button>
-                    <button class="delete-btn" id="delete-btn" onclick="deleteMovie()">Delete</button>
                 </div>
                 `;
 
@@ -141,34 +140,12 @@ function loadMovies() {
                 </div>
                 <div class="button-container">
                     <button class="save-btn" id="save-btn" onclick="openEditDialog(${movie.movieid},'${movie.moviename}',${movie.runtimeminutes},'${movie.releasedate}','${movie.endshowingdate}','${movie.poster}')">Edit</button>
-                    <button class="delete-btn" id="delete-btn" onclick="deleteMovie(${movie.movieid})">Delete</button>
                 </div>
                 `;
 
                 movieContainer.appendChild(movieBox);});
         });
     }
-}
-
-function deleteMovie(movieid) {
-    var url = "http://127.0.0.1:5000/removeMovieId";
-
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            movieid: movieid
-        }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Movie deleted successfully:', data);
-    })
-    .catch(error => {
-        console.error('Error deleting Movie:', error);
-    });
 }
 
 function openEditDialog(movieid, moviename, runtimeminutes, releasedate, endshowingdate, poster) {

@@ -112,6 +112,7 @@
               </div>              
             </div> 
             <a href="/addmovie">Add/Edit Movie</a>
+            <a href="updateTheater"> Add Theater </a>
           </div>
     </header>
     
@@ -119,9 +120,12 @@
         <div>
             <label for="multiplex">Select Multiplex:</label>
             <select id="multiplex" name="multiplex" class="multiplex-dropdown"></select>
-            <button class="add-theater-btn" id="add-theater-btn" onclick="openDialog()">Add Theater</button>
+            <!-- <label for="theater">Select Theater:</label>
+            <select id="theater" name="theater" class="theater-dropdown"></select> -->
+
         </div>
     </div>
+    
     <div class="dialog">
         <dialog id="add-theater-dialog" style="width:50%;background-color:white;border:1px dotted black;">  
             <h2>New Theater</h2>
@@ -174,34 +178,70 @@
     </div>
     <div class="dialog">
         <dialog id="edit-theater-dialog">
-                <div class="editable-container">
-                    <label for="MultiplexId">Multiplex ID:</label>
-                    <input type="text" id="multiplexId" readonly>
-                </div>
-                <div class="editable-container">
-                    <label for="theaterId">Theater ID:</label>
-                    <input type="text" id="theaterId" readonly>
-                </div>
-                    
-                <div class="editable-container">
-                    <label for="mshowtimes">Showtimes:</label>
-                    <input type="text" id="mshowtimes">
-                </div>
-        
-                <div class="editable-container">
-                  <label for="movienames">Movies Playing:</label>
-                  <select id="movienames" name="movienames"></select>
+          <h2 id="theaternumber"></h2>
+          <div class="editable-field" data-field="showtimes">
+              <div class="editable-container">                                               
+                  <div contenteditable="false" id="theaterid">
+                      <label for="theaterid">Theater Id :</label>
+                  </div>                        
               </div>
-                
-                <div class="editable-container">
-                    <label for="noofseats">Seating Capacity:</label>
-                    <input type="text" id="noofseats">
-                </div>
-                
-                <div class="button-container">        
-                    <button class="save-button" id="save-button" onclick="saveChanges()">Save Changes</button>
-                    <button class="close-btn" id="close-button" onclick="closeEditTheater()"> Close</button>
-                <div>
+          </div>
+          <div class="editable-field" data-field="showingid">
+              <div class="editable-container">                        
+                  <div contenteditable="false" id="showingid">
+                      <label for="showingid">Showing Id :</label>
+                  </div>
+              </div>
+          </div>
+          <div class="editable-field" data-field="noofseats">                    
+              <div class="editable-container">                        
+                  <div name="noofseats" id="noofseats">
+                      <label for="noofseats">Seating Capacity :</label>
+                  </div>
+              </div>
+          </div>
+          <div class="editable-field" data-field="noofrows">                    
+              <div class="editable-container">                        
+                  <div name="noofrows" id="noofrows">
+                      <label for="noofrows">number of rows :</label>
+                  </div>
+              </div>
+          </div>
+          <div class="editable-field" data-field="seatingCapacity">                    
+              <div class="editable-container">                        
+                  <div name="noofcolumns" id="noofcolumns">
+                      <label for="noofcolumns">no of columns :</label>
+                  </div>
+              </div>
+          </div>
+          <div class="editable-field" data-field="mmovieid">                    
+              <div class="editable-container">                        
+                  <div name="mmovieid" id="mmovieid">
+                      <label for="mmovieid">movieid :</label>
+                  </div>
+              </div>
+          </div>
+          <div class="editable-field" data-field="mmovienames">                    
+              <div class="editable-container">                        
+                  <div name="mmovienames" id="mmovienames">
+                      <label for="mmovienames">movienames :</label>
+                  </div>
+              </div>
+          </div>
+          <div class="editable-field" data-field="prices">                    
+              <div class="editable-container">                        
+                  <div name="seatingCapacity" id="prices">
+                      <label for="prices">Prices:</label>
+                  </div>
+              </div>
+          </div>
+          <div class="editable-field" data-field="mshowtimes">                    
+              <div class="editable-container">                        
+                  <div name="mshowtimes" id="mshowtimes">
+                      <label for="mshowtimes">Showtimes :</label>
+                  </div>
+              </div>
+          </div>
         </dialog>
     </div>
     <div class="container" id="theaterContainer"></div>
