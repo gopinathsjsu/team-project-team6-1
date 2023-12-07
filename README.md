@@ -42,6 +42,7 @@ Configure discount prices for Tuesday movie showings or showings before 6 PM
 ### Architecture Diagram  
 ![architecture diagram](./diagrams/architecture.png)
 ### Deployment Diagram  
+We've deployed our application and database on AWS. We have 2 EC2 instances serving as our web servers, and a load balancer configured on top of these 2 instances. Our PostgreSQL database is set up in RDS in an auto-scale group. 
 ![deployment diagram](./diagrams/deployment.png)
 
 
