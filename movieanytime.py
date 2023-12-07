@@ -64,7 +64,11 @@ def login():
             session['ispremium']=response[0]['ispremium']
             session['userid']=response[0]['userid']
             session['rewardpoints']=response[0]['rewardpoints']
-            return redirect(url_for('current_movies'))
+            print(response[0]['userrole'])
+            if response[0]['userrole'] == "User":
+               return redirect(url_for('current_movies'))
+            else:
+               return redirect(url_for('admindashboard'))
         else:
             #show error message, maybe send a variable here to display in html with jinja
             return render_template('signin.html')
