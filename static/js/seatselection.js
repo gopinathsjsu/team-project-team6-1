@@ -1,3 +1,6 @@
+//import { baseURL } from './config.js';
+const baseURL = "http://127.0.0.1:5000";
+
 var reserve = {
     selectedSeats: [],
 
@@ -17,7 +20,7 @@ var reserve = {
 
         console.log(document.getElementById("theaterid").value)
         console.log(document.getElementById("showingdetailid").value)
-        const url = "http://127.0.0.1:5000/getseatmatrix";
+        const url = `${baseURL}/getseatmatrix`;
         fetch(url, {
             method: "POST",
             headers: {
@@ -125,7 +128,7 @@ var reserve = {
                 showingdetailid: document.getElementById("showingdetailid").value, 
                 userid: userid,
             };
-            const url = "http://127.0.0.1:5000/createbooking";
+            const url = `${baseURL}/createbooking`;
             fetch(url, {
                 method: 'POST',
                 headers: {
@@ -139,7 +142,7 @@ var reserve = {
 
                 if (data && data.length > 0 && data[0].bookingid) {
 
-                    const url = `http://127.0.0.1:5001/payment/${data[0].bookingid}`;
+                    const url = `${baseURL}/${data[0].bookingid}`;
                     window.location.href = url;
 
                     //alert(`Seats reserved successfully! Booking ID: ${data[0].bookingid}`);

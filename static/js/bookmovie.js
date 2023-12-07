@@ -1,3 +1,6 @@
+// import { baseURL } from './config.js';
+const baseURL = "http://127.0.0.1:5000";
+
 document.addEventListener("DOMContentLoaded", function () {
     const locationDropdown = document.getElementById('locations');
     const multiplexDropdown = document.getElementById('multiplexs');
@@ -15,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
         alert('Please select a date equal to or greater than today.');
     }
 
-    const locationUrl = "http://127.0.0.1:5000/getlocationlist";
+    const locationUrl = `${baseURL}/getlocationlist`;
     
     fetch(locationUrl, {
         method: "GET",
@@ -43,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     const fetchMultiplexes = (locationid) => {
-        const multiplexUrl = `http://127.0.0.1:5000/multiplexlist`;
+        const multiplexUrl =  `${baseURL}/multiplexlist`;
         const requestData = {
                 locationid: locationid,
             };
