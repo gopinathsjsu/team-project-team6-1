@@ -1,4 +1,8 @@
-multiplexurl = "http://127.0.0.1:5000/multiplexlist";
+//import { baseURL } from './config.js';
+
+const baseURL = "http://127.0.0.1:5000";
+
+multiplexurl =  `${baseURL}/multiplexlist`;
 fetch(multiplexurl)
     .then(response => response.json())
     .then(data => {
@@ -47,7 +51,7 @@ fetch(multiplexurl)
 }
 
 function fetchMoviesAndPopulateDropdown(uniqueId) {
-const moviesurl = "http://127.0.0.1:5000/currentmovies";
+const moviesurl = `${baseURL}/currentmovies`;
 fetch(moviesurl)
     .then(response => response.json())
     .then(data => {
@@ -117,7 +121,7 @@ function submitForm(event) {
         showtimes: showtimesList
     };
 
-    const addTheaterUrl = "http://127.0.0.1:5000/addTheater";
+    const addTheaterUrl = `${baseURL}/addTheater`;
     fetch(addTheaterUrl, {
         method: 'POST',
         headers: {

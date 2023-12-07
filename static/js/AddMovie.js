@@ -1,3 +1,6 @@
+// import { baseURL } from 'config.js';
+const baseURL = "http://127.0.0.1:5000";
+
 document.addEventListener('DOMContentLoaded', function () {
     loadMovies();
 });
@@ -11,7 +14,7 @@ function loadMovies() {
     console.log("selectedmovie", selectedOption)
     if (selectedOption === "upcoming") {
 
-        url = "http://127.0.0.1:5000/upcomingmovies";
+        url = `${baseURL}/upcomingmovies`;
 
         fetch(url, {
             method: 'GET',
@@ -82,7 +85,7 @@ function loadMovies() {
     }
     else if (selectedOption== "current")
     {
-        url = "http://127.0.0.1:5000/currentmovies";
+        url = `${baseURL}/currentmovies`;
 
         fetch(url, {
             method: 'GET',
@@ -195,7 +198,7 @@ function addMovie() {
         "poster" : poster
     };
 
-    fetch('http://127.0.0.1:5000/addMovie', {
+    fetch(`${baseURL}/addMovie`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

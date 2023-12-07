@@ -11,6 +11,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 global_ip='127.0.0.1:5000'
+#global_ip='54.193.129.173:5000'
 app.secret_key = 'fwe_5HvBK=9CvoqSD87xm'
 
 @app.route("/openupgradepage")
@@ -492,4 +493,6 @@ def cancelbooking(bookingid):
    return redirect(url_for('user_details'))
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1',port=5001,debug=True)
+   
+   app.run(host='127.0.0.1',port=5001,debug=True)
+   # app.run(host='0.0.0.0',port=5001,debug=True)
