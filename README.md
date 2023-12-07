@@ -3,7 +3,7 @@
 ## Team Members: Aishwarya Shankar, Sai Pranavi Kurapati, Sayali Vinod Bayaskar, Divija Choudhary
 ---
 ### Name of Application: MovieAnytime
-GitHub Project Repo Link: [https://github.com/gopinathsjsu/team-project-team6-1] \
+GitHub Project Repo Link: [https://github.com/gopinathsjsu/team-project-team6-1]  
 Project Board Link:\
 Project Journal Link: https://github.com/gopinathsjsu/team-project-team6-1/tree/main/Project_Journal  
 Google Sprint Task Sheet Link:  
@@ -69,10 +69,12 @@ wrote API for employees to get theater occupancy analytics for the last 30, 60, 
 wrote api for employees to be able to configure discount prices for Tuesday movie showings or showings before 6 PM  
 - Wrote team's XP Core Values Reflection
 - Setup team's AWS account
-- Worked on setting up PostgreSQL database instance in AWS RDS
+- Worked on setting up PostgreSQL database instance in AWS RDS  
+- Worked with Sayali to set up load balancer for servers in AWS
 - Helped troubleshoot some issues in AWS deployment of application
-- Created component diagram and architecture diagram
-- Worked on project README.md file  
+- Created component diagram, architecture diagram, and deployment diagram
+- Wrote the project README.md file  
+- Participated in project presentation/demo
 
 ### Sayali Vinod Bayaskar  
 
