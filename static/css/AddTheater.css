@@ -113,12 +113,6 @@ header {
     padding: 10px;
 }
 
-.theater-form {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 10px;
-}
-
 .theater-form div {
     display: flex;
     flex-direction: column;
@@ -149,3 +143,20 @@ input[type=text], select {
     border-radius: 4px;
     cursor: pointer;
   }
+
+  .theater-form div {
+    display: flex;
+    flex-direction: column;
+}
+
+/* .theater-form-container {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 15px;
+    width: 50%; 
+} */
+
+.theater-form label {
+    width: 30%; 
+    margin-right: 10px;
+}

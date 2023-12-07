@@ -86,42 +86,54 @@ function loadTheaterDropdown(selectedMultiplexId) {
             theaterContainerDiv.innerHTML = `
             <div class="theater-form-container">
                 <form id="formTheaterId_${theater.theaterid}" class="theater-form"> 
-                    
-                        <label for="theaterid">theaterid:</label>
-                        <input type="text" name="theaterid" value=${theater.theaterid} readonly>
-                    
-                        <label for="price">showingid:</label>
-                        <input type="text" name="showingid"  value=${theater.showingid} readonly>
-                    
-                        <label for="price">multiplexid:</label>
-                        <input type="text" name="multiplexid"  value=${theater.multiplexid} readonly>
-                    
-                        <label for="price">theaternumber:</label>
-                        <input type="text" name="theaternumber" value=${theater.theaternumber} readonly>
-                    
-                        <label for="price">noofseats:</label>
-                        <input type="text" name="noofseats" value=${theater.noofseats} readonly>
-                    
-                        <label for="price">noofrows:</label>
-                        <input type="text" name="noofrows" value=${theater.noofrows} readonly>
-                    
-                        <label for="price">noofcolumns:</label>
-                        <input type="text" name="noofcolumns" value=${theater.noofcolumns} readonly>
-                    
-                        <label for="price">mmovienames:</label>
-                        <input type="text" name="movienames" value=${theater.mmovienames}>
-                    
-                        <label for="price">mmovienames:</label>
-                        <input type="text" name="movieid" value=${theater.mmovieid}>
-                    
-                        <label for="price">noofcolumns:</label>
-                        <input type="text" name="price" value=${theater.prices}>
-                    
-                        <label for="price">noofcolumns:</label>
-                        <input type="text" name="mshowtimes" value=${theater.mshowtimes}>
-                    
-                    <button type="button" onclick="movieInTheater('formTheaterId_${theater.theaterid}')">update</button>
-                    <button type="button" >Delete</button>
+                        <div>
+                            <label for="theaterid">theaterid:</label>
+                            <input type="text" name="theaterid" value=${theater.theaterid} readonly>
+                        </div>
+                        <div>
+                            <label for="price">showingid:</label>
+                            <input type="text" name="showingid"  value=${theater.showingid} readonly>
+                        </div>
+                        <div>
+                            <label for="price">multiplexid:</label>
+                            <input type="text" name="multiplexid"  value=${theater.multiplexid} readonly>
+                        </div>
+                        <div>
+                            <label for="price">theaternumber:</label>
+                            <input type="text" name="theaternumber" value=${theater.theaternumber} readonly>
+                        </div>
+                        <div>
+                            <label for="price">noofseats:</label>
+                            <input type="text" name="noofseats" value=${theater.noofseats} readonly>
+                        </div>
+                        <div>
+                            <label for="price">noofrows:</label>
+                            <input type="text" name="noofrows" value=${theater.noofrows} readonly>
+                        </div>
+                        <div>
+                            <label for="price">noofcolumns:</label>
+                            <input type="text" name="noofcolumns" value=${theater.noofcolumns} readonly>
+                        </div>
+                        <div>
+                            <label for="price">mmovienames:</label>
+                            <input type="text" name="movienames" value=${theater.mmovienames}>
+                        </div>
+                        <div>
+                            <label for="price">mmovienames:</label>
+                            <input type="text" name="movieid" value=${theater.mmovieid}>
+                        </div>
+                        <div>
+                            <label for="price">noofcolumns:</label>
+                            <input type="text" name="price" value=${theater.prices}>
+                        </div>
+                        <div>
+                            <label for="price">noofcolumns:</label>
+                            <input type="text" name="mshowtimes" value=${theater.mshowtimes}>
+                        </div>
+                        <div class="button-conatiner">
+                    <button class="save-button" type="button" onclick="movieInTheater('formTheaterId_${theater.theaterid}')">update</button>
+                    <button class="save-button" type="button" >Delete</button>
+                    </div>
                 </form>
                 </div>
             `;
