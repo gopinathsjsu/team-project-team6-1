@@ -152,13 +152,13 @@ wrote api for employees to be able to configure discount prices for Tuesday movi
 - Was Scrum Master for one sprint
 - Frontend development contributions using Html/CSS:
 - Designed common landing page for all types of users
-- Given two directives for 
+- Given two directives for: 
           - all current movies
           - all upcoming movies.
 - Designed user registration/signup frontend and added validations to it.
 - Designed html page to upgrade membership status and make payment page to fulfill the same
 - Integrated API and UI for users to upgrade to Premium membership.
-- Integrated user profile details to a common profile page
+- Integrated user profile details to a common profile page:
          - Profile(General)
          - View Past Bookings
          - View Upcoming bookings
@@ -166,7 +166,7 @@ wrote api for employees to be able to configure discount prices for Tuesday movi
 
 - Designed module for cancel their upcoming movie booking and get refund.
 - Researched for the graphichal implementation of the analytics dashboard
-- Designed UI for admin anlytics dashboard
+- Designed UI for admin anlytics dashboard:
             - summarized by location
             - summarized by movie
 - Integrated all the UI components and analyzed whole flow.
