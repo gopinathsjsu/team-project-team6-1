@@ -105,7 +105,7 @@ Designed UI for admin anlytics dashboard
 - summarized by movie
 Integrated all the UI components and analyzed whole flow.
 Researched over the deployment process
-Configured global IP for the connection establishment on the ec2
+Configured global IP for the connection establishment on the ec2.
 Setup the ec2 instance, made sure to have all the project files on the ec2 instance.
 Handled deployment for whole project
 
