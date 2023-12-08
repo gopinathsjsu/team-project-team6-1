@@ -51,6 +51,7 @@ def seatselection(theaterid, showingdetailid):
    else:
       userid = None
    session['theater'] = theaterid
+   print("userid",userid)
    return render_template('seatselection.html', theaterid=theaterid, showingdetailid=showingdetailid, userid=userid)
 
 @app.route('/login', methods=['POST', 'GET'])
