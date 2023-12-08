@@ -114,6 +114,37 @@ wrote api for employees to be able to configure discount prices for Tuesday movi
 
 ### Sai Pranavi Kurapati  
 
+- Created UI wireframes for Registration, Member Profile page, Add/update/remove movies/showtimes/theater assignment in the schedule, Configure discount prices for shows before 6 pm and for Tuesday shows.
+- Researched and selected the tech stack for the project.
+- Designed the database, created tables, and established connections between them.
+- Added mock data to the database.
+- Acted as the Scrum master for one sprint, leading Scrum meetings.
+  
+- Frontend Development:
+- Login Page:
+    - Design and Implementation: Created a login interface using HTML, CSS, and JavaScript.
+    - Booking Movie UI: Location, Date, and Multiplex Selection: Designed and implemented a feature allowing users to select location, date, and multiplex.
+    - Dynamic Theater Loading: Dynamically loaded theaters based on the user's selection, providing a streamlined user experience.
+- Seat Selection Page:
+    - Seat Display: Implemented a page to display available, taken, and selected seats for a specific theater.
+    - Booking ID Generation: Created functionality to generate a booking ID after seat selection and passed it as a parameter to the payment page.
+- Admin Dashboard:
+    - UI Design and Implementation: Designed and implemented an intuitive admin dashboard using HTML, CSS, and JavaScript.
+- Theater Management:
+    - Load Theaters Functionality: Developed a feature to load all theaters of a selected multiplex on the admin dashboard.
+    - Add Theater: Implemented the ability to add a new theater to any multiplex, allowing configuration of showtimes, prices, and movies.
+    - Edit Theater: Provided functionality to edit showtimes, prices, and movies running in a theater.
+- Movie Management:
+    - Add Movie: Implemented a feature to add a new movie to the system.
+    - Update Movie: Created functionality to update movie details, such as the end showing date or runtime.
+    - Delete Movie: Implemented the ability to delete an existing movie.
+- Integration and Testing:
+    - Integrated Admin Pages: Integrated all admin pages to ensure a cohesive user experience.
+    - Thorough Testing: Conducted comprehensive testing on all modules to identify and address potential issues.
+- Mock Data Addition: Added mock data to the RDS instance for testing purposes.
+- Deployment: Deployed the application on an EC2 instance, making it accessible for users.
+
+
 ### Divija Choudhary 
 
 Created UI Wireframes for admin landing page, cancel tickets, and membership page
