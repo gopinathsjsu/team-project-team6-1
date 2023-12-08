@@ -1,5 +1,6 @@
 //import { baseURL } from './config.js';
 const baseURL = "http://127.0.0.1:5000";
+const paymentURL = "http://127.0.0.1:5001";
 
 var reserve = {
     selectedSeats: [],
@@ -79,7 +80,7 @@ var reserve = {
         let allSeats = document.querySelectorAll("#layout .seat");
     
         console.log(userid)
-        let maxSeats = (userid !== "none") ? 1 : 8;
+        let maxSeats = (userid !== "None") ? 8 : 1;
     
         if (selected.length === 0) {
             messageElement.innerHTML = "No seats selected.";
@@ -142,7 +143,7 @@ var reserve = {
 
                 if (data && data.length > 0 && data[0].bookingid) {
 
-                    const url = `${baseURL}/${data[0].bookingid}`;
+                    const url = `${paymentURL}/payment/${data[0].bookingid}`;
                     window.location.href = url;
 
                     //alert(`Seats reserved successfully! Booking ID: ${data[0].bookingid}`);
