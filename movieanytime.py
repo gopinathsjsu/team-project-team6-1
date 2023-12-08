@@ -81,6 +81,7 @@ def payment(bookingid):
    userdetails = {}
    moviedetails = {}
    payment={}
+   payment['fee'] = 2.50
    if session.get('userid'):
       userid = session['userid']
       userdetails['userid'] = userid
@@ -92,6 +93,8 @@ def payment(bookingid):
          userdetails["card_num"]=(response[0]['cardid'])%10000
       userdetails['email'] = session['username']
       userdetails['membership']= session['ispremium']
+      if(userdetails['membership']=="true"):
+          payment['fee'] = 0.0
       userdetails['rewards']= session['rewardpoints']
    else:
       userdetails['userid'] = 0
@@ -125,7 +128,7 @@ def payment(bookingid):
        payment['price'] = round(float(response[0]['price'].strip('$.')) * moviedetails['noofseats'] , 2)
        payment['discount'] = float(response[0]['discount'].strip('$.')) 
        payment['tax'] = round(float(payment['price']) * 0.05, 2)
-       payment['fee'] = 2.50
+       
        payment['total'] = round(payment['fee'] + payment['tax'] + payment['price'] - payment['discount'], 2)
    return render_template('payment.html', moviedetails =moviedetails, payment=payment, userdetails=userdetails)
 

@@ -303,7 +303,7 @@ def deleteBooking(bookingid):
 
 
 #add all the booking info after payment is successful
-def completeBooking(bookingid, payment, rewardpointsused, seats):
+def completeBooking(bookingid, payment, rewardpointsused, seats, userid):
     data = []
     try:
         with psycopg2.connect(**params) as conn:
@@ -364,9 +364,15 @@ def completeBooking(bookingid, payment, rewardpointsused, seats):
                 if len(data) ==0:
                     data.append({"error":"Record not updated"})
                     data.append({"error details": "Showingdetailid record not updated"})
-
-
+                
+                if(userid !=0):
+                    query = f'''UPDATE usermembership 
+                                SET rewardpoints= rewardpoints+%s
+                                WHERE userid=%s RETURNING userid;'''
+                    cur.execute(query, (payment['total']-rewardpointsused, userid))
+                    data1 = cur.fetchall()
     except (Exception, psycopg2.DatabaseError) as error:
+        print(str(error))
         data.append({"error":"Error in createBooking()"})
         data.append({"error details": str(error)})
     finally:
