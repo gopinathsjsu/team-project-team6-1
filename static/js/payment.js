@@ -82,10 +82,16 @@ function showrewardline(total, points){
     var checkBox = document.getElementById("rewardpoints");
     if (checkBox.checked == true){
         document.getElementById('rewardpoint').style.display = "table-row";
-        document.getElementById('total').innerHTML = '$' + (total-points).toFixed(2);
+        var tot123 = (total-points).toFixed(2);
+        if(tot123<0){
+            tot123 =0;
+        }
+        document.getElementById('total').innerHTML = '$' + tot123;
+        document.getElementById('btmtot').innerHTML = '$' + tot123;
       } else {
         document.getElementById('rewardpoint').style.display = "none";
         document.getElementById('total').innerHTML = '$' + total;
+        document.getElementById('btmtot').innerHTML = '$' + total;
       }
     
 }

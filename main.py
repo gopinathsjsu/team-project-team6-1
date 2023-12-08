@@ -161,10 +161,15 @@ def saveBooking():
     userdetails = eval(requestdata["userdetails"].replace("'", "\""))
     #if(userdetails is not None and "card_num" not in userdetails):
 
+    if userdetails["userid"] !=0:
+        userid = userdetails["userid"]
+    else:
+        userid =0
+
     if card_number != "" and userdetails["userid"] !=0:
         responsedata = dbc.saveCardDetails(card_number, cvv,exp, userdetails["userid"])
         print(responsedata)
-    responsedata = dbc.completeBooking(moviedetails["bookingid"], payment, rewardpointsused, moviedetails["seats"])
+    responsedata = dbc.completeBooking(moviedetails["bookingid"], payment, rewardpointsused, moviedetails["seats"],  userid)
     for res in responsedata:
         if "error" in res:
             return responsedata, 400
