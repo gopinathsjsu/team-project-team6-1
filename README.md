@@ -3,10 +3,10 @@
 ## Team Members: Aishwarya Shankar, Sai Pranavi Kurapati, Sayali Vinod Bayaskar, Divija Choudhary
 ---
 ### Name of Application: MovieAnytime
-GitHub Project Repo Link: [https://github.com/gopinathsjsu/team-project-team6-1]  
-Project Board Link:\
-Project Journal Link: https://github.com/gopinathsjsu/team-project-team6-1/tree/main/Project_Journal  
-Google Sprint Task Sheet Link:  
+GitHub Project Repo Link: [https://github.com/gopinathsjsu/team-project-team6-1]    
+Project Board Link: [https://github.com/gopinathsjsu/team-project-team6-1/tree/main/Project_Journal/ScrumReport]  
+Project Journal Link: [https://github.com/gopinathsjsu/team-project-team6-1/tree/main/Project_Journal]      
+Google Sprint Task Sheet Link: [https://github.com/gopinathsjsu/team-project-team6-1/tree/main/Project_Journal/SprintSheetsAndBurndownCharts]
 
 
 ### Tech Stack Used
