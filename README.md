@@ -79,6 +79,39 @@ wrote api for employees to be able to configure discount prices for Tuesday movi
 
 ### Sayali Vinod Bayaskar  
 
+- Create UI wireframe diagrams for login page, list of movies, employee dashboard and update theater
+- Performed research on tech stack for backend and database Python, Flask, and Postgres
+- Design Postgres database schema and added some sample data
+- Created user stories
+- Was Scrum master for 2 sprints
+- Backend development contributions using Python/Flask:
+    - Wrote API for Login API
+    - Wrote API for current movies for homepage
+    - Wrote API for upcoming movies for homepage
+    - Wrote API for return multiplex list
+    - Implement session variable for login page
+    - Wrote API for seat allocation matrix
+    - Wrote API for payment page
+    - Wrote API for getting user details
+    - Wrote API for saving card deatils
+    - Wrote API for saving booking details
+    - Wrote API for generating transaction number
+    - Wrote API for adding, updating and removing location, movie, theater, multiplex and showtimes
+    - Wrote API for adding, updating and removing seat, seat details, showing detail and showing master
+    - Updated the cancel booking API to release seats 
+- Frontend development contributions using HTML/CSS:
+    - Worked on homepage
+    - Worked on booking page
+    - Created payment page
+- Integrating front to backed contributions:
+    - Integrate payment frontend with api
+    - Worked on homepage to bookmovie page integration
+    - Booking and payment page integration
+- Tested the cycle and worked on bug fixing
+- Worked with Aishwarya to setup team's AWS account and to create mock data on PostgreSQL database 
+- Set up load balancer for servers in AWS
+- Participated in project presentation/demo
+
 ### Sai Pranavi Kurapati  
 
 ### Divija Choudhary 
