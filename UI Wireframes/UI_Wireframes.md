@@ -59,4 +59,10 @@ Sayali:
 11. Update/remove movies/showtimes/theater assignment in the schedule and Configure seating capacity for each theater in a multiplex
 12. Dashboard for employees including all above components- merged
 
+Pranavi
+3. Registration
+7. Member Profile page
+11. Add/update/remove movies/showtimes/theater assignment in the schedule
+15. Configure discount prices for shows before 6pm and for Tuesday shows
+
 </details>
